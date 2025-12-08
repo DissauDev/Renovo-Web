@@ -1,0 +1,112 @@
+@import "tailwindcss";
+
+/* Tus estilos globales abajo */
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  background-color: #fff;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@theme {
+  /* 🎨 PALETA PERSIAN RED */
+  --color-persian-red-50: #fef2f2;
+  --color-persian-red-100: #fde3e3;
+  --color-persian-red-200: #fccccd;
+  --color-persian-red-300: #f8a9aa;
+  --color-persian-red-400: #f37678;
+  --color-persian-red-500: #e84b4d;
+  --color-persian-red-600: #d02a2c;
+  --color-persian-red-700: #b32224;
+  --color-persian-red-800: #942021;
+  --color-persian-red-900: #7b2122;
+  --color-persian-red-950: #430c0d;
+
+  /* 🎨 PALETA CAMEO */
+  --color-cameo-50: #fbf7f1;
+  --color-cameo-100: #f5ecdf;
+  --color-cameo-200: #e9d5bf;
+  --color-cameo-300: #d8b28d;
+  --color-cameo-400: #cc956b;
+  --color-cameo-500: #c17b4e;
+  --color-cameo-600: #b36743;
+  --color-cameo-700: #955239;
+  --color-cameo-800: #784434;
+  --color-cameo-900: #62392c;
+  --color-cameo-950: #341b16;
+
+   /* 🎨 PALETA Oxford blue */
+  --color-oxford-blue-50: #f5f7fa;
+--color-oxford-blue-100: #ebeef3;
+--color-oxford-blue-200: #d2dbe5;
+--color-oxford-blue-300: #aabbcf;
+--color-oxford-blue-400: #7c97b4;
+--color-oxford-blue-500: #5b7a9c;
+--color-oxford-blue-600: #486281;
+--color-oxford-blue-700: #3b4f69;
+--color-oxford-blue-800: #344458;
+--color-oxford-blue-900: #2f3b4c;
+--color-oxford-blue-950: #1f2632;
+
+/*Woodsmoke*/
+--color-woodsmoke-50: #f6f6f6;
+--color-woodsmoke-100: #e7e7e7;
+--color-woodsmoke-200: #d1d1d1;
+--color-woodsmoke-300: #b0b0b0;
+--color-woodsmoke-400: #888888;
+--color-woodsmoke-500: #6d6d6d;
+--color-woodsmoke-600: #5d5d5d;
+--color-woodsmoke-700: #4f4f4f;
+--color-woodsmoke-800: #454545;
+--color-woodsmoke-900: #3d3d3d;
+--color-woodsmoke-950: #1a1a1a;
+
+/* seashell*/
+--color-seashell-50: #f8f8f8;
+--color-seashell-100: #f1f1f1;
+--color-seashell-200: #dcdcdc;
+--color-seashell-300: #bdbdbd;
+--color-seashell-400: #989898;
+--color-seashell-500: #7c7c7c;
+--color-seashell-600: #656565;
+--color-seashell-700: #525252;
+--color-seashell-800: #464646;
+--color-seashell-900: #3d3d3d;
+--color-seashell-950: #292929;
+
+
+
+  /* 🔤 FUENTES PERSONALIZADAS (nombres de utilidades) */
+  --font-varien: "Varien", system-ui, sans-serif;
+  --font-varien-outline: "VarienOutline", system-ui, sans-serif;
+  --font-varien-italic: "VarienItalic", system-ui, sans-serif;
+}
+
+
+/* 👇 Tus @font-face mejor fuera de :root */
+
+@font-face {
+  font-family: "Varien";
+  src: url("./assets/fonts/Varien.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "VarienOutline";
+  src: url("./assets/fonts/Varien Outline.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "VarienItalic";
+  src: url("./assets/fonts/Varien-Italic.ttf") format("truetype");
+  font-weight: normal;
+  font-style: italic;
+}
