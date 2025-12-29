@@ -3,8 +3,8 @@ import { axiosBaseQuery, type AxiosBaseQueryArgs, type AxiosBaseQueryError } fro
 import type { RootState } from '../../store';
 import { logout } from '../slices/authSlice';
 
-//const baseUrl = import.meta.env.VITE_API_URL as string;
-const baseUrl = 'http://localhost:3000/api'
+const baseUrl = import.meta.env.VITE_API_URL as string;
+//const baseUrl = 'http://localhost:3000/api'
 
 // baseQuery "puro" con axios
 const rawBaseQuery = axiosBaseQuery({ baseUrl });
