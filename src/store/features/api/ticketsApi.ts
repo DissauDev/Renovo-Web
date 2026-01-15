@@ -5,43 +5,72 @@ import type {
   CreateTicketRequest,
   ListTicketsArgs,
   TicketsListResponse,
-  TicketStatus,
+  UpdateTicketRequest,
+  AssignTicketRequest,
+  ChangeStatusRequest,
+  ScheduleTicketRequest,
+
 } from "../../../types/tickets";
 
-// --------- Payload types ---------
 
-interface UpdateTicketRequestData {
-  title?: string;
+export type ScopeItemKind = "BASE" | "ADD_ON";
+
+export type CreateScopeItemRequest = {
+  id: number; // ticketId
+  title: string;
   description?: string;
   photos?: string[];
-  clientName?: string | null;
-  clientPhone?: string | null;
-  clientEmail?: string | null;
-  address?: string | null;
-  categoryId?: number;
-  assignedTo?: number | null;
-  urgency?: Ticket["urgency"];
-  scheduledAt?: string | null;
-  onSiteAt?: string | null;
-  completedAt?: string | null;
-}
+  kind?: ScopeItemKind; // default "ADD_ON"
+};
 
-interface UpdateTicketRequest {
+export type CloseTicketLineKind = "INVENTORY" | "NON_INVENTORY" | "LABOR";
+
+type CloseTicketRequest = {
   id: number;
-  data: UpdateTicketRequestData;
-}
+  completedAt?: string; // opcional
+  workSummary?: string;
+  notesInternal?: string;
+  lineItems?: Array<{
+    kind: "INVENTORY" | "NON_INVENTORY" | "LABOR";
+    productId?: number;
+    scopeItemId?: number;
+    nameSnapshot?: string;
+    unitSellCentsSnapshot?: number;
+    unitCostCentsSnapshot?: number;
+    quantity: number;
+    notes?: string;
+  }>;
+};
 
-interface AssignTicketRequest {
-  id: number;
-  assignedTo: number; // según tu backend, assignedTo es requerido
-}
+export type CloseTicketLineItem = {
+  kind: CloseTicketLineKind;
+  quantity?: number;
 
-interface ChangeStatusRequest {
-  id: number;
-  status: TicketStatus;
-}
+  // INVENTORY
+  productId?: number;
 
-// ---------------------------------
+  // optional links
+  scopeItemId?: number;
+
+  // NON_INVENTORY / LABOR
+  nameSnapshot?: string;
+  unitSellCentsSnapshot?: number;
+  unitCostCentsSnapshot?: number;
+
+  notes?: string;
+};
+export type UpdateScopeItemRequest = {
+  ticketId: number;
+  scopeItemId: number;
+  title: string;
+  description?: string;
+};
+
+export type DeleteScopeItemRequest = {
+  ticketId: number;
+  scopeItemId: number;
+};
+
 
 export const ticketsApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -98,6 +127,36 @@ export const ticketsApi = apiSlice.injectEndpoints({
       ],
     }),
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    createScopeItem: builder.mutation<any, CreateScopeItemRequest>({
+  query: ({ id, title, description, photos, kind }) => ({
+    url: `/tickets/${id}/scope-items`,
+    method: "POST",
+    data: {
+      title,
+      ...(description ? { description } : {}),
+      ...(photos?.length ? { photos } : {}),
+      ...(kind ? { kind } : {}),
+    },
+  }),
+  invalidatesTags: (_result, _error, { id }) => [
+    { type: "Ticket" as const, id },
+    { type: "Ticket" as const, id: "LIST" },
+  ],
+}),
+
+   closeTicket: builder.mutation<Ticket, CloseTicketRequest>({
+  query: ({ id, ...body }) => ({
+    url: `/tickets/${id}/close`,
+    method: "PATCH",
+    data: body,
+  }),
+  invalidatesTags: (_r, _e, { id }) => [
+    { type: "Ticket", id },
+    { type: "Ticket", id: "LIST" },
+  ],
+}),
+
     // PATCH /tickets/:id/assign
     assignTicket: builder.mutation<Ticket, AssignTicketRequest>({
       query: ({ id, assignedTo }) => ({
@@ -124,6 +183,49 @@ export const ticketsApi = apiSlice.injectEndpoints({
       ],
     }),
 
+    scheduleTicket: builder.mutation<Ticket, ScheduleTicketRequest>({
+  query: ({ id, assignedTo, scheduledAt }) => ({
+    url: `/tickets/${id}/schedule`,
+    method: "PATCH",
+    data: {
+      scheduledAt,
+      // manda assignedTo solo si existe (backend lo soporta opcional)
+      ...(assignedTo ? { assignedTo } : {}),
+    },
+  }),
+  invalidatesTags: (_result, _error, { id }) => [
+    { type: "Ticket" as const, id },
+    { type: "Ticket" as const, id: "LIST" },
+  ],
+}),
+
+
+
+updateScopeItem: builder.mutation<Ticket, UpdateScopeItemRequest>({
+  query: ({ ticketId, scopeItemId, title, description }) => ({
+    url: `/tickets/${ticketId}/scope-items/${scopeItemId}`,
+    method: "PATCH",
+    data: {
+      title,
+      ...(description ? { description } : {}),
+    },
+  }),
+  invalidatesTags: (_result, _error, { ticketId }) => [
+    { type: "Ticket" as const, id: ticketId },
+    { type: "Ticket" as const, id: "LIST" },
+  ],
+}),
+
+deleteScopeItem: builder.mutation<void, DeleteScopeItemRequest>({
+  query: ({ ticketId, scopeItemId }) => ({
+    url: `/tickets/${ticketId}/scope-items/${scopeItemId}`,
+    method: "DELETE",
+  }),
+  invalidatesTags: (_result, _error, { ticketId }) => [
+    { type: "Ticket" as const, id: ticketId },
+    { type: "Ticket" as const, id: "LIST" },
+  ],
+}),
     // DELETE /tickets/:id
     deleteTicket: builder.mutation<void, number>({
       query: (id) => ({
@@ -147,4 +249,9 @@ export const {
   useAssignTicketMutation,
   useChangeTicketStatusMutation,
   useDeleteTicketMutation,
+  useScheduleTicketMutation,
+  useCloseTicketMutation,
+  useCreateScopeItemMutation,
+  useDeleteScopeItemMutation,
+  useUpdateScopeItemMutation
 } = ticketsApi;

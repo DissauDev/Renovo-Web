@@ -1,9 +1,8 @@
 // src/pages/products/ProductDetailPage.tsx
 import * as React from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import {
-  ArrowLeftIcon,
   CalendarDaysIcon,
   TagIcon,
   CurrencyDollarIcon,
@@ -22,10 +21,12 @@ import {
   type ProductFormValues,
 } from "../../../components/products/ProductForm";
 import { toastNotify } from "../../../lib/toastNotify";
+import { useTranslation } from "react-i18next";
+import { ButtonBack } from "../../../components/layout/ButtonBack";
 
 export const ProductDetailPage = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
+  const { t } = useTranslation("products");
 
   const productId = React.useMemo(() => (id ? Number(id) : undefined), [id]);
 
@@ -41,22 +42,28 @@ export const ProductDetailPage = () => {
     usePatchProductActiveMutation();
 
   const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
+
   const handleToggleActive = async () => {
-    if (!productId) return;
+    if (!productId || !product) return;
+    const typedProduct = product as Product;
+
     try {
       await patchActive({
         id: productId,
         isActive: !typedProduct.isActive,
       }).unwrap();
-
       toastNotify(
-        `Product ${!typedProduct.isActive ? "activated" : "deactivated"}`,
+        t("toasts.toggled", {
+          state: !typedProduct.isActive
+            ? t("status.active")
+            : t("status.inactive"),
+        }),
         "success"
       );
       refetch();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      toastNotify(err?.message || "Error toggling product status", "error");
+      toastNotify(err?.message || t("errors.toggleActive"), "error");
     }
   };
 
@@ -64,7 +71,7 @@ export const ProductDetailPage = () => {
     if (!productId) return;
 
     try {
-      const priceNumber = Number(values.price);
+      const priceNumber = Number(values.sell);
       const priceCents = Math.round(priceNumber * 100);
 
       await updateProduct({
@@ -72,45 +79,46 @@ export const ProductDetailPage = () => {
         name: values.name,
         description: values.description || undefined,
         priceCents,
+        stockQty: values.stockQty,
+        costCents: Math.round(values.cost * 100),
+        sellCents: priceCents,
         imageUrl: values.imageUrl || undefined,
         categoryId: values.categoryId,
       }).unwrap();
 
-      toastNotify("Product updated successfully", "success");
+      toastNotify(t("toasts.updated"), "success");
       refetch();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error(error);
-      toastNotify(error?.message || "Error updating product", "error");
+      toastNotify(error?.message || t("errors.update"), "error");
     }
   };
 
   if (!productId) {
     return (
       <div className="p-4">
-        <p className="text-sm text-red-500">Invalid product id.</p>
+        <p className="text-sm text-red-500">{t("errors.invalidId")}</p>
       </div>
     );
   }
 
   if (isLoading) {
     return (
-      <div className="p-4 text-sm text-slate-500">
-        Loading product details...
-      </div>
+      <div className="p-4 text-sm text-slate-500">{t("loading.detail")}</div>
     );
   }
 
   if (isError || !product) {
     return (
       <div className="p-4 space-y-3">
-        <p className="text-sm text-red-500">Error loading product.</p>
+        <p className="text-sm text-red-500">{t("errors.load")}</p>
         <button
           type="button"
           onClick={() => refetch()}
           className="text-xs px-3 py-1 rounded-md border border-slate-300 hover:bg-slate-50"
         >
-          Retry
+          {t("actions.retry")}
         </button>
       </div>
     );
@@ -118,7 +126,6 @@ export const ProductDetailPage = () => {
 
   const typedProduct = product as Product;
   const createdAt = new Date(typedProduct.createdAt).toLocaleString();
-  const priceInDollars = (typedProduct.priceCents ?? 0) / 100;
 
   return (
     <div className="space-y-5">
@@ -126,19 +133,12 @@ export const ProductDetailPage = () => {
       <div className="flex flex-wrap justify-between">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div className="space-y-1">
-            <button
-              type="button"
-              onClick={() => navigate(-1)}
-              className="inline-flex items-center gap-1 text-sm font-semibold text-slate-500 hover:text-slate-700"
-            >
-              <ArrowLeftIcon className="h-4 w-4" />
-              Go Back
-            </button>
+            <ButtonBack />
             <h1 className="text-lg font-varien text-oxford-blue-800">
-              Product details
+              {t("detail.title")}
             </h1>
             <p className="text-sm font-semibold text-slate-500">
-              View and edit product information. Some fields are read-only.
+              {t("detail.subtitle")}
             </p>
           </div>
         </div>{" "}
@@ -154,16 +154,16 @@ export const ProductDetailPage = () => {
         >
           <h4 className="flex flex-row items-center font-varien gap-2">
             {isToggling ? (
-              "Processing..."
+              t("actions.processing")
             ) : typedProduct.isActive ? (
               <>
                 <ShieldExclamationIcon className="size-6 text-white" />{" "}
-                {"Desactivate"}{" "}
+                {t("actions.deactivate")}
               </>
             ) : (
               <>
                 <CheckBadgeIcon className="size-6 text-emerald-700" />{" "}
-                {"Activate"}{" "}
+                {t("actions.activate")}
               </>
             )}
           </h4>
@@ -176,7 +176,7 @@ export const ProductDetailPage = () => {
         <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-xs">
           <div className="flex items-center gap-2 text-sm font-varien text-slate-500 mb-1">
             <TagIcon className="h-4 w-4" />
-            <span>Product ID</span>
+            <span>{t("detail.cards.productId")}</span>
           </div>
           <p className="text-sm font-semibold text-slate-700">
             #{typedProduct.id}
@@ -187,33 +187,45 @@ export const ProductDetailPage = () => {
         <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-xs">
           <div className="flex items-center gap-2 text-sm font-varien text-slate-500 mb-1">
             <TagIcon className="h-4 w-4" />
-            <span>Category</span>
+            <span>{t("detail.cards.category")}</span>
           </div>
           <p
             className="inline-flex items-center rounded-full
            bg-cameo-100 px-2 py-0.5 text-sm font-semibold text-cameo-700"
           >
-            {typedProduct.category?.name ?? "No category"}
+            {typedProduct.category?.name ?? t("detail.noCategory")}
           </p>
         </div>
 
         {/* Precio en cents (info técnica) */}
         <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-xs">
-          <div className="flex items-center gap-2 text-sm font-varien text-slate-500 mb-1">
-            <CurrencyDollarIcon className="h-4 w-4" />
-            <span>Price </span>
+          <div className="flex justify-between">
+            <div className="flex items-center gap-2 text-sm font-varien text-slate-500 mb-1">
+              <CurrencyDollarIcon className="h-4 w-4" />
+              <span>{t("detail.cards.sellPrice")} :</span>
+            </div>
+            <p className="text-sm font-semibold text-slate-700">
+              $ {Number((typedProduct.sellCents / 100).toFixed(2))}
+              <span className="text-sm text-slate-500"></span>
+            </p>
           </div>
-          <p className="text-sm font-semibold text-slate-700">
-            $ {typedProduct.priceCents}
-            <span className="text-sm text-slate-500"></span>
-          </p>
+          <div className="flex justify-between">
+            <div className="flex items-center gap-2 text-sm font-varien text-slate-500 mb-1">
+              <CurrencyDollarIcon className="h-4 w-4" />
+              <span>{t("detail.cards.cost")} :</span>
+            </div>
+            <p className="text-xs font-semibold text-slate-700">
+              $ {Number((typedProduct.costCents / 100).toFixed(2))}
+              <span className="text-sm text-slate-500"></span>
+            </p>
+          </div>
         </div>
 
         {/* Fecha creación */}
         <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-xs">
           <div className="flex items-center gap-2 text-sm font-varien text-slate-500 mb-1">
             <CalendarDaysIcon className="h-4 w-4" />
-            <span>Created at</span>
+            <span>{t("detail.cards.createdAt")}</span>
           </div>
           <p className="text-sm font-semibold text-slate-700">{createdAt}</p>
         </div>
@@ -227,7 +239,7 @@ export const ProductDetailPage = () => {
         >
           <PhotoIcon className="h-5 w-5" />
           <div className="flex flex-col">
-            <span className="font-medium">Current product image</span>
+            <span className="font-medium">{t("detail.currentImage")}</span>
             <span className="text-[11px] break-all">
               {typedProduct.imageUrl}
             </span>
@@ -248,17 +260,21 @@ export const ProductDetailPage = () => {
           {/* Wrapper que controla título + form */}
           <div className="w-full max-w-xl flex flex-col items-center">
             <h2 className="text-sm font-varien text-oxford-blue-800 mb-3 w-full text-left">
-              Editable information
+              {t("detail.editable")}
             </h2>
 
             <ProductForm
               mode="edit"
               isSubmitting={isUpdating}
-              submitLabel={isUpdating ? "Saving..." : "Save changes"}
+              submitLabel={
+                isUpdating ? t("actions.saving") : t("actions.saveChanges")
+              }
               initialValues={{
                 name: typedProduct.name,
                 description: typedProduct.description ?? "",
-                price: Number(priceInDollars.toFixed(2)),
+                stockQty: typedProduct.stockQty,
+                sell: Number((typedProduct.sellCents / 100).toFixed(2)),
+                cost: Number((typedProduct.costCents / 100).toFixed(2)),
                 categoryId: typedProduct.categoryId ?? undefined,
                 imageUrl: typedProduct.imageUrl ?? "",
               }}

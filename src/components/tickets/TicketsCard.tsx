@@ -7,14 +7,15 @@ import {
   WrenchScrewdriverIcon,
 } from "@heroicons/react/24/outline";
 import type { Ticket, TicketStatus } from "../../types/tickets";
+import { useTranslation } from "react-i18next";
 
-const statusLabel: Record<TicketStatus, string> = {
-  PENDING: "Pending",
-  CANCELLED: "Canceled",
-  EN_ROUTE: "On route",
-  ON_SITE: "On Site",
-  SCHEDULED: "Scheduled",
-  COMPLETED: "Completed",
+const statusLabelKey: Record<TicketStatus, string> = {
+  PENDING: "status.PENDING",
+  CANCELLED: "status.CANCELLED",
+  EN_ROUTE: "status.EN_ROUTE",
+  ON_SITE: "status.ON_SITE",
+  SCHEDULED: "status.SCHEDULED",
+  COMPLETED: "status.COMPLETED",
 };
 
 const statusStyles: Record<TicketStatus, string> = {
@@ -33,8 +34,8 @@ interface TicketCardProps {
 export type UrgencyFilterValue = "LOW" | "MEDIUM" | "HIGH";
 interface UrgencyOption {
   value: UrgencyFilterValue;
-  label: string;
-  description?: string;
+  labelKey: string;
+  descKey?: string;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   color: string; // text-red-500, text-amber-500, text-emerald-500, etc.
   hoverBg: string;
@@ -45,8 +46,8 @@ interface UrgencyOption {
 const BASE_URGENCY_OPTIONS: UrgencyOption[] = [
   {
     value: "LOW",
-    label: "Low",
-    description: "It can wait, there is no immediate risk.",
+    labelKey: "urgency.LOW.label",
+    descKey: "urgency.LOW.desc",
     icon: ClockIcon,
     color: "text-emerald-600",
     hoverBg: "hover:bg-emerald-50",
@@ -55,8 +56,8 @@ const BASE_URGENCY_OPTIONS: UrgencyOption[] = [
   },
   {
     value: "MEDIUM",
-    label: "Medium",
-    description: "It requires immediate attention.",
+    labelKey: "urgency.MEDIUM.label",
+    descKey: "urgency.MEDIUM.desc",
     icon: ExclamationTriangleIcon,
     color: "text-amber-600",
     hoverBg: "hover:bg-amber-50",
@@ -65,8 +66,8 @@ const BASE_URGENCY_OPTIONS: UrgencyOption[] = [
   },
   {
     value: "HIGH",
-    label: "High",
-    description: "Top priority, possible emergency.",
+    labelKey: "urgency.HIGH.label",
+    descKey: "urgency.HIGH.desc",
     icon: FireIcon,
     color: "text-red-600",
     hoverBg: "hover:bg-red-50",
@@ -75,6 +76,8 @@ const BASE_URGENCY_OPTIONS: UrgencyOption[] = [
   },
 ];
 export const TicketCard: React.FC<TicketCardProps> = ({ ticket, onClick }) => {
+  const { t } = useTranslation("tickets");
+
   const technicianInitials = ticket.employee?.name
     ?.split(" ")
     .map((p) => p[0])
@@ -126,7 +129,7 @@ export const TicketCard: React.FC<TicketCardProps> = ({ ticket, onClick }) => {
   `}
         >
           <span className="h-1.5 w-1.5 rounded-full bg-current" />
-          {statusLabel[ticket.status]}
+          {t(statusLabelKey[ticket.status])}
         </span>
       </div>
 
@@ -155,7 +158,8 @@ export const TicketCard: React.FC<TicketCardProps> = ({ ticket, onClick }) => {
         <div className="flex items-center gap-1.5">
           <ClockIcon className="h-3.5 w-3.5 text-slate-400" />
           <span>
-            Creado:{" "}
+            {t("card.created")}
+            {":"}
             <span className="text-slate-700">
               {new Date(ticket.createdAt).toLocaleDateString()}
             </span>
@@ -168,7 +172,7 @@ export const TicketCard: React.FC<TicketCardProps> = ({ ticket, onClick }) => {
         {/* Cliente */}
         <div className="flex flex-col">
           <span className="text-[11px] font-medium font-varien text-slate-400">
-            Client
+            {t("card.client")} {":"}
           </span>
           <span className="text-xs font-semibold text-slate-800">
             {ticket.clientName}
@@ -182,10 +186,11 @@ export const TicketCard: React.FC<TicketCardProps> = ({ ticket, onClick }) => {
           </div>
           <div className="flex flex-col items-start">
             <span className="text-[11px] font-varien text-slate-400">
-              Technician
+              {t("card.technician")}
+              {":"}
             </span>
             <span className="text-xs font-semibold text-slate-800">
-              {ticket.employee?.name ?? "Sin asignar"}
+              {ticket.employee?.name ?? t("card.unassigned")}
             </span>
           </div>
         </div>

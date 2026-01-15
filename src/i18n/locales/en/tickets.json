@@ -1,0 +1,269 @@
+{
+  "title": "Tickets",
+  "subtitle": "Manage your work orders by status, assignment, and urgency.",
+  "searchPlaceholder": "Search by title, description or client...",
+  "loading": "Loading tickets...",
+  "errorLoad": "Error loading tickets.",
+  "noResults": "No results",
+
+  "filters": {
+    "urgency": "Urgency",
+    "status": "Status",
+    "category": "Category",
+    "all": "All"
+  },
+
+  "tabs": {
+    "all": "All tickets",
+    "pending": "Pending",
+    "scheduled": "Scheduled",
+    "completed": "Completed"
+  },
+
+  "status": {
+    "ALL": "All",
+    "PENDING": "Pending",
+    "EN_ROUTE": "On route",
+    "ON_SITE": "On site",
+    "CANCELLED": "Canceled",
+    "SCHEDULED": "Scheduled",
+    "COMPLETED": "Completed"
+  },
+
+  "card": {
+    "created": "Created",
+    "client": "Client",
+    "technician": "Technician",
+    "unassigned": "Unassigned"
+  },
+
+   "form": {
+    "createTitle": "Create new Ticket",
+    "editTitle": "Edit Ticket",
+    "createSubtitle": "Create a ticket for dispatch/technician.",
+    "editSubtitle": "Update ticket details.",
+
+    "fields": {
+      "title": { "label": "Title", "placeholder": "Title of ticket" },
+      "description": { "label": "Description", "placeholder": "Describe the problem..." },
+      "clientName": { "label": "Client name", "placeholder": "John Doe" },
+      "clientPhone": { "label": "Client phone", "placeholder": "+1 555 123 456" },
+      "clientEmail": { "label": "Client email", "placeholder": "client@email.com" },
+      "address": { "label": "Address", "placeholder": "Street, number, city..." },
+      "urgency": { "label": "Urgency", "placeholder": "Select urgency" },
+      "category": { "label": "Category", "placeholder": "Select category" }
+    },
+
+    "actions": {
+      "create": "Create Ticket",
+      "save": "Save changes",
+      "creating": "Creating...",
+      "saving": "Saving..."
+    },
+
+    "validation": {
+      "titleRequired": "Title is required",
+      "descriptionRequired": "Description is required",
+      "invalidEmail": "Invalid email",
+      "categoryRequired": "Select a category",
+      "invalidUrl": "Must be a valid URL"
+    }
+  },
+
+  "details": {
+    "back": "Back",
+    "ticket": "Ticket",
+    "priority": "Priority",
+    "edit": "Edit"
+  },
+
+  "urgency": {
+    "LOW": {
+      "label": "Low",
+      "desc": "It can wait, there is no immediate risk."
+    },
+    "MEDIUM": {
+      "label": "Medium",
+      "desc": "It requires immediate attention."
+    },
+    "HIGH": {
+      "label": "High",
+      "desc": "Top priority, possible emergency."
+    }
+  },
+  "edit": {
+    "invalidId": "Invalid ticket id.",
+    "loading": "Loading ticket...",
+    "notFound": "Ticket not found.",
+    "retry": "Retry",
+        "noAdditionalDescription": "No additional description.",
+    "loadingTicketDetails": "Loading ticket details...",
+    "ticketNotFound": "Ticket {{id}} doesn't exist or was deleted."
+  },
+  "toasts": {
+    "providerNotFound": "Provider user not found. Please log in again.",
+    "created": "Ticket created successfully.",
+    "createError": "Error creating ticket.",
+    "onlyPendingEditable": "We can only edit pending tickets.",
+    "updated": "Ticket updated.",
+    "updateError": "Error updating ticket."
+  },
+  "uploader": {
+    "label": "Images",
+    "helperText": "You can upload up to {{max}} images.",
+    "maxReached": "You have already reached the maximum number of images.",
+    "success": "Upload success.",
+    "uploading": "Uploading...",
+    "photoAlt": "Photo {{index}}"
+  },
+    "client": {
+    "client": "Client",
+    "provider": "Provider",
+    "tenant": "Tenant",
+    "propertyManager": "Property manager",
+    "noName": "Unnamed"
+  },
+  "technician": {
+    "title": "Schedule & assign technician",
+    "subtitle": "Select a technician and schedule date/time.",
+    "unassigned": "Unassigned",
+    "loading": "Loading technicians...",
+    "select": "Select technician",
+    "confirm": "Confirm schedule",
+    "success": "Ticket scheduled",
+      "dateLabel":"Date",
+    "timeLabel": "Time",
+      "selectDate": "Select date",
+    "errors": {
+      "selectDate": "Please select date and time",
+      "schedule": "Error scheduling ticket"
+    }
+  },
+  "statusPanel": {
+    "title": "Ticket status",
+    "description": "Change the ticket status according to the technician's progress or the dispatch team.",
+    "select": "Select status",
+    "confirm": "Confirm status change",
+    "updating": "Updating status...",
+    "noChanges": "No changes to save",
+    "setCompleted": "Set status to Completed",
+    "success": "Ticket status updated",
+    "error": "Error updating ticket status"
+  },
+   "common": {
+    "new": "New",
+    "close": "Close",
+    "saving": "Saving...",
+    "saveChanges": "Save changes",
+       "open": "Open",
+    "hide": "Hide",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "scope": {
+    "title": "Extra tasks (scope)",
+    "subtitle": "Add-ons discovered on site",
+    "empty": "No extra tasks yet.",
+    "confirmDelete": "Delete this extra task?",
+    "validation": {
+      "titleMin": "Add a short title"
+    },
+    "form": {
+      "createTitle": "Add extra task",
+      "editTitle": "Edit extra task",
+      "switchToNew": "Switch to new",
+      "add": "Add task",
+      "titlePlaceholder": "e.g. \"Open wall + patch + paint\"",
+      "notesPlaceholder": "Notes (optional)"
+    },
+    "toast": {
+      "added": "Extra task added",
+      "updated": "Extra task updated",
+      "deleted": "Extra task deleted",
+      "saveError": "Error saving extra task",
+      "deleteError": "Error deleting task"
+    }
+   }, "photos": {
+    "title": "Pictures",
+    "empty": "No images to show",
+    "photoAlt": "Ticket photo {{index}}"
+  },
+    "detailsPanel": {
+    "title": "Order Details",
+    "addressLabel": "Service address",
+    "noAddress": "No address provided.",
+    "created": "Created",
+    "scheduledAt": "Scheduled at"
+  },
+  "closePanel": {
+    "title": "Close ticket",
+    "subtitle": "Add materials used + notes (labor time is auto)"
+  },
+  "closeForm": {
+    "toast": {
+      "closed": "Ticket closed (ready for invoice)",
+      "error": "Error closing ticket"
+    },
+    "fields": {
+      "workSummary": {
+        "label": "Work summary (for invoice)",
+        "placeholder": "Example: \"Repaired leak behind wall; patched and sealed.\""
+      },
+      "internalNote": {
+        "label": "Internal note (admin only)",
+        "placeholder": "Example: \"Customer asked for paint match. Add to invoice later.\""
+      }
+    },
+    "materials": {
+      "title": "Materials used",
+      "subtitle": "Inventory items reduce stock automatically",
+      "addItem": "+ Add item"
+    },
+    "actions": {
+      "closing": "Closing...",
+      "close": "Close ticket"
+    },
+    "laborNote": "Labor time is calculated automatically from on-site check-in to completion."
+  },
+  "closeLineItem": {
+    "item": "Item #{{index}}",
+    "kind": {
+      "inventory": "Inventory",
+      "nonInventory": "Non-inventory"
+    },
+    "qty": "Qty",
+    "note": {
+      "label": "Note",
+      "placeholder": "Optional note (size, brand, etc.)"
+    },
+    "inventory": {
+      "productLabel": "Product (inventory)",
+      "selectProduct": "Select product",
+      "stock": "Stock {{qty}}"
+    },
+    "nonInventory": {
+      "nameLabel": "Name (non-inventory)",
+      "namePlaceholder": "e.g. \"Paint (custom match)\""
+    },
+      "validation": {
+    "workSummaryMax": "Work summary is too long.",
+    "internalNoteMax": "Internal note is too long.",
+    "qtyInteger": "Qty must be an integer.",
+    "qtyMin": "Qty must be at least 1.",
+    "noteMax": "Note is too long.",
+    "productRequired": "Select a product.",
+    "nameRequired": "Name is required."
+  }
+  },
+   "urgencyoptions": {
+    "placeholder": "Select urgency",
+    "options": {
+      "all": { "label": "All" },
+      "low": { "label": "Low", "description": "You can wait, there is no immediate risk." },
+      "medium": { "label": "Medium", "description": "It requires immediate attention." },
+      "high": { "label": "High", "description": "Top priority, possible emergency." }
+    }
+  }
+
+}

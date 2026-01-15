@@ -2,6 +2,11 @@
 import { apiSlice } from "./apiSlice";
 
 export interface Product {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  sku: any;
+  costCents: number;
+  sellCents: number;
+  stockQty: number;
   id: number;
   name: string;
   slug: string | null;
@@ -44,6 +49,9 @@ export interface CreateProductPayload {
   priceCents: number;
   imageUrl?: string;
   categoryId?: number;
+  stockQty: number;
+  costCents: number;
+  sellCents:number;
 }
 
 export interface UpdateProductPayload {
@@ -54,6 +62,9 @@ export interface UpdateProductPayload {
   priceCents?: number;
   imageUrl?: string;
   categoryId?: number;
+    stockQty: number;
+  costCents: number;
+  sellCents:number;
 }
 
 export const productsApi = apiSlice.injectEndpoints({

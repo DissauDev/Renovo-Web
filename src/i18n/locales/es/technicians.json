@@ -1,0 +1,24 @@
+{
+  "technicians": {
+    "title": "Técnicos",
+    "createPageTitle": "Crear nuevo usuario",
+    "createFormTitle": "Crear técnico",
+    "createSubmit": "Crear técnico"
+  },
+  "table": {
+    "columns": {
+      "name": "Nombre",
+      "email": "Correo",
+      "phone": "Teléfono",
+      "role": "Rol",
+      "status": "Estado",
+      "createdAt": "Creado el"
+    },
+    "searchPlaceholder": "Buscar por nombre, correo...",
+    "empty": "No hay resultados."
+  },
+  "status": {
+    "active": "Activo",
+    "inactive": "Inactivo"
+  }
+}

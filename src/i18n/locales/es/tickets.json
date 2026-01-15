@@ -1,0 +1,270 @@
+{
+  "title": "Tickets",
+  "subtitle": "Gestiona las órdenes de trabajo por estado, asignación y urgencia.",
+  "searchPlaceholder": "Buscar por título, descripción o cliente...",
+  "loading": "Cargando tickets...",
+  "errorLoad": "Error al cargar los tickets.",
+  "noResults": "Sin resultados",
+
+  "filters": {
+    "urgency": "Urgencia",
+    "status": "Estado",
+    "category": "Categoría",
+    "all": "Todos"
+  },
+
+  "tabs": {
+    "all": "Todos",
+    "pending": "Pendientes",
+    "scheduled": "Agendados",
+    "completed": "Completados"
+  },
+
+  "status": {
+    "ALL": "Todos",
+    "PENDING": "Pendiente",
+    "EN_ROUTE": "En camino",
+    "ON_SITE": "En sitio",
+    "CANCELLED": "Cancelado",
+    "SCHEDULED": "Agendado",
+    "COMPLETED": "Completado"
+  },
+
+  "card": {
+    "created": "Creado",
+    "client": "Cliente",
+    "technician": "Técnico",
+    "unassigned": "Sin asignar"
+  },
+
+  "urgency": {
+    "LOW": {
+      "label": "Baja",
+      "desc": "Puede esperar, no hay riesgo inmediato."
+    },
+    "MEDIUM": {
+      "label": "Media",
+      "desc": "Requiere atención inmediata."
+    },
+    "HIGH": {
+      "label": "Alta",
+      "desc": "Máxima prioridad, posible emergencia."
+    }
+  },
+   "form": {
+    "createTitle": "Crear nuevo ticket",
+    "editTitle": "Editar ticket",
+    "createSubtitle": "Crea un ticket para despacho/técnico.",
+    "editSubtitle": "Actualiza los detalles del ticket.",
+
+    "fields": {
+      "title": { "label": "Título", "placeholder": "Título del ticket" },
+      "description": { "label": "Descripción", "placeholder": "Describe el problema..." },
+      "clientName": { "label": "Nombre del cliente", "placeholder": "Juan Pérez" },
+      "clientPhone": { "label": "Teléfono del cliente", "placeholder": "+1 555 123 456" },
+      "clientEmail": { "label": "Email del cliente", "placeholder": "cliente@correo.com" },
+      "address": { "label": "Dirección", "placeholder": "Calle, número, ciudad..." },
+      "urgency": { "label": "Urgencia", "placeholder": "Seleccionar urgencia" },
+      "category": { "label": "Categoría", "placeholder": "Selecciona una categoría" }
+    },
+
+    "actions": {
+      "create": "Crear ticket",
+      "save": "Guardar cambios",
+      "creating": "Creando...",
+      "saving": "Guardando..."
+    },
+
+    "validation": {
+      "titleRequired": "El título es obligatorio",
+      "descriptionRequired": "La descripción es obligatoria",
+      "invalidEmail": "Email inválido",
+      "categoryRequired": "Selecciona una categoría",
+      "invalidUrl": "Debe ser una URL válida"
+    }
+  },
+
+  "details": {
+    "back": "Atrás",
+    "ticket": "Ticket",
+    "priority": "Prioridad",
+    "edit": "Editar",
+    "noAdditionalDescription": "Sin descripción adicional.",
+    "loadingTicketDetails": "Cargando detalles del ticket...",
+    "ticketNotFound": "El ticket {{id}} no existe o fue eliminado."
+  }, "edit": {
+    "invalidId": "ID de ticket inválido.",
+    "loading": "Cargando ticket...",
+    "notFound": "Ticket no encontrado.",
+    "retry": "Reintentar"
+  },
+  "toasts": {
+    "providerNotFound": "No se encontró el usuario proveedor. Inicia sesión de nuevo.",
+    "created": "Ticket creado correctamente.",
+    "createError": "Error al crear el ticket.",
+    "onlyPendingEditable": "Solo se pueden editar tickets pendientes.",
+    "updated": "Ticket actualizado.",
+    "updateError": "Error al actualizar el ticket."
+  },
+  "uploader": {
+    "label": "Imágenes",
+    "helperText": "Puedes subir hasta {{max}} imágenes.",
+    "maxReached": "Ya alcanzaste el número máximo de imágenes.",
+    "success": "Subida exitosa.",
+    "uploading": "Subiendo...",
+    "photoAlt": "Foto {{index}}"
+  },
+    "client": {
+    "client": "Cliente",
+    "provider": "Proveedor",
+    "tenant": "Arrendatario",
+    "propertyManager": "Administrador",
+    "noName": "Sin nombre"
+  },
+  "technician": {
+    "title": "Agenda & asigna un técnico",
+    "subtitle": "Selecciona un técnico y agenda fecha/hora.",
+    "unassigned": "Sin asignar",
+    "loading": "Cargando...",
+    "select": "Selecciona un técnico",
+    "confirm": "Confirma agenda",
+    "success": "Ticket Agendado",
+    "dateLabel":"Fecha",
+    "timeLabel": "Hora",
+      "selectDate": "Selecciona fecha ",
+    "errors": {
+      "selectDate": "Selecciona fecha y hora",
+      "schedule": "Error agendando ticket"
+    }
+  },
+  "statusPanel": {
+    "title": "Estado del Ticket",
+    "description": "Cambiar el estado del ticket según el progreso del técnico o del equipo de despacho.",
+    "select": "Selecciona un estado",
+    "confirm": "Confirma el cambio de estado",
+    "updating": "Cargando ...",
+    "noChanges": "No hay cambios que guardar",
+    "setCompleted": "Cambiar estado a completado",
+    "success": "Estado actualizado",
+    "error": "Error actualizando el estado del ticket"
+  },
+  
+  "common": {
+    "new": "Nuevo",
+    "close": "Cerrar",
+    "saving": "Guardando...",
+    "saveChanges": "Guardar cambios",
+    "cancel": "Cancelar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+        "open": "Abrir",
+    "hide": "Ocultar"
+
+  },
+  "scope": {
+    "title": "Tareas adicionales (alcance)",
+    "subtitle": "Complementos descubiertos en el sitio",
+    "empty": "Aún no hay tareas adicionales.",
+    "confirmDelete": "¿Eliminar esta tarea adicional?",
+    "validation": {
+      "titleMin": "Añade un título corto"
+    },
+    "form": {
+      "createTitle": "Añadir tarea adicional",
+      "editTitle": "Editar tarea adicional",
+      "switchToNew": "Cambiar a nuevo",
+      "add": "Añadir tarea",
+      "titlePlaceholder": "ej. \"Abrir pared + parche + pintura\"",
+      "notesPlaceholder": "Notas (opcional)"
+    },
+    "toast": {
+      "added": "Tarea adicional añadida",
+      "updated": "Tarea adicional actualizada",
+      "deleted": "Tarea adicional eliminada",
+      "saveError": "Error al guardar la tarea adicional",
+      "deleteError": "Error al eliminar la tarea"
+    }
+  },
+  "photos": {
+    "title": "Fotos",
+    "empty": "No hay imágenes para mostrar",
+    "photoAlt": "Foto del ticket {{index}}"
+  },
+  "detailsPanel": {
+    "title": "Detalles del pedido",
+    "addressLabel": "Dirección del servicio",
+    "noAddress": "No se proporcionó dirección.",
+    "created": "Creado",
+    "scheduledAt": "Programado para"
+  },
+
+  "closePanel": {
+    "title": "Cerrar ticket",
+    "subtitle": "Añade materiales utilizados + notas (el tiempo de mano de obra es automático)"
+  },
+  "closeForm": {
+    "toast": {
+      "closed": "Ticket cerrado (listo para facturar)",
+      "error": "Error al cerrar el ticket"
+    },
+    "fields": {
+      "workSummary": {
+        "label": "Resumen del trabajo (para la factura)",
+        "placeholder": "Ejemplo: \"Se reparó fuga tras la pared; parcheado y sellado.\""
+      },
+      "internalNote": {
+        "label": "Nota interna (solo admin)",
+        "placeholder": "Ejemplo: \"El cliente pidió igualar pintura. Añadir a la factura después.\""
+      }
+    },
+    "materials": {
+      "title": "Materiales utilizados",
+      "subtitle": "Los artículos de inventario reducen el stock automáticamente",
+      "addItem": "+ Añadir artículo"
+    },
+    "actions": {
+      "closing": "Cerrando...",
+      "close": "Cerrar ticket"
+    },
+    "laborNote": "El tiempo de mano de obra se calcula automáticamente desde el check-in en el sitio hasta la finalización."
+  },
+  "closeLineItem": {
+    "item": "Artículo #{{index}}",
+    "kind": {
+      "inventory": "Inventario",
+      "nonInventory": "Fuera de inventario"
+    },
+    "qty": "Cant.",
+    "note": {
+      "label": "Nota",
+      "placeholder": "Nota opcional (tamaño, marca, etc.)"
+    },
+    "inventory": {
+      "productLabel": "Producto (inventario)",
+      "selectProduct": "Seleccionar producto",
+      "stock": "Stock {{qty}}"
+    },
+    "nonInventory": {
+      "nameLabel": "Nombre (fuera de inventario)",
+      "namePlaceholder": "ej. \"Pintura (color personalizado)\""
+    },
+    "validation": {
+  "workSummaryMax": "El resumen del trabajo es demasiado largo.",
+  "internalNoteMax": "La nota interna es demasiado larga.",
+  "qtyInteger": "La cantidad debe ser un número entero.",
+  "qtyMin": "La cantidad debe ser al menos 1.",
+  "noteMax": "La nota es demasiado larga.",
+  "productRequired": "Seleccione un producto.",
+  "nameRequired": "El nombre es obligatorio."
+}
+  },
+  "urgencyoptions": {
+    "placeholder": "Seleccionar urgencia",
+    "options": {
+      "all": { "label": "Todas" },
+      "low": { "label": "Baja", "description": "Puede esperar, no hay riesgo inmediato." },
+      "medium": { "label": "Media", "description": "Requiere atención pronta." },
+      "high": { "label": "Alta", "description": "Máxima prioridad, posible emergencia." }
+    }
+  }
+}

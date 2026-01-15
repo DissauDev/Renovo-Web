@@ -9,6 +9,7 @@ import {
   SelectItem,
 } from "../../ui/select";
 import { cn } from "../../../lib/utils";
+import { useTranslation } from "react-i18next";
 
 export type UseOptionsHook<T> = () => {
   data?: T[];
@@ -26,7 +27,7 @@ interface AsyncSelectProps<T> {
   value?: string;
   useLabel?: boolean;
   onChange?: (value: string) => void;
-
+  filterOptions?: (options: T[]) => T[];
   useOptionsHook: UseOptionsHook<T>;
   getOptionLabel: (item: T) => string;
   getOptionValue: (item: T) => string;
@@ -53,7 +54,7 @@ export function AsyncSelect<T>({
   getOptionValue,
   enableSearch = false,
   mode = "input",
-
+  filterOptions,
   className,
   includeAllOption = false,
   wrapperClassName,
@@ -65,7 +66,10 @@ export function AsyncSelect<T>({
 
   const [search, setSearch] = React.useState("");
 
-  const options = React.useMemo(() => data ?? [], [data]);
+  const options = React.useMemo(() => {
+    const base = data ?? [];
+    return filterOptions ? filterOptions(base) : base;
+  }, [data, filterOptions]);
 
   const filteredOptions = React.useMemo(() => {
     if (!enableSearch || !search.trim()) return options;
@@ -76,6 +80,7 @@ export function AsyncSelect<T>({
   }, [options, search, enableSearch, getOptionLabel]);
 
   const isFilterMode = mode === "filter";
+  const { t } = useTranslation("common");
 
   return (
     <div className={cn("flex flex-col gap-2", wrapperClassName)}>
@@ -118,9 +123,9 @@ export function AsyncSelect<T>({
           <SelectValue
             placeholder={
               isLoading
-                ? "Cargando..."
+                ? t("asyncSelect.loading")
                 : isError
-                ? "Error al cargar"
+                ? t("asyncSelect.error")
                 : placeholder
             }
           />
@@ -134,7 +139,7 @@ export function AsyncSelect<T>({
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Buscar..."
+                placeholder={t("asyncSelect.searchPlaceholder")}
                 className="w-full rounded-md border border-slate-200
               
                  px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-oxford-blue-500"
@@ -149,7 +154,7 @@ export function AsyncSelect<T>({
               disabled
               className="text-xs text-slate-500 cursor-default"
             >
-              loading...
+              {t("asyncSelect.loadingLower")}
             </SelectItem>
           )}
 
@@ -159,7 +164,7 @@ export function AsyncSelect<T>({
               disabled
               className="text-xs text-red-500 cursor-default"
             >
-              Error to loading
+              {t("asyncSelect.errorLower")}
             </SelectItem>
           )}
 
@@ -169,7 +174,7 @@ export function AsyncSelect<T>({
               disabled
               className="text-xs text-slate-500 cursor-default"
             >
-              No results
+              {t("asyncSelect.empty")}
             </SelectItem>
           )}
 
@@ -184,7 +189,7 @@ export function AsyncSelect<T>({
                 "hover:bg-slate-50 hover:text-slate-800 hover:pl-3 hover:shadow-sm"
               )}
             >
-              {"All"}
+              {t("filters.all")}
             </SelectItem>
           )}
 

@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+
 import {
   useGetUsersQuery,
   type User,
@@ -7,7 +10,6 @@ import {
   DataTable,
   type TableColumn,
 } from "../../../components/ui/dashboad/DataTable";
-import { useNavigate } from "react-router-dom";
 import {
   ActiveStatusSelect,
   type ActiveFilterValue,
@@ -15,6 +17,8 @@ import {
 import { HeaderTab } from "../../../components/layout/HeaderTab";
 
 export const TechniciansPage: React.FC = () => {
+  const { t } = useTranslation("technicians");
+
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const pageSize = 10;
@@ -28,6 +32,7 @@ export const TechniciansPage: React.FC = () => {
     pageSize,
     active: activeFilter === "ALL" ? undefined : activeFilter === "true",
   });
+
   // data viene como: { items: User[], meta: { total, page, ... } }
   const items: User[] = data?.items ?? [];
   const totalItems: number = data?.meta?.total ?? items.length;
@@ -35,24 +40,24 @@ export const TechniciansPage: React.FC = () => {
   const columns: TableColumn<User>[] = [
     {
       key: "name",
-      header: "Name",
+      header: t("table.columns.name"),
       render: (u) => (
         <span className="font-medium text-slate-800">{u.name}</span>
       ),
     },
     {
       key: "email",
-      header: "Email",
+      header: t("table.columns.email"),
       render: (u) => <span className="text-slate-600">{u.email}</span>,
     },
     {
       key: "phone",
-      header: "Phone",
+      header: t("table.columns.phone"),
       render: (u) => <span className="text-slate-600">{u.phone ?? "—"}</span>,
     },
     {
       key: "role",
-      header: "Role",
+      header: t("table.columns.role"),
       render: (u) => (
         <span
           className="inline-flex items-center rounded-full bg-indigo-50
@@ -63,22 +68,26 @@ export const TechniciansPage: React.FC = () => {
       ),
     },
     {
-      key: "is Active?",
-      header: "is Active?",
+      key: "isActive",
+      header: t("table.columns.status"),
       render: (u) => (
         <span
           className={`
-    inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium
-    ${u.isActive ? "bg-emerald-50 text-emerald-700" : "bg-red-50 text-red-700"}
-  `}
+            inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium
+            ${
+              u.isActive
+                ? "bg-emerald-50 text-emerald-700"
+                : "bg-red-50 text-red-700"
+            }
+          `}
         >
-          {u.isActive ? "Active" : "Desactive"}
+          {u.isActive ? t("status.active") : t("status.inactive")}
         </span>
       ),
     },
     {
       key: "createdAt",
-      header: "Created at",
+      header: t("table.columns.createdAt"),
       render: (u) => (
         <span className="text-slate-500">
           {new Date(u.createdAt).toLocaleDateString()}
@@ -91,10 +100,12 @@ export const TechniciansPage: React.FC = () => {
     <div className="space-y-4">
       <HeaderTab
         hadle={() => navigate("/app/technicians/new")}
-        title="Technicians"
+        title={"technicians"}
       />
+
       <DataTable<User>
-        title="Technicians"
+        title={t("technicians.title")}
+        i18nNs="users"
         data={items}
         columns={columns}
         isLoading={isLoading}
@@ -102,6 +113,15 @@ export const TechniciansPage: React.FC = () => {
         onSearchChange={(val) => {
           setSearch(val);
           setPage(1); // resetea a la primera página al buscar
+        }}
+        searchPlaceholder={t("table.searchPlaceholder")}
+        emptyMessage={t("table.empty")}
+        page={page}
+        pageSize={pageSize}
+        totalItems={totalItems}
+        onPageChange={setPage}
+        onRowClick={(row) => {
+          navigate(`/app/technicians/${row.id}`);
         }}
         rightSlot={
           <div className="flex flex-wrap gap-2">
@@ -115,14 +135,6 @@ export const TechniciansPage: React.FC = () => {
             />
           </div>
         }
-        searchPlaceholder="Search by name, email..."
-        page={page}
-        pageSize={pageSize}
-        totalItems={totalItems}
-        onPageChange={setPage}
-        onRowClick={(row) => {
-          navigate(`/app/technicians/${row.id}`);
-        }}
       />
     </div>
   );

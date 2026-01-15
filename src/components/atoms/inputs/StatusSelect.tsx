@@ -37,13 +37,13 @@ export const StatusSelect: React.FC<StatusSelectProps> = ({
   value,
   onChange,
   options,
-  placeholder = "Seleccionar",
+  placeholder = "Select",
   className,
   label,
   wrapperClassName,
   labelClassName,
   includeAllOption = false,
-  allLabel = "Todos",
+  allLabel = "All",
   allValue = "ALL",
 }) => {
   const current = options.find((o) => o.value === value);

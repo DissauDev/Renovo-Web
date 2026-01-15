@@ -2,6 +2,7 @@ import { apiSlice } from "./apiSlice";
 
 
 export interface Category {
+  icon: string;
   id: number;
   name: string;
   isActive?: boolean;
@@ -22,11 +23,13 @@ export interface ListCategoriesArgs {
 // Crear categoría
 export interface CreateCategoryPayload {
   name: string;
+  icon: string;
 }
 
 // Actualizar categoría (solo name por ahora)
 export interface UpdateCategoryPayload {
   id: number;
+  icon?:string;
   name?: string;
 }
 
@@ -79,7 +82,7 @@ export const categoriesApi = apiSlice.injectEndpoints({
       query: (body) => ({
         url: "/categories",
         method: "POST",
-        // 👇 importante: usas `data` en tu baseQuery tipo axios
+       
         data: body,
       }),
       invalidatesTags: [{ type: "Category", id: "LIST" }],

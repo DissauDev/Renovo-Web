@@ -18,6 +18,7 @@ import {
   type ActiveFilterValue,
 } from "../../../components/atoms/inputs/ActiveStatusSelect.tsx";
 import { HeaderTab } from "../../../components/layout/HeaderTab.tsx";
+import { useTranslation } from "react-i18next";
 
 export const ProductsPage = () => {
   const [search, setSearch] = useState("");
@@ -35,70 +36,132 @@ export const ProductsPage = () => {
     active: activeFilter === "ALL" ? undefined : activeFilter === "true",
   });
 
+  const { t } = useTranslation("products");
+
   const products: Product[] = data?.items ?? [];
   const total = data?.total ?? 0;
 
   const columns: TableColumn<Product>[] = [
     {
       key: "name",
-      header: "Name",
-      render: (u) => (
-        <span className="font-medium text-slate-800">{u.name}</span>
+      header: t("table.columns.name"),
+      render: (p) => (
+        <div className="flex flex-col">
+          <span className="font-medium text-slate-800">{p.name}</span>
+          {p.sku && (
+            <span className="text-[11px] text-slate-500">
+              {t("table.sku")}: {p.sku}
+            </span>
+          )}
+        </div>
       ),
     },
+
     {
       key: "price",
-      header: "price",
-      render: (u) => <span className="text-slate-600">${u.priceCents}</span>,
-    },
-    {
-      key: "descriptio",
-      header: "description",
-      render: (u) => (
-        <span className="text-slate-600">{u.description ?? "—"}</span>
+      header: t("table.columns.price"),
+      render: (p) => (
+        <div className="flex flex-col text-sm">
+          <span className="font-medium text-slate-700">
+            ${((p.sellCents ?? 0) / 100).toFixed(2)}
+          </span>
+          <span className="text-[11px] text-slate-500">
+            {t("table.cost")} ${((p.costCents ?? 0) / 100).toFixed(2)}
+          </span>
+        </div>
       ),
     },
+
     {
-      key: "Category",
-      header: "Category",
-      render: (u) => (
-        <span
-          className="inline-flex items-center rounded-full bg-indigo-50 px-2
-         py-0.5 text-[11px] font-medium text-indigo-700"
-        >
-          {u.category?.name}
+      key: "stock",
+      header: t("table.columns.stock"),
+      render: (p) => {
+        const qty = p.stockQty ?? 0;
+
+        const stockStyles =
+          qty === 0
+            ? "bg-red-50 text-red-700"
+            : qty <= 5
+            ? "bg-amber-50 text-amber-700"
+            : "bg-emerald-50 text-emerald-700";
+
+        return (
+          <span
+            className={`
+            inline-flex items-center justify-center min-w-[48px]
+            rounded-full px-2 py-0.5 text-[11px] font-medium
+            ${stockStyles}
+          `}
+          >
+            {qty}
+          </span>
+        );
+      },
+    },
+
+    {
+      key: "description",
+      header: t("table.columns.description"),
+      render: (p) => (
+        <span className="text-slate-600 line-clamp-2">
+          {p.description ?? "—"}
         </span>
       ),
     },
+
     {
-      key: "is Active?",
-      header: "is Active?",
-      render: (u) => (
+      key: "category",
+      header: t("table.columns.category"),
+      render: (p) => (
+        <span
+          className="
+          inline-flex items-center rounded-full
+          bg-indigo-50 px-2 py-0.5
+          text-[11px] font-medium text-indigo-700
+        "
+        >
+          {p.category?.name ?? "—"}
+        </span>
+      ),
+    },
+
+    {
+      key: "isActive",
+      header: t("table.columns.status"),
+      render: (p) => (
         <span
           className={`
-    inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium
-    ${u.isActive ? "bg-emerald-50 text-emerald-700" : "bg-red-50 text-red-700"}
-  `}
+          inline-flex items-center rounded-full px-2 py-0.5
+          text-[11px] font-medium
+          ${
+            p.isActive
+              ? "bg-emerald-50 text-emerald-700"
+              : "bg-red-50 text-red-700"
+          }
+        `}
         >
-          {u.isActive ? "Active" : "Desactive"}
+          {p.isActive ? t("status.active") : t("status.inactive")}
         </span>
       ),
     },
+
     {
       key: "createdAt",
-      header: "Created at",
-      render: (u) => (
-        <span className="text-slate-500">
-          {new Date(u.createdAt).toLocaleDateString()}
+      header: t("table.columns.createdAt"),
+      render: (p) => (
+        <span className="text-slate-500 text-sm">
+          {new Date(p.createdAt).toLocaleDateString()}
         </span>
       ),
     },
   ];
+
   return (
     <div className="space-y-4">
       <HeaderTab hadle={() => navigate("/app/products/new")} title="Products" />
       <DataTable<Product>
-        title="Products"
+        title={t("title")}
+        i18nNs="products"
         data={products}
         columns={columns}
         isLoading={isLoading}
@@ -107,7 +170,8 @@ export const ProductsPage = () => {
           setSearch(val);
           setPage(1); // resetea a la primera página al buscar
         }}
-        searchPlaceholder="Search by name, email..."
+        emptyMessage={t("table.empty")}
+        searchPlaceholder={t("table.searchPlaceholder")}
         page={page}
         pageSize={pageSize}
         totalItems={total}

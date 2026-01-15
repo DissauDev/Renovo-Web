@@ -1,0 +1,96 @@
+{
+
+  "layout": {
+    "loggedInAs": "Logged in as",
+    "myProfile": "My profile",
+    "userFallback": "User"
+  },
+  "actions": {
+    "create": "Create"
+  },
+  "nav": {
+    "tickets": "Tickets",
+    "technicians": "Technicians",
+    "providers": "Providers",
+    "categories": "Categories",
+    "products": "Products",
+    "invoices": "Invoices",
+    "settings": "Settings"
+  },
+
+
+  "tickets": {
+    "title": "Tickets",
+    "status": {
+      "scheduled": "Scheduled",
+      "pending": "Pending",
+      "completed": "Completed"
+    }
+  
+},  "table": {
+    "subtitle": "Manage and search records.",
+    "searchPlaceholder": "Search by name...",
+    "loading": "Loading records...",
+    "empty": "No records found.",
+    "noRecords": "No records to display.",
+    "showing": "Showing {{from}}–{{to}} of {{total}} records",
+    "pageOf": "Page {{page}} of {{totalPages}}",
+    "prev": "Prev",
+    "next": "Next",
+    "columns": {
+      "name": "Name",
+      "tickets": "Tickets",
+      "products": "Products",
+      "active": "Active?",
+      "createdAt": "Created at"
+    }
+  },
+  
+  "filters": {
+    "all": "All",
+    "selectStatus": "Select status"
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "asyncSelect": {
+    "loading": "Loading...",
+    "error": "Error loading",
+    "searchPlaceholder": "Search...",
+    "loadingLower": "loading...",
+    "errorLower": "Error loading",
+    "empty": "No results"
+  },
+ "sidebar": {
+    "logoAlt": "Renovo Logo",
+    "aria": { "nav": "Sidebar navigation" },
+    "nav": {
+      "tickets": "Tickets",
+      "technicians": "Technicians",
+      "providers": "Providers",
+      "categories": "Categories",
+      "products": "Products",
+      "invoices": "Invoices",
+      "settings": "Settings"
+    },
+    "mobile": {
+      "openMenu": "Open menu",
+      "closeMenu": "Close menu",
+      "title": "Menu",
+      "subtitle": "Quick navigation",
+      "close": "Close"
+    }
+  }, "settings": {
+    "title": "Settings",
+    "language": {
+      "title": "Language",
+      "subtitle": "Choose the language for the dashboard interface.",
+      "hint": "Changes apply immediately.",
+      "aria": "Language selector",
+      "es": "Spanish",
+      "en": "English"
+    }
+  }
+
+}

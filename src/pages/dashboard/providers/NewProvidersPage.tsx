@@ -1,29 +1,24 @@
-import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { useTranslation } from "react-i18next";
 import { UserForm } from "../../../components/users/UserForm";
-import { useNavigate } from "react-router-dom";
+import { ButtonBack } from "../../../components/layout/ButtonBack";
 
 export const NewProvidersPage = () => {
-  const navigate = useNavigate();
-  return (
-    <div>
-      <button
-        type="button"
-        onClick={() => navigate("/app/technicians")}
-        className="px-4 flex flex-row py-2 text-sm items-center justify-center rounded-lg border border-slate-300
-                 text-slate-700 hover:bg-slate-300"
-      >
-        <ArrowLeftIcon className="size-6 mr-2" /> Go Back
-      </button>
+  const { t } = useTranslation("providers");
 
-      <h1 className="text-xl text-center font-semibold text-slate-900 mb-4">
-        Create new user
+  return (
+    <div className="space-y-4">
+      <ButtonBack />
+
+      <h1 className="text-xl text-center font-varien text-oxford-blue-800">
+        {t("new.title", "Create new user")}
       </h1>
+
       <div className="items-center w-full justify-center flex">
         <UserForm
-          title="Create provider"
-          defaultRole="EMPLOYEE"
+          title={t("new.formTitle", "Create provider")}
+          defaultRole="PROVIDER"
           hideRoleSelect
-          submitLabel="Create technician"
+          submitLabel={t("new.submit", "Create provider")}
         />
       </div>
     </div>

@@ -8,7 +8,6 @@ import {
 import { UserForm, type UserFormValues } from "./UserForm";
 
 import {
-  ArrowLeftIcon,
   CalendarDaysIcon,
   ShieldCheckIcon,
   AtSymbolIcon,
@@ -20,6 +19,8 @@ import {
 import { toastNotify } from "../../lib/toastNotify";
 import { useLogoutMutation } from "../../store/features/api/authApi";
 import { usePatchProductActiveMutation } from "../../store/features/api/productsApi";
+import { useTranslation } from "react-i18next";
+import { ButtonBack } from "../layout/ButtonBack";
 
 interface Props {
   defaultRoleProp?: "ADMIN" | "PROVIDER" | "EMPLOYEE";
@@ -32,6 +33,8 @@ export const UserDetailPage = ({
   showLogoutButton,
   desactiveUser,
 }: Props) => {
+  const { t } = useTranslation("providers");
+
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -55,9 +58,10 @@ export const UserDetailPage = ({
       navigate("/"); // o la ruta que uses para el login
     } catch (error) {
       console.error(error);
-      toastNotify("Error logging out", "error");
+      toastNotify(t("detail.toasts.logoutError"), "error");
     }
   };
+
   const [patchActive, { isLoading: isToggling }] =
     usePatchProductActiveMutation();
 
@@ -73,14 +77,15 @@ export const UserDetailPage = ({
         data: rest,
       }).unwrap();
 
-      toastNotify("success", "success");
+      toastNotify(t("detail.toasts.updated"), "success");
       refetch();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error(error);
-      toastNotify(error.message || "Error to update", "error");
+      toastNotify(error.message || t("detail.toasts.updateError"), "error");
     }
   };
+
   const handleToggleActive = async () => {
     if (!userId) return;
     try {
@@ -90,39 +95,44 @@ export const UserDetailPage = ({
       }).unwrap();
 
       toastNotify(
-        `Product ${!typedUser.isActive ? "activated" : "deactivated"}`,
+        t("detail.toasts.toggled", {
+          status: !typedUser.isActive
+            ? t("detail.toasts.activated")
+            : t("detail.toasts.deactivated"),
+        }),
         "success"
       );
       refetch();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      toastNotify(err?.message || "Error toggling product status", "error");
+      toastNotify(err?.message || t("detail.toasts.toggleError"), "error");
     }
   };
+
   if (!userId) {
     return (
       <div className="p-4">
-        <p className="text-sm text-red-500">Invalid user id.</p>
+        <p className="text-sm text-red-500">{t("detail.invalidId")}</p>
       </div>
     );
   }
 
   if (isLoading) {
     return (
-      <div className="p-4 text-sm text-slate-500">Loading user details...</div>
+      <div className="p-4 text-sm text-slate-500">{t("detail.loading")}</div>
     );
   }
 
   if (isError || !user) {
     return (
       <div className="p-4 space-y-3">
-        <p className="text-sm text-red-500">Error loading user.</p>
+        <p className="text-sm text-red-500">{t("detail.loadError")}</p>
         <button
           type="button"
           onClick={() => refetch()}
           className="text-xs px-3 py-1 rounded-md border border-slate-300 hover:bg-slate-50"
         >
-          Retry
+          {t("detail.retry")}
         </button>
       </div>
     );
@@ -136,19 +146,12 @@ export const UserDetailPage = ({
       {/* Header + back button */}
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-1">
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            className="inline-flex items-center gap-1 text-xs text-slate-500 hover:text-slate-700"
-          >
-            <ArrowLeftIcon className="h-4 w-4" />
-            Go Back
-          </button>
+          <ButtonBack />
           <h1 className="text-lg font-varien text-oxford-blue-800">
-            User details
+            {t("detail.title")}
           </h1>
           <p className="text-sm text-oxford-blue-600 font-semibold">
-            View and edit user information. Some fields are read-only.
+            {t("detail.subtitle")}
           </p>
         </div>
 
@@ -165,16 +168,16 @@ export const UserDetailPage = ({
           >
             <h4 className="flex flex-row items-center gap-2 font-varien">
               {isToggling ? (
-                "Processing..."
+                t("detail.processing")
               ) : typedUser.isActive ? (
                 <>
                   <ShieldExclamationIcon className="size-6 text-white" />{" "}
-                  {"Desactivate"}{" "}
+                  {t("detail.deactivate")}
                 </>
               ) : (
                 <>
                   <CheckBadgeIcon className="size-6 text-emerald-700" />{" "}
-                  {"Activate"}{" "}
+                  {t("detail.activate")}
                 </>
               )}
             </h4>
@@ -187,7 +190,7 @@ export const UserDetailPage = ({
              border-slate-200 px-3 py-1.5 text-sm font-varien text-oxford-blue-700 hover:bg-slate-50"
           >
             <ShieldCheckIcon className="h-5 w-5" />
-            Change password
+            {t("detail.changePassword")}
           </button>
         )}
 
@@ -201,7 +204,7 @@ export const UserDetailPage = ({
              font-varien text-persian-red-600 hover:bg-red-100"
           >
             <ArrowLeftStartOnRectangleIcon className="size-5" />{" "}
-            {isLoggingOut ? "Logging out..." : "Log out"}
+            {isLoggingOut ? t("detail.loggingOut") : t("detail.logout")}
           </button>
         )}
       </div>
@@ -211,7 +214,7 @@ export const UserDetailPage = ({
         <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-xs">
           <div className="flex items-center gap-2 text-xs font-varien text-slate-500 mb-1">
             <FingerPrintIcon className="h-4 w-4" />
-            <span>User ID</span>
+            <span>{t("detail.cards.userId")}</span>
           </div>
           <p className="text-sm font-semibold text-slate-700">
             #{typedUser.id}
@@ -221,7 +224,7 @@ export const UserDetailPage = ({
         <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-xs">
           <div className="flex items-center gap-2 text-xs font-varien text-slate-500 mb-1">
             <ShieldCheckIcon className="h-4 w-4" />
-            <span>Role</span>
+            <span>{t("detail.cards.role")}</span>
           </div>
           <p
             className="inline-flex items-center rounded-full bg-cameo-100 px-2 py-0.5 
@@ -234,14 +237,9 @@ export const UserDetailPage = ({
         <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-xs">
           <div className="flex items-center gap-2 text-xs font-varien text-slate-500 mb-1">
             <CalendarDaysIcon className="h-4 w-4" />
-            <span>Created at</span>
+            <span>{t("detail.cards.createdAt")}</span>
           </div>
-          <p
-            className="text-sm font-semibold
-           text-slate-700"
-          >
-            {createdAt}
-          </p>
+          <p className="text-sm font-semibold text-slate-700">{createdAt}</p>
         </div>
       </div>
 
@@ -252,7 +250,9 @@ export const UserDetailPage = ({
       >
         <AtSymbolIcon className="h-4 w-4" />
         <div className="flex flex-col">
-          <span className="font-semibold text-sm">Login email</span>
+          <span className="font-semibold text-sm">
+            {t("detail.cards.loginEmail")}
+          </span>
           <span className="text-[11px]">{typedUser.email}</span>
         </div>
       </div>
@@ -260,14 +260,11 @@ export const UserDetailPage = ({
       {/* Formulario de edición (reutilizando tu UserForm) */}
       <div className="rounded-2xl border border-slate-200  p-6 shadow-sm mx-auto max-w-lg">
         <div className="flex flex-col items-center">
-          {/* WRAPPER que controla la alineación del título y el form */}
           <div className="w-full max-w-md flex flex-col items-center">
-            {/* TÍTULO centrado respecto al card, pero alineado a la izquierda donde empieza el form */}
             <h2 className="text-sm font-varien text-oxford-blue-800 mb-3 w-full text-left">
-              Editable information
+              {t("detail.editable")}
             </h2>
 
-            {/* FORM centrado */}
             <UserForm
               mode="edit"
               hidePasswordField
@@ -280,7 +277,7 @@ export const UserDetailPage = ({
                 email: typedUser.email,
                 role: typedUser.role,
               }}
-              submitLabel={isUpdating ? "Saving..." : "Save changes"}
+              submitLabel={isUpdating ? t("detail.saving") : t("detail.save")}
               onSubmitForm={handleSubmit}
             />
           </div>

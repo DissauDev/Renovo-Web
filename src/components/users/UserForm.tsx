@@ -1,4 +1,3 @@
-// src/components/users/UserForm.tsx
 import * as React from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { z } from "zod";
@@ -9,45 +8,46 @@ import { cn } from "../../lib/utils";
 import { toast } from "react-toastify";
 import { useCreateUserMutation } from "../../store/features/api/userApi";
 import { FormInputPhone } from "../atoms/form/FormInputPhone";
+import { useTranslation } from "react-i18next";
 
 type Role = "ADMIN" | "PROVIDER" | "EMPLOYEE";
 
+const US_PHONE_REGEX = /^\+?1?\s*\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$/;
+
 //
-// 1) Esquemas Zod separados para crear vs editar
+// 🔹 Zod schemas (create vs edit)
 //
 const baseUserSchema = z.object({
-  name: z.string().min(1, "Name is required"),
+  name: z.string().min(1, "validation.nameRequired"),
   userName: z.string().optional(),
   phone: z
     .string()
     .optional()
-    .refine(
-      (val) =>
-        !val || /^\+?1?\s*\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$/.test(val),
-      {
-        message: "Phone must be a valid US number",
-      }
-    ),
-  email: z.string().min(1, "Email is required").email("Invalid email address"),
+    .refine((val) => !val || US_PHONE_REGEX.test(val), {
+      message: "validation.phoneInvalid",
+    }),
+  email: z
+    .string()
+    .min(1, "validation.emailRequired")
+    .email("validation.emailInvalid"),
   role: z.enum(["ADMIN", "PROVIDER", "EMPLOYEE"]),
 });
 
-// Para crear: password obligatoria y fuerte
+// create: strong password required
 const createUserSchema = baseUserSchema.extend({
   password: z
     .string()
-    .min(8, "Password must be at least 8 characters")
-    .regex(/[A-Z]/, "Must contain at least one uppercase letter")
-    .regex(/[a-z]/, "Must contain at least one lowercase letter")
-    .regex(/\d/, "Must contain at least one number"),
+    .min(8, "validation.passwordMin")
+    .regex(/[A-Z]/, "validation.passwordUpper")
+    .regex(/[a-z]/, "validation.passwordLower")
+    .regex(/\d/, "validation.passwordNumber"),
 });
 
-// Para editar: password opcional (y en nuestro caso la ocultaremos)
+// edit: password optional
 const updateUserSchema = baseUserSchema.extend({
   password: z.string().optional(),
 });
 
-// Tipo del formulario (password opcional)
 export type UserFormValues = {
   name: string;
   userName?: string;
@@ -67,16 +67,9 @@ interface UserFormProps {
   submitLabel?: string;
   className?: string;
 
-  // 🔹 NUEVO: modo de uso
-  mode?: UserFormMode; // "create" por defecto
-
-  // 🔹 NUEVO: valores iniciales para editar
+  mode?: UserFormMode; // default "create"
   initialValues?: Partial<UserFormValues>;
-
-  // 🔹 NUEVO: submit externo (para update, etc.)
   onSubmitForm?: (values: UserFormValues) => Promise<void> | void;
-
-  // 🔹 NUEVO: ocultar el campo password (para edición)
   hidePasswordField?: boolean;
 }
 
@@ -92,13 +85,13 @@ export const UserForm: React.FC<UserFormProps> = ({
   onSubmitForm,
   hidePasswordField = false,
 }) => {
+  const { t } = useTranslation("providers");
+
   const isEditMode = mode === "edit";
 
-  // Mutación solo para crear
   const [createUser, { isLoading: isCreating }] = useCreateUserMutation();
   const [showPassword, setShowPassword] = React.useState(false);
 
-  // Valores por defecto combinando create + initialValues de edición
   const effectiveDefaults: UserFormValues = {
     name: "",
     userName: "",
@@ -109,7 +102,6 @@ export const UserForm: React.FC<UserFormProps> = ({
     ...initialValues,
   };
 
-  // Escogemos el schema según modo
   const schema = isEditMode ? updateUserSchema : createUserSchema;
 
   const {
@@ -123,19 +115,16 @@ export const UserForm: React.FC<UserFormProps> = ({
   });
 
   const onSubmit: SubmitHandler<UserFormValues> = async (values) => {
-    // Role efectivo (por si ocultamos el select)
     const payload: UserFormValues = {
       ...values,
       role: hideRoleSelect ? defaultRole : values.role,
     };
 
-    // Si nos pasas un onSubmit externo (modo edición), se usa eso
     if (onSubmitForm) {
       await onSubmitForm(payload);
       return;
     }
 
-    // Sin onSubmitForm, asumimos modo CREATE con RTK-Query interno
     if (isEditMode) {
       console.warn(
         "UserForm in 'edit' mode without onSubmitForm; nothing will be sent."
@@ -144,14 +133,13 @@ export const UserForm: React.FC<UserFormProps> = ({
     }
 
     try {
-      // Ensure password is always a string to satisfy the CreateUserPayload type
       await createUser({
         ...payload,
         sendEmail: true,
         password: payload.password ?? "",
       }).unwrap();
 
-      toast.success("User created successfully", {
+      toast.success(t("toasts.created", "User created successfully"), {
         position: "top-right",
       });
 
@@ -167,22 +155,34 @@ export const UserForm: React.FC<UserFormProps> = ({
       onSuccess?.();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      console.error("Create user error:", error);
-      toast.error(error?.message || "Error creating user", {
-        position: "top-right",
-      });
+      toast.error(
+        error?.message || t("toasts.createError", "Error creating user"),
+        { position: "top-right" }
+      );
     }
   };
 
-  const heading = title ?? (isEditMode ? "Edit user" : "Create user");
+  const heading =
+    title ??
+    (isEditMode
+      ? t("form.titleEdit", "Edit user")
+      : t("form.titleCreate", "Create user"));
+
   const description = isEditMode
-    ? "Update the information for this user."
-    : "Fill the information to create a new user.";
+    ? t("form.subtitleEdit", "Update the information for this user.")
+    : t("form.subtitleCreate", "Fill the information to create a new user.");
 
-  const submittingLabel =
-    submitLabel ?? (isEditMode ? "Save changes" : "Create user");
+  const submitText =
+    submitLabel ??
+    (isEditMode
+      ? t("form.submitSave", "Save changes")
+      : t("form.submitCreate", "Create user"));
 
-  const isSubmitting = isEditMode ? false : isCreating;
+  // If you want edit mode loading, pass isSubmitting from parent via onSubmitForm.
+  const isSubmitting = !isEditMode && isCreating;
+
+  // helper to render zod error keys -> translated messages
+  const renderError = (msg?: string) => (msg ? t(msg, msg) : undefined);
 
   return (
     <div
@@ -203,70 +203,108 @@ export const UserForm: React.FC<UserFormProps> = ({
         <div className="grid grid-cols-1 gap-4">
           {/* Name */}
           <FormInput
-            label="Name"
-            placeholder="John Doe"
-            error={errors.name}
+            label={t("form.fields.name.label", "Name")}
+            placeholder={t("form.fields.name.placeholder", "John Doe")}
+            error={
+              errors.name
+                ? { ...errors.name, message: renderError(errors.name.message) }
+                : undefined
+            }
             {...register("name")}
           />
 
           {/* Username */}
           <FormInput
-            label="Username"
-            placeholder="john.doe"
-            error={errors.userName}
+            label={t("form.fields.userName.label", "Username")}
+            placeholder={t("form.fields.userName.placeholder", "john.doe")}
+            error={
+              errors.userName
+                ? {
+                    ...errors.userName,
+                    message: renderError(errors.userName.message),
+                  }
+                : undefined
+            }
             {...register("userName")}
           />
 
           {/* Email */}
           <FormInput
-            label="Email"
+            label={t("form.fields.email.label", "Email")}
             type="email"
-            placeholder="user@example.com"
-            error={errors.email}
+            placeholder={t("form.fields.email.placeholder", "user@example.com")}
+            error={
+              errors.email
+                ? {
+                    ...errors.email,
+                    message: renderError(errors.email.message),
+                  }
+                : undefined
+            }
             {...register("email")}
           />
 
           {/* Phone */}
           <FormInputPhone
-            label="Phone"
-            placeholder="+1 (555) 123-4567"
-            error={errors.phone}
+            label={t("form.fields.phone.label", "Phone")}
+            placeholder={t(
+              "form.fields.phone.placeholder",
+              "+1 (555) 123-4567"
+            )}
+            error={
+              errors.phone
+                ? {
+                    ...errors.phone,
+                    message: renderError(errors.phone.message),
+                  }
+                : undefined
+            }
             {...register("phone")}
           />
 
-          {/* Password (solo si NO está oculto) */}
+          {/* Password */}
           {!hidePasswordField && (
-            <div>
-              <FormInput
-                label="Password"
-                type={showPassword ? "text" : "password"}
-                placeholder="••••••••"
-                error={errors.password}
-                autoComplete={isEditMode ? "off" : "new-password"}
-                {...register("password")}
-                rightIcon={
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((prev) => !prev)}
-                    className="flex items-center justify-center text-slate-600 hover:text-slate-800 focus:outline-none"
-                  >
-                    {showPassword ? (
-                      <EyeSlashIcon className="h-4 w-4" />
-                    ) : (
-                      <EyeIcon className="h-4 w-4" />
-                    )}
-                  </button>
-                }
-              />
-            </div>
+            <FormInput
+              label={t("form.fields.password.label", "Password")}
+              type={showPassword ? "text" : "password"}
+              placeholder={t("form.fields.password.placeholder", "••••••••")}
+              error={
+                errors.password
+                  ? {
+                      ...errors.password,
+                      message: renderError(errors.password.message),
+                    }
+                  : undefined
+              }
+              autoComplete={isEditMode ? "off" : "new-password"}
+              {...register("password")}
+              rightIcon={
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="flex items-center justify-center text-slate-600 hover:text-slate-800 focus:outline-none"
+                  aria-label={t(
+                    "form.fields.password.toggle",
+                    "Toggle password visibility"
+                  )}
+                >
+                  {showPassword ? (
+                    <EyeSlashIcon className="h-4 w-4" />
+                  ) : (
+                    <EyeIcon className="h-4 w-4" />
+                  )}
+                </button>
+              }
+            />
           )}
 
           {/* Role */}
           {!hideRoleSelect && (
             <div className="flex flex-col gap-1.5">
               <label className="text-xs font-medium text-slate-600 tracking-[0.12em] uppercase">
-                Role
+                {t("form.fields.role.label", "Role")}
               </label>
+
               <select
                 className={cn(
                   "w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-xs text-slate-700",
@@ -274,13 +312,18 @@ export const UserForm: React.FC<UserFormProps> = ({
                 )}
                 {...register("role")}
               >
-                <option value="ADMIN">Admin</option>
-                <option value="PROVIDER">Provider</option>
-                <option value="EMPLOYEE">Employee</option>
+                <option value="ADMIN">{t("roles.admin", "Admin")}</option>
+                <option value="PROVIDER">
+                  {t("roles.provider", "Provider")}
+                </option>
+                <option value="EMPLOYEE">
+                  {t("roles.employee", "Employee")}
+                </option>
               </select>
+
               {errors.role && (
                 <p className="text-[11px] text-red-500 mt-0.5">
-                  {errors.role.message}
+                  {renderError(errors.role.message)}
                 </p>
               )}
             </div>
@@ -299,7 +342,7 @@ export const UserForm: React.FC<UserFormProps> = ({
                 "transition-colors"
               )}
             >
-              {isSubmitting ? "Saving..." : submittingLabel}
+              {isSubmitting ? t("form.submitting", "Saving...") : submitText}
             </button>
           </div>
         </div>

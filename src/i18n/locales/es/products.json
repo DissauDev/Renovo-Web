@@ -1,0 +1,103 @@
+{
+  "title": "Productos",
+  "status": {
+    "active": "Activo",
+    "inactive": "Inactivo"
+  },
+  "table": {
+    "searchPlaceholder": "Buscar por nombre, SKU...",
+    "empty": "No se encontraron productos.",
+    "dash": "—",
+    "sku": "SKU",
+    "cost": "costo",
+    "columns": {
+      "name": "Nombre",
+      "price": "Precio",
+      "stock": "Stock",
+      "description": "Descripción",
+      "category": "Categoría",
+      "status": "Estado",
+      "createdAt": "Creado"
+    }
+  },
+  "actions": {
+    "goBack": "Volver",
+    "retry": "Reintentar",
+    "processing": "Procesando...",
+    "activate": "Activar",
+    "deactivate": "Desactivar",
+    "cancel": "Cancelar",
+    "creating": "Creando...",
+    "saving": "Guardando...",
+    "create": "Crear producto",
+    "saveChanges": "Guardar cambios"
+  },
+  "loading": {
+    "detail": "Cargando detalles del producto..."
+  },
+  "errors": {
+    "invalidId": "ID de producto inválido.",
+    "load": "Error cargando el producto.",
+    "toggleActive": "Error cambiando el estado del producto",
+    "update": "Error actualizando el producto"
+  },
+  "toasts": {
+    "updated": "Producto actualizado correctamente",
+    "toggled": "Estado del producto actualizado: {{state}}"
+  },
+  "detail": {
+    "title": "Detalles del producto",
+    "subtitle": "Ver y editar la información del producto. Algunos campos son de solo lectura.",
+    "editable": "Información editable",
+    "currentImage": "Imagen actual del producto",
+    "noCategory": "Sin categoría",
+    "cards": {
+      "productId": "ID del producto",
+      "category": "Categoría",
+      "sellPrice": "Precio de venta:",
+      "cost": "Costo:",
+      "createdAt": "Creado el"
+    }
+  },
+  "form": {
+    "titleCreate": "Crear producto",
+    "titleEdit": "Editar producto",
+    "subtitle": "Incluye inventario y campos de precios",
+    "fields": {
+      "name": "Nombre",
+      "skuOptional": "SKU (opcional)",
+      "description": "Descripción",
+      "stockQty": "Cantidad en stock",
+      "costUsd": "Costo (USD)",
+      "sellUsd": "Venta (USD)",
+      "category": "Categoría",
+      "image": "Imagen del producto"
+    },
+    "placeholders": {
+      "name": "Nombre del producto",
+      "sku": "ej. COPPER-1-2",
+      "description": "Describe el producto...",
+      "selectCategory": "Selecciona una categoría"
+    }
+  },
+  "errorsSchema": {
+    "nameRequired": "El nombre es obligatorio",
+    "skuTooShort": "El SKU es demasiado corto",
+    "stockRequired": "El stock es obligatorio",
+    "stockInteger": "El stock debe ser un número entero",
+    "stockNonNegative": "El stock no puede ser negativo",
+    "costRequired": "El costo es obligatorio",
+    "costNonNegative": "El costo no puede ser negativo",
+    "sellRequired": "El precio de venta es obligatorio",
+    "sellNonNegative": "El precio de venta no puede ser negativo",
+    "categoryRequired": "Selecciona una categoría",
+    "imageUrl": "La imagen debe ser una URL válida"
+  },
+   "create": {
+    "title": "Crear nuevo producto"
+  },
+  "toast": {
+    "createdSuccess": "Producto creado correctamente",
+    "createError": "Error al crear el producto"
+  }
+}

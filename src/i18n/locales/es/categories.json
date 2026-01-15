@@ -1,0 +1,69 @@
+{
+  "title": "Categorías",
+  "status": {
+    "active": "Activa",
+    "inactive": "Inactiva"
+  },
+  "table": {
+    "subtitle": "Administra y busca registros.",
+    "searchPlaceholder": "Buscar por nombre...",
+    "loading": "Cargando registros...",
+    "empty": "No se encontraron registros.",
+    "noRecords": "No hay registros para mostrar.",
+    "showing": "Mostrando {{from}}–{{to}} de {{total}} registros",
+    "pageOf": "Página {{page}} de {{totalPages}}",
+    "prev": "Anterior",
+    "next": "Siguiente",
+    "columns": {
+      "name": "Nombre",
+      "tickets": "Tickets",
+      "products": "Productos",
+      "active": "¿Activa?",
+      "createdAt": "Creada"
+    }
+  },"create": { "title": "Crear nueva categoría" },
+  "detail": {
+    "back": "Volver",
+    "title": "Detalles de la categoría",
+    "subtitle": "Ver y editar la información de la categoría. Algunos campos son de solo lectura.",
+    "editableTitle": "Información editable",
+    "loading": "Cargando detalles de la categoría...",
+    "error": "Error al cargar la categoría.",
+    "invalidId": "ID de categoría inválido.",
+    "info": {
+      "categoryId": "ID de categoría",
+      "status": "Estado",
+      "createdAt": "Fecha de creación"
+    }
+  },
+  "form": {
+    "nameLabel": "Nombre de la categoría",
+    "namePlaceholder": "Plomería, Electricidad, Pintura...",
+    "iconLabel": "Ícono",
+    "iconSearchPlaceholder": "Buscar ícono… ej: \"wrench\", \"home\", \"bolt\""
+  },
+
+  "actions": {
+    "retry": "Reintentar",
+    "processing": "Procesando...",
+    "activate": "Activar",
+    "deactivate": "Desactivar",
+    "saveChanges": "Guardar cambios",
+    "createCategory": "Crear categoría",
+    "creating": "Creando...",
+    "saving": "Guardando..."
+  },
+  "toast": {
+    "created": "Categoría creada correctamente",
+    "createError": "Error al crear la categoría",
+    "updated": "Categoría actualizada correctamente",
+    "updateError": "Error al actualizar la categoría",
+    "activated": "Categoría activada",
+    "deactivated": "Categoría desactivada",
+    "toggleError": "Error al cambiar el estado de la categoría"
+  },
+  "errors": {
+    "nameRequired": "El nombre es obligatorio",
+    "iconRequired": "Selecciona un ícono"
+  }
+}

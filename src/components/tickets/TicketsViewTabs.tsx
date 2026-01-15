@@ -1,12 +1,13 @@
 // src/components/tickets/TicketsViewTabs.tsx
 import React from "react";
+import { useTranslation } from "react-i18next";
 
-export type ViewFilter = "ALL" | "WAITING_FOR_ME" | "UNASSIGNED" | "COMPLETED";
+export type ViewFilter = "ALL" | "PENDING" | "SCHEDULED" | "COMPLETED";
 
 export interface TicketsCounters {
   all: number;
-  waitingForMe: number;
-  unassigned: number;
+  pending: number;
+  scheduled: number;
   completed: number;
 }
 
@@ -18,28 +19,27 @@ interface TicketsViewTabsProps {
 
 const TABS: {
   id: ViewFilter;
-  label: string;
+  labelkey: string;
   countKey: keyof TicketsCounters;
   // nombre de paleta de color
   color: "slate" | "emerald" | "amber" | "sky" | "zinc" | "indigo";
 }[] = [
-  { id: "ALL", label: "All tickets", countKey: "all", color: "slate" },
-
+  { id: "ALL", labelkey: "tabs.all", countKey: "all", color: "slate" },
   {
-    id: "WAITING_FOR_ME",
-    label: "Waiting for me",
-    countKey: "waitingForMe",
+    id: "PENDING",
+    labelkey: "tabs.pending",
+    countKey: "pending",
     color: "amber",
   },
   {
-    id: "UNASSIGNED",
-    label: "Unassigned",
-    countKey: "unassigned",
+    id: "SCHEDULED",
+    labelkey: "tabs.scheduled",
+    countKey: "scheduled",
     color: "sky",
   },
   {
     id: "COMPLETED",
-    label: "Completed",
+    labelkey: "tabs.completed",
     countKey: "completed",
     color: "emerald",
   },
@@ -51,7 +51,7 @@ const COLOR_STYLES: Record<
     border: string;
     bg: string;
     topBar: string;
-    label: string;
+    labelkey: string;
     badgeBg: string;
     badgeText: string;
   }
@@ -60,7 +60,7 @@ const COLOR_STYLES: Record<
     border: "border-slate-300",
     bg: "bg-slate-50",
     topBar: "bg-slate-400",
-    label: "text-slate-800",
+    labelkey: "text-slate-800",
     badgeBg: "bg-slate-200",
     badgeText: "text-slate-800",
   },
@@ -68,7 +68,7 @@ const COLOR_STYLES: Record<
     border: "border-indigo-300",
     bg: "bg-indigo-50",
     topBar: "bg-indigo-400",
-    label: "text-indigo-800",
+    labelkey: "text-indigo-800",
     badgeBg: "bg-indigo-200",
     badgeText: "text-indigo-800",
   },
@@ -76,7 +76,7 @@ const COLOR_STYLES: Record<
     border: "border-emerald-300",
     bg: "bg-emerald-50",
     topBar: "bg-emerald-500",
-    label: "text-emerald-800",
+    labelkey: "text-emerald-800",
     badgeBg: "bg-emerald-100",
     badgeText: "text-emerald-800",
   },
@@ -84,7 +84,7 @@ const COLOR_STYLES: Record<
     border: "border-amber-300",
     bg: "bg-amber-50",
     topBar: "bg-amber-500",
-    label: "text-amber-800",
+    labelkey: "text-amber-800",
     badgeBg: "bg-amber-100",
     badgeText: "text-amber-800",
   },
@@ -92,7 +92,7 @@ const COLOR_STYLES: Record<
     border: "border-sky-300",
     bg: "bg-sky-50",
     topBar: "bg-sky-500",
-    label: "text-sky-800",
+    labelkey: "text-sky-800",
     badgeBg: "bg-sky-100",
     badgeText: "text-sky-800",
   },
@@ -100,7 +100,7 @@ const COLOR_STYLES: Record<
     border: "border-zinc-300",
     bg: "bg-zinc-50",
     topBar: "bg-zinc-500",
-    label: "text-zinc-800",
+    labelkey: "text-zinc-800",
     badgeBg: "bg-zinc-100",
     badgeText: "text-zinc-800",
   },
@@ -111,6 +111,8 @@ export const TicketsViewTabs: React.FC<TicketsViewTabsProps> = ({
   onChange,
   counters,
 }) => {
+  const { t } = useTranslation("tickets");
+
   return (
     <div className="w-full overflow-x-auto">
       <div className="flex gap-3 min-w-max">
@@ -149,10 +151,10 @@ export const TicketsViewTabs: React.FC<TicketsViewTabsProps> = ({
                 <span
                   className={`
                     text-[11px] font-semibold uppercase tracking-[0.14em]
-                    ${isActive ? color.label : "text-slate-400"}
+                    ${isActive ? color.labelkey : "text-slate-400"}
                   `}
                 >
-                  {tab.label}
+                  {t(tab.labelkey)}
                 </span>
                 <span
                   className={`

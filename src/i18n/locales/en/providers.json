@@ -1,0 +1,97 @@
+{
+  "title": "Providers",
+  "table": {
+    "searchPlaceholder": "Search by name, email...",
+    "empty": "No records found.",
+    "columns": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "role": "Role",
+      "status": "Status",
+      "createdAt": "Created at"
+    }
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "roles": {
+    "admin": "Admin",
+    "provider": "Provider",
+    "employee": "Employee"
+  },
+  "new": {
+    "title": "Create new user",
+    "formTitle": "Create provider",
+    "submit": "Create provider"
+  },
+  "form": {
+    "titleCreate": "Create user",
+    "titleEdit": "Edit user",
+    "subtitleCreate": "Fill the information to create a new user.",
+    "subtitleEdit": "Update the information for this user.",
+    "submitCreate": "Create user",
+    "submitSave": "Save changes",
+    "submitting": "Saving...",
+    "fields": {
+      "name": { "label": "Name", "placeholder": "John Doe" },
+      "userName": { "label": "Username", "placeholder": "john.doe" },
+      "email": { "label": "Email", "placeholder": "user@example.com" },
+      "phone": { "label": "Phone", "placeholder": "+1 (555) 123-4567" },
+      "password": {
+        "label": "Password",
+        "placeholder": "••••••••",
+        "toggle": "Toggle password visibility"
+      },
+      "role": { "label": "Role" }
+    }
+  },
+  "toasts": {
+    "created": "User created successfully",
+    "createError": "Error creating user"
+  },
+  "validation": {
+    "nameRequired": "Name is required",
+    "emailRequired": "Email is required",
+    "emailInvalid": "Invalid email address",
+    "phoneInvalid": "Phone must be a valid US number",
+    "passwordMin": "Password must be at least 8 characters",
+    "passwordUpper": "Must contain at least one uppercase letter",
+    "passwordLower": "Must contain at least one lowercase letter",
+    "passwordNumber": "Must contain at least one number"
+  },
+    "detail": {
+    "invalidId": "Invalid user id.",
+    "loading": "Loading user details...",
+    "loadError": "Error loading user.",
+    "retry": "Retry",
+    "back": "Go Back",
+    "title": "User details",
+    "subtitle": "View and edit user information. Some fields are read-only.",
+    "processing": "Processing...",
+    "activate": "Activate",
+    "deactivate": "Desactivate",
+    "changePassword": "Change password",
+    "logout": "Log out",
+    "loggingOut": "Logging out...",
+    "editable": "Editable information",
+    "save": "Save changes",
+    "saving": "Saving...",
+    "cards": {
+      "userId": "User ID",
+      "role": "Role",
+      "createdAt": "Created at",
+      "loginEmail": "Login email"
+    },
+    "toasts": {
+      "logoutError": "Error logging out",
+      "updated": "User updated successfully",
+      "updateError": "Error to update",
+      "toggleError": "Error toggling product status",
+      "activated": "activated",
+      "deactivated": "deactivated",
+      "toggled": "{{status}}"
+    }
+  }
+}

@@ -1,11 +1,12 @@
 import * as React from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { useTranslation } from "react-i18next";
 import { cn } from "../../../lib/utils";
 
 export interface TableColumn<T> {
   /** Clave única por columna */
   key: string;
-  /** Texto del encabezado (en inglés) */
+  /** Texto del encabezado (ya traducido desde el caller) */
   header: string;
   /** Cómo renderizar la celda */
   render: (row: T) => React.ReactNode;
@@ -29,7 +30,8 @@ interface DataTableProps<T> {
   onPageSizeChange?: (size: number) => void;
   onRowClick?: (row: T) => void;
   className?: string;
-  rightSlot?: React.ReactNode; // ⬅️
+  rightSlot?: React.ReactNode;
+  i18nNs?: string; // default "common"
 }
 
 export function DataTable<T>({
@@ -37,10 +39,10 @@ export function DataTable<T>({
   data,
   columns,
   isLoading = false,
-  emptyMessage = "No records found.",
+  emptyMessage,
   searchTerm,
   onSearchChange,
-  searchPlaceholder = "Search...",
+  searchPlaceholder,
   page,
   pageSize,
   totalItems,
@@ -48,7 +50,10 @@ export function DataTable<T>({
   onRowClick,
   className,
   rightSlot,
+  i18nNs = "common",
 }: DataTableProps<T>) {
+  const { t } = useTranslation(i18nNs);
+
   const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
   const from = totalItems === 0 ? 0 : (page - 1) * pageSize + 1;
   const to = Math.min(page * pageSize, totalItems);
@@ -77,7 +82,7 @@ export function DataTable<T>({
             </h2>
           )}
           <p className="text-sm font-semibold text-slate-500">
-            Manage and search records.
+            {t("table.subtitle", "Manage and search records.")}
           </p>
         </div>
 
@@ -91,13 +96,16 @@ export function DataTable<T>({
                 type="text"
                 value={searchTerm}
                 onChange={(e) => onSearchChange(e.target.value)}
-                placeholder={searchPlaceholder}
-                className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 bg-white text-xs text-slate-700 focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500"
+                placeholder={
+                  searchPlaceholder ?? t("table.searchPlaceholder", "Search...")
+                }
+                className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 bg-white text-xs text-slate-700
+                 focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500"
               />
             </div>
           </div>
 
-          {/* Slot para filtros extra (ej. Category) */}
+          {/* Slot para filtros extra */}
           {rightSlot && (
             <div className="w-full md:w-auto flex justify-end">{rightSlot}</div>
           )}
@@ -130,7 +138,7 @@ export function DataTable<T>({
                   colSpan={columns.length}
                   className="px-4 py-6 text-center text-xs text-slate-400"
                 >
-                  Loading records...
+                  {t("table.loading", "Loading records...")}
                 </td>
               </tr>
             )}
@@ -141,7 +149,7 @@ export function DataTable<T>({
                   colSpan={columns.length}
                   className="px-4 py-6 text-center text-xs text-slate-400"
                 >
-                  {emptyMessage}
+                  {emptyMessage ?? t("table.empty", "No records found.")}
                 </td>
               </tr>
             )}
@@ -171,24 +179,18 @@ export function DataTable<T>({
       <div className="flex flex-col gap-2 px-4 py-3 border-t border-slate-100 md:flex-row md:items-center md:justify-between">
         {/* Info de filas */}
         <div className="text-[11px] text-slate-500">
-          {totalItems === 0 ? (
-            "No records to display."
-          ) : (
-            <>
-              Showing{" "}
-              <span className="font-semibold text-slate-700">
-                {from}–{to}
-              </span>{" "}
-              of{" "}
-              <span className="font-semibold text-slate-700">{totalItems}</span>{" "}
-              records
-            </>
-          )}
+          {totalItems === 0
+            ? t("table.noRecords", "No records to display.")
+            : t("table.showing", {
+                from,
+                to,
+                total: totalItems,
+                defaultValue: `Showing ${from}–${to} of ${totalItems} records`,
+              })}
         </div>
 
         {/* Controles de paginación */}
         <div className="flex items-center gap-3 justify-end">
-          {/* Prev / Next */}
           <div className="flex items-center gap-1 text-[11px]">
             <button
               type="button"
@@ -201,13 +203,17 @@ export function DataTable<T>({
                   : "border-slate-300 text-slate-700 hover:bg-slate-50"
               )}
             >
-              Prev
+              {t("table.prev", "Prev")}
             </button>
+
             <span className="px-1 text-slate-500">
-              Page <span className="font-semibold text-slate-700">{page}</span>{" "}
-              of{" "}
-              <span className="font-semibold text-slate-700">{totalPages}</span>
+              {t("table.pageOf", {
+                page,
+                totalPages,
+                defaultValue: `Page ${page} of ${totalPages}`,
+              })}
             </span>
+
             <button
               type="button"
               onClick={handleNext}
@@ -219,7 +225,7 @@ export function DataTable<T>({
                   : "border-slate-300 text-slate-700 hover:bg-slate-50"
               )}
             >
-              Next
+              {t("table.next", "Next")}
             </button>
           </div>
         </div>

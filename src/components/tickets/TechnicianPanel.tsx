@@ -2,8 +2,10 @@ import * as React from "react";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
 import type { Ticket, User } from "../../types/tickets";
 import { StatusSelect } from "../atoms/inputs/StatusSelect";
-import { useAssignTicketMutation } from "../../store/features/api/ticketsApi";
+import { useScheduleTicketMutation } from "../../store/features/api/ticketsApi";
 import { toastNotify } from "../../lib/toastNotify";
+import { DateTimePicker } from "../ui/dateTimePicker";
+import { useTranslation } from "react-i18next";
 
 interface TechnicianPanelProps {
   ticket: Ticket;
@@ -18,51 +20,74 @@ export const TechnicianPanel: React.FC<TechnicianPanelProps> = ({
   isLoading,
   onStatusUpdated,
 }) => {
+  const { t } = useTranslation("tickets");
   const currentTech = ticket.employee;
-  const [assignTicket, { isLoading: isAssignin }] = useAssignTicketMutation();
-
   const ticketId = Number(ticket.id);
-  const handleTechnicianChange = async (techId: string) => {
-    const numericId = Number(techId);
 
-    try {
-      await assignTicket({
-        id: ticketId,
-        assignedTo: numericId,
-      }).unwrap();
+  const [scheduleTicket, { isLoading: isScheduling }] =
+    useScheduleTicketMutation();
 
-      toastNotify("Technician updated", "success");
-      onStatusUpdated?.();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      toastNotify(error?.message || "Error updating technician", "error");
-    }
-  };
-
-  // 🔹 estado local para el técnico seleccionado en el select
+  // técnico seleccionado
   const [selectedTechId, setSelectedTechId] = React.useState<string>(
     currentTech ? String(currentTech.id) : "UNASSIGNED"
   );
 
-  // si cambia el ticket (refetch, etc), sincronizamos el valor
+  // fecha/hora seleccionada
+  const [scheduledAtLocal, setScheduledAtLocal] = React.useState<Date | null>(
+    ticket.scheduledAt ? new Date(ticket.scheduledAt) : null
+  );
+
   React.useEffect(() => {
     setSelectedTechId(currentTech ? String(currentTech.id) : "UNASSIGNED");
   }, [currentTech]);
 
-  const handleConfirm = () => {
-    // "" = unassign (mantiene tu contrato actual)
-    const valueToSend = selectedTechId === "UNASSIGNED" ? "" : selectedTechId;
-    handleTechnicianChange(valueToSend);
+  React.useEffect(() => {
+    setScheduledAtLocal(
+      ticket.scheduledAt ? new Date(ticket.scheduledAt) : null
+    );
+  }, [ticket.scheduledAt]);
+
+  const handleConfirm = async () => {
+    try {
+      if (!scheduledAtLocal) {
+        toastNotify(t("technician.errors.selectDate"), "error");
+
+        return;
+      }
+
+      const assignedTo =
+        selectedTechId === "UNASSIGNED" ? null : Number(selectedTechId);
+
+      await scheduleTicket({
+        id: ticketId,
+        assignedTo, // null si quieres permitir unassign
+        scheduledAt: scheduledAtLocal.toISOString(),
+      }).unwrap();
+
+      toastNotify(t("technician.success"), "success");
+
+      onStatusUpdated?.();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      toastNotify(error?.message || t("technician.errors.schedule"), "error");
+    }
   };
 
   const disableConfirm =
-    isAssignin ||
-    selectedTechId === (currentTech ? String(currentTech.id) : "UNASSIGNED");
+    isScheduling ||
+    !scheduledAtLocal ||
+    (selectedTechId === (currentTech ? String(currentTech.id) : "UNASSIGNED") &&
+      // compara scheduledAt actual vs local (por ms)
+      ((ticket.scheduledAt &&
+        scheduledAtLocal &&
+        new Date(ticket.scheduledAt).getTime() ===
+          scheduledAtLocal.getTime()) ||
+        (!ticket.scheduledAt && !scheduledAtLocal)));
 
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm space-y-3">
+    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm space-y-4">
       <h2 className="text-sm font-varien text-oxford-blue-800">
-        Assigned technician
+        {t("technician.title")}
       </h2>
 
       <div className="flex items-center gap-3">
@@ -81,30 +106,35 @@ export const TechnicianPanel: React.FC<TechnicianPanelProps> = ({
 
         <div className="text-sm text-slate-600 flex-1">
           <div className="font-semibold text-slate-800">
-            {currentTech?.name ?? "Unassigned"}
+            {currentTech?.name ?? t("technician.unassigned")}
           </div>
-          <div className="text-slate-500">
-            {currentTech
-              ? "Field technician"
-              : "Assign this ticket to an available technician."}
-          </div>
+          <div className="text-slate-500">{t("technician.subtitle")}</div>
         </div>
       </div>
 
-      <div className="pt-2 space-y-2">
+      <div className="space-y-3">
         <StatusSelect
           value={selectedTechId}
-          onChange={(value) => setSelectedTechId(value)}
+          onChange={setSelectedTechId}
           placeholder={
-            isLoading ? "Loading technicians..." : "Select technician"
+            isLoading ? t("technician.loading") : t("technician.select")
           }
           options={[
-            { value: "UNASSIGNED", label: "Unassigned" },
+            { value: "UNASSIGNED", label: t("technician.unassigned") },
+
             ...technicians.map((tech) => ({
               value: String(tech.id),
               label: tech.name,
             })),
           ]}
+        />
+
+        <DateTimePicker
+          value={scheduledAtLocal}
+          onChange={(d: React.SetStateAction<Date | null>) =>
+            setScheduledAtLocal(d)
+          }
+          defaultTime="10:30:00"
         />
 
         <button
@@ -118,7 +148,7 @@ export const TechnicianPanel: React.FC<TechnicianPanelProps> = ({
                 : "bg-emerald-600 text-white border-emerald-700 hover:bg-emerald-700"
             }`}
         >
-          Confirm assignment
+          {t("technician.confirm")}
         </button>
       </div>
     </section>

@@ -1,3 +1,4 @@
+// src/components/atoms/inputs/UrgencySelect.tsx
 import * as React from "react";
 import {
   Select,
@@ -6,6 +7,7 @@ import {
   SelectItem,
 } from "../../ui/select";
 import { cn } from "../../../lib/utils";
+import { useTranslation } from "react-i18next";
 
 import {
   FireIcon,
@@ -24,89 +26,98 @@ interface UrgencyOption {
   label: string;
   description?: string;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-  color: string; // text-red-500, text-amber-500, text-emerald-500, etc.
+  color: string;
   hoverBg: string;
   selectedBg: string;
   borderColor: string;
 }
 
-const BASE_URGENCY_OPTIONS: UrgencyOption[] = [
-  {
-    value: "LOW",
-    label: "Low",
-    description: "You can wait, there is no immediate risk.",
-    icon: ClockIcon,
-    color: "text-emerald-600",
-    hoverBg: "hover:bg-emerald-50",
-    selectedBg: "data-[state=checked]:bg-emerald-100",
-    borderColor: "border-emerald-500",
-  },
-  {
-    value: "MEDIUM",
-    label: "Medium",
-    description: "It requires immediate attention.",
-    icon: ExclamationTriangleIcon,
-    color: "text-amber-600",
-    hoverBg: "hover:bg-amber-50",
-    selectedBg: "data-[state=checked]:bg-amber-100",
-    borderColor: "border-amber-500",
-  },
-  {
-    value: "HIGH",
-    label: "High",
-    description: "Top priority, possible emergency.",
-    icon: FireIcon,
-    color: "text-red-600",
-    hoverBg: "hover:bg-red-50",
-    selectedBg: "data-[state=checked]:bg-red-100",
-    borderColor: "border-red-500",
-  },
-];
-
-const ALL_OPTION: UrgencyOption = {
-  value: "ALL",
-  label: "All",
-  icon: AdjustmentsHorizontalIcon,
-  color: "text-slate-500",
-  hoverBg: "hover:bg-slate-50",
-  selectedBg: "data-[state=checked]:bg-slate-100",
-  borderColor: "border-slate-400",
-};
-
-interface UrgencySelectProps {
-  mode?: UrgencyMode; // "input" (form) | "filter" (filtro listado)
+export const UrgencySelect: React.FC<{
+  mode?: UrgencyMode;
   value: UrgencyFilterValue;
   onChange: (value: UrgencyFilterValue) => void;
   placeholder?: string;
   label?: string;
   className?: string;
-  includeAllOption?: boolean; // solo tiene sentido en modo "filter"
-}
-
-export const UrgencySelect: React.FC<UrgencySelectProps> = ({
+  includeAllOption?: boolean;
+}> = ({
   mode = "input",
   value,
   onChange,
-  placeholder = "Seleccionar urgencia",
+  placeholder,
   className,
   label,
   includeAllOption = false,
 }) => {
-  const options = React.useMemo(() => {
-    if (mode === "filter" && includeAllOption) {
-      return [ALL_OPTION, ...BASE_URGENCY_OPTIONS];
-    }
-    return BASE_URGENCY_OPTIONS;
-  }, [mode, includeAllOption]);
+  const { t } = useTranslation("tickets");
 
-  const current = options.find((o) => o.value === value);
+  const BASE_URGENCY_OPTIONS: UrgencyOption[] = React.useMemo(
+    () => [
+      {
+        value: "LOW",
+        label: t("urgencyoptions.options.low.label"),
+        description: t("urgency.options.low.description"),
+        icon: ClockIcon,
+        color: "text-emerald-600",
+        hoverBg: "hover:bg-emerald-50",
+        selectedBg: "data-[state=checked]:bg-emerald-100",
+        borderColor: "border-emerald-500",
+      },
+      {
+        value: "MEDIUM",
+        label: t("urgencyoptions.options.medium.label"),
+        description: t("urgencyoptions.options.medium.description"),
+        icon: ExclamationTriangleIcon,
+        color: "text-amber-600",
+        hoverBg: "hover:bg-amber-50",
+        selectedBg: "data-[state=checked]:bg-amber-100",
+        borderColor: "border-amber-500",
+      },
+      {
+        value: "HIGH",
+        label: t("urgencyoptions.options.high.label"),
+        description: t("urgencyoptions.options.high.description"),
+        icon: FireIcon,
+        color: "text-red-600",
+        hoverBg: "hover:bg-red-50",
+        selectedBg: "data-[state=checked]:bg-red-100",
+        borderColor: "border-red-500",
+      },
+    ],
+    [t]
+  );
+
+  const ALL_OPTION: UrgencyOption = React.useMemo(
+    () => ({
+      value: "ALL",
+      label: t("urgencyoptions.options.all.label"),
+      icon: AdjustmentsHorizontalIcon,
+      color: "text-slate-500",
+      hoverBg: "hover:bg-slate-50",
+      selectedBg: "data-[state=checked]:bg-slate-100",
+      borderColor: "border-slate-400",
+    }),
+    [t]
+  );
 
   const isFilterMode = mode === "filter";
 
+  const options = React.useMemo(() => {
+    if (isFilterMode && includeAllOption)
+      return [ALL_OPTION, ...BASE_URGENCY_OPTIONS];
+    return BASE_URGENCY_OPTIONS;
+  }, [isFilterMode, includeAllOption, ALL_OPTION, BASE_URGENCY_OPTIONS]);
+
+  const current = options.find((o) => o.value === value);
+
+  const resolvedPlaceholder =
+    placeholder ??
+    t("urgencyoptions.placeholder", { defaultValue: "Select urgency" });
+
   return (
-    <div className="flex flex-col gap-0.5 ">
+    <div className="flex flex-col gap-0.5">
       {label && label.length > 0 && (
-        <span className="text-[10px]  font-medium text-slate-500 uppercase tracking-[0.12em]">
+        <span className="text-[10px] font-medium text-slate-500 uppercase tracking-[0.12em]">
           {label}
         </span>
       )}
@@ -116,7 +127,7 @@ export const UrgencySelect: React.FC<UrgencySelectProps> = ({
         onValueChange={(v) => onChange(v as UrgencyFilterValue)}
       >
         <SelectTrigger
-          size={isFilterMode ? "sm" : "sm"}
+          size="sm"
           className={cn(
             "bg-white border-slate-200 shadow-xs w-28",
             isFilterMode
@@ -133,7 +144,9 @@ export const UrgencySelect: React.FC<UrgencySelectProps> = ({
               <span className="font-medium">{current.label}</span>
             </span>
           ) : (
-            <span className="text-xs text-slate-400">{placeholder}</span>
+            <span className="text-xs text-slate-400">
+              {resolvedPlaceholder}
+            </span>
           )}
         </SelectTrigger>
 
@@ -145,16 +158,10 @@ export const UrgencySelect: React.FC<UrgencySelectProps> = ({
               className={cn(
                 "text-xs cursor-pointer px-2 py-2 rounded-md transition-all",
                 "flex items-start gap-2 text-slate-700",
-
-                // Hover dinámico según urgencia
                 opt.hoverBg,
                 "hover:pl-3 hover:shadow-sm",
-
-                // Borde lateral dinámico
                 `hover:border-l-4 ${opt.borderColor}`,
                 `data-[state=checked]:border-l-4 ${opt.borderColor}`,
-
-                // Fondo dinámico cuando está seleccionado
                 opt.selectedBg
               )}
             >
@@ -164,7 +171,6 @@ export const UrgencySelect: React.FC<UrgencySelectProps> = ({
                 <div className="flex flex-col">
                   <span className="font-medium">{opt.label}</span>
 
-                  {/* En modo filter NO mostramos descripción */}
                   {!isFilterMode && opt.description && (
                     <span className="text-[10px] text-slate-500">
                       {opt.description}

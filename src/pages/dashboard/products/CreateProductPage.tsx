@@ -1,61 +1,71 @@
 // src/pages/products/CreateProductPage.tsx
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { useTranslation } from "react-i18next";
+
 import {
   ProductForm,
   type ProductFormValues,
 } from "../../../components/products/ProductForm";
 import { useCreateProductMutation } from "../../../store/features/api/productsApi";
 import { toastNotify } from "../../../lib/toastNotify";
+import { ButtonBack } from "../../../components/layout/ButtonBack";
 
 export const CreateProductPage: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation("products");
   const [createProduct, { isLoading }] = useCreateProductMutation();
 
   const handleCreate = async (values: ProductFormValues) => {
-    const priceCents = Math.round(values.price * 100);
+    const sellCents = Math.round(Number(values.sell || 0) * 100);
+    const costCents = Math.round(Number(values.cost || 0) * 100);
+
     try {
       await createProduct({
-        name: values.name,
-        description: values.description || undefined,
-        priceCents,
-        imageUrl: values.imageUrl || undefined,
-        categoryId: values.categoryId,
+        name: values.name.trim(),
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
+        sku: values.sku?.trim() || undefined,
+        description: values.description?.trim() || undefined,
+        priceCents: sellCents, // si tu backend aún lo usa
+        sellCents,
+        costCents,
+        stockQty: Number(values.stockQty ?? 0),
+        imageUrl: values.imageUrl?.trim() || undefined,
+        categoryId: Number(values.categoryId),
       }).unwrap();
 
-      toastNotify("Product created successfully", "success");
-
+      toastNotify(
+        t("toast.createdSuccess", "Product created successfully"),
+        "success"
+      );
+      navigate("/app/products");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      console.error(error);
-      toastNotify(error?.message || "Error updating product", "error");
+      toastNotify(
+        error?.message || t("toast.createError", "Error creating product"),
+        "error"
+      );
     }
   };
-  return (
-    <div className="min-h-screen px-4 py-8 ">
-      {/* Botón volver alineado a la izquierda, fuera del max-w-3xl */}
-      <button
-        type="button"
-        onClick={() => navigate("/app/products")}
-        className="inline-flex items-center gap-2 font-semibold rounded-lg border
-         border-slate-300 px-4 py-2 text-sm text-slate-700 hover:bg-slate-200"
-      >
-        <ArrowLeftIcon className="h-4 w-4" />
-        Go back
-      </button>
 
-      {/* Contenedor centrado para el formulario */}
+  return (
+    <div className="min-h-screen px-4 py-8">
+      {/* Back */}
+      <ButtonBack />
+
+      {/* Centered form */}
       <div className="mt-6 flex justify-center">
         <div className="w-full max-w-3xl space-y-4">
           <h1 className="text-xl text-center font-varien text-oxford-blue-800">
-            Create new product
+            {t("create.title", "Create new product")}
           </h1>
 
           <ProductForm
-            mode={"create"}
+            mode="create"
             onSubmitForm={handleCreate}
             isSubmitting={isLoading}
+            onCancel={() => navigate("/app/products")}
           />
         </div>
       </div>

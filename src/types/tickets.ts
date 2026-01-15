@@ -12,6 +12,12 @@ export type TicketStatus =
 export type TicketUrgency = "LOW" | "MEDIUM" | "HIGH";
 
 export interface Ticket {
+  images: never[];
+  uploads: never[];
+  notesInternal: string;
+  workSummary: string;
+  laborMinutes: null;
+  scopeItems: never[];
   id: number;
   title: string;              // en Prisma tiene default, pero en la respuesta siempre llega un string
   description: string;
@@ -61,10 +67,6 @@ export interface User {
   role: "ADMIN" | "EMPLOYEE" |"PROVIDER";
 }
 
-
-
-
-
 // Payload para crear ticket (lo que espera tu backend)
 export interface CreateTicketRequest {
   description: string;
@@ -90,7 +92,7 @@ interface TicketsCountersApi {
   all: number;
   pending: number;
   completed: number;
-  unassigned: number;
+  scheduled: number;
 }
 
 export interface TicketsListResponse {
@@ -102,4 +104,41 @@ export interface TicketsListResponse {
   hasNextPage: boolean;
   hasPrevPage: boolean;
   counters: TicketsCountersApi;
+}
+
+export type ScheduleTicketRequest = {
+  id: number;
+  assignedTo?: number | null;  // null/undefined = no asignar
+  scheduledAt: string;         // ISO string
+};
+
+interface UpdateTicketRequestData {
+  title?: string;
+  description?: string;
+  photos?: string[];
+  clientName?: string | null;
+  clientPhone?: string | null;
+  clientEmail?: string | null;
+  address?: string | null;
+  categoryId?: number;
+  assignedTo?: number | null;
+  urgency?: Ticket["urgency"];
+  scheduledAt?: string | null;
+  onSiteAt?: string | null;
+  completedAt?: string | null;
+}
+
+export interface UpdateTicketRequest {
+  id: number;
+  data: UpdateTicketRequestData;
+}
+
+export interface AssignTicketRequest {
+  id: number;
+  assignedTo: number; // según tu backend, assignedTo es requerido
+}
+
+export interface ChangeStatusRequest {
+  id: number;
+  status: TicketStatus;
 }

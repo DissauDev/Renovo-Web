@@ -1,0 +1,70 @@
+{
+  "title": "Categories",
+
+    "create": { "title": "Create new category" },
+  "detail": {
+    "back": "Go back",
+    "title": "Category details",
+    "subtitle": "View and edit category information. Some fields are read-only.",
+    "editableTitle": "Editable information",
+    "loading": "Loading category details...",
+    "error": "Error loading category.",
+    "invalidId": "Invalid category id.",
+    "info": {
+      "categoryId": "Category ID",
+      "status": "Status",
+      "createdAt": "Created at"
+    }
+  },
+  "form": {
+    "nameLabel": "Category name",
+    "namePlaceholder": "Plumbing, Electric, Painting...",
+    "iconLabel": "Icon",
+    "iconSearchPlaceholder": "Search icon… e.g. \"wrench\", \"home\", \"bolt\""
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "actions": {
+    "retry": "Retry",
+    "processing": "Processing...",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "saveChanges": "Save changes",
+    "createCategory": "Create Category",
+    "creating": "Creating...",
+    "saving": "Saving..."
+  },
+  "toast": {
+    "created": "Category created successfully",
+    "createError": "Error creating category",
+    "updated": "Category updated successfully",
+    "updateError": "Error updating category",
+    "activated": "Category activated",
+    "deactivated": "Category deactivated",
+    "toggleError": "Error toggling category status"
+  },
+  "errors": {
+    "nameRequired": "Name is required",
+    "iconRequired": "Select an icon"
+  },
+  "table": {
+    "subtitle": "Manage and search records.",
+    "searchPlaceholder": "Search by name...",
+    "loading": "Loading records...",
+    "empty": "No records found.",
+    "noRecords": "No records to display.",
+    "showing": "Showing {{from}}–{{to}} of {{total}} records",
+    "pageOf": "Page {{page}} of {{totalPages}}",
+    "prev": "Prev",
+    "next": "Next",
+    "columns": {
+      "name": "Name",
+      "tickets": "Tickets",
+      "products": "Products",
+      "active": "Active?",
+      "createdAt": "Created at"
+    }
+  }
+}

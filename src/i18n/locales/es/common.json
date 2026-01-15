@@ -1,0 +1,90 @@
+{
+  "layout": {
+    "loggedInAs": "Conectado como",
+    "myProfile": "Mi perfil",
+    "userFallback": "Usuario"
+  },
+  "actions": {
+    "create": "Crear"
+  },
+  "nav": {
+    "tickets": "Tickets",
+    "technicians": "Técnicos",
+    "providers": "Proveedores",
+    "categories": "Categorías",
+    "products": "Productos",
+    "invoices": "Facturas",
+    "settings": "Ajustes"
+  },
+  "tickets": {
+    "title": "Tickets",
+    "status": {
+      "scheduled": "Programado",
+      "pending": "Pendiente",
+      "completed": "Completado"
+    }
+  },"table": {
+    "subtitle": "Administra y busca registros.",
+    "searchPlaceholder": "Buscar por nombre...",
+    "loading": "Cargando registros...",
+    "empty": "No se encontraron registros.",
+    "noRecords": "No hay registros para mostrar.",
+    "showing": "Mostrando {{from}}–{{to}} de {{total}} registros",
+    "pageOf": "Página {{page}} de {{totalPages}}",
+    "prev": "Anterior",
+    "next": "Siguiente",
+    "columns": {
+      "name": "Nombre",
+      "tickets": "Tickets",
+      "products": "Productos",
+      "active": "¿Activa?",
+      "createdAt": "Creada"
+    }
+  },
+    "filters": {
+    "all": "Todos",
+    "selectStatus": "Seleccionar estado"
+  },
+  "status": {
+    "active": "Activo",
+    "inactive": "Inactivo"
+  },
+  "asyncSelect": {
+    "loading": "Cargando...",
+    "error": "Error al cargar",
+    "searchPlaceholder": "Buscar...",
+    "loadingLower": "cargando...",
+    "errorLower": "Error al cargar",
+    "empty": "Sin resultados"
+  },
+ "sidebar": {
+  "logoAlt": "Logo de Renovo",
+  "aria": { "nav": "Navegación lateral" },
+  "nav": {
+    "tickets": "Tickets",
+    "technicians": "Técnicos",
+    "providers": "Proveedores",
+    "categories": "Categorías",
+    "products": "Productos",
+    "invoices": "Facturas",
+    "settings": "Ajustes"
+  },
+  "mobile": {
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú",
+    "title": "Menú",
+    "subtitle": "Navegación rápida",
+    "close": "Cerrar"
+  }
+}, "settings": {
+    "title": "Ajustes",
+    "language": {
+      "title": "Idioma",
+      "subtitle": "Elige el idioma de la interfaz del panel.",
+      "hint": "Los cambios se aplican al instante.",
+      "aria": "Selector de idioma",
+      "es": "Español",
+      "en": "Inglés"
+    }
+  }
+}

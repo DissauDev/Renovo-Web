@@ -3,8 +3,8 @@ import { axiosBaseQuery, type AxiosBaseQueryArgs, type AxiosBaseQueryError } fro
 import type { RootState } from '../../store';
 import { logout } from '../slices/authSlice';
 
-const baseUrl = import.meta.env.VITE_API_URL as string;
-//const baseUrl = 'http://localhost:3000/api'
+const viteUrl = import.meta.env.VITE_API_URL
+const baseUrl = `${viteUrl}/api`
 
 // baseQuery "puro" con axios
 const rawBaseQuery = axiosBaseQuery({ baseUrl });
@@ -60,7 +60,8 @@ export const apiSlice = createApi({
     'Category',
     'Technician',
     'Settings',
-    'Product'
+    'Product',
+    'InvoiceSettings'
   ],
   refetchOnMountOrArgChange: false,
   refetchOnFocus: false,

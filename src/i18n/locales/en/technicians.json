@@ -1,0 +1,24 @@
+{
+  "technicians": {
+    "title": "Technicians",
+    "createPageTitle": "Create new user",
+    "createFormTitle": "Create technician",
+    "createSubmit": "Create technician"
+  },
+  "table": {
+    "columns": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "role": "Role",
+      "status": "Status",
+      "createdAt": "Created at"
+    },
+    "searchPlaceholder": "Search by name, email...",
+    "empty": "No results found."
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive"
+  }
+}

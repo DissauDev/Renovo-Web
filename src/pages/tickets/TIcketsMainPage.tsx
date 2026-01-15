@@ -18,15 +18,16 @@ import {
 } from "../../store/features/api/categoriesApi.ts";
 import { StatusSelect } from "../../components/atoms/inputs/StatusSelect.tsx";
 import { HeaderTab } from "../../components/layout/HeaderTab.tsx";
+import { useTranslation } from "react-i18next";
 
 const statusFilterLabel: Record<"ALL" | TicketStatus, string> = {
-  ALL: "Todos",
-  PENDING: "Pending",
-  EN_ROUTE: "On Route",
-  ON_SITE: "On Site",
-  CANCELLED: "Canceled",
-  SCHEDULED: "Scheduled",
-  COMPLETED: "Completed",
+  ALL: "status.ALL",
+  PENDING: "status.PENDING",
+  EN_ROUTE: "status.EN_ROUTE",
+  ON_SITE: "status.ON_SITE",
+  CANCELLED: "status.CANCELLED",
+  SCHEDULED: "status.SCHEDULED",
+  COMPLETED: "status.COMPLETED",
 };
 
 interface TicketsPageProps {
@@ -37,6 +38,7 @@ export const TicketsMainPage: React.FC<TicketsPageProps> = ({
   currentUserId,
 }) => {
   const [viewFilter, setViewFilter] = useState<ViewFilter>("ALL");
+  const { t } = useTranslation("tickets");
   const [statusFilter, setStatusFilter] = useState<"ALL" | TicketStatus>("ALL");
   const [searchTerm, setSearchTerm] = useState("");
   const [priorityFilter, setPriorityFilter] = useState<"ALL" | TicketUrgency>(
@@ -63,7 +65,7 @@ export const TicketsMainPage: React.FC<TicketsPageProps> = ({
         case "COMPLETED":
           args.status = "COMPLETED";
           break;
-        case "WAITING_FOR_ME":
+        case "PENDING":
           args.status = "PENDING";
           break;
         default:
@@ -99,10 +101,14 @@ export const TicketsMainPage: React.FC<TicketsPageProps> = ({
     const backendCounters = data?.counters;
 
     const all = backendCounters?.all ?? baseTickets.length;
-    const waitingForMe = backendCounters?.pending ?? 0;
-    const unassigned =
-      backendCounters?.unassigned ??
-      baseTickets.filter((t) => !t.employee).length;
+    const pending =
+      backendCounters?.pending ??
+      baseTickets.filter((t) => t.status === "PENDING").length;
+
+    const scheduled =
+      backendCounters?.scheduled ??
+      baseTickets.filter((t) => t.status === "SCHEDULED").length;
+
     const completed =
       backendCounters?.completed ??
       baseTickets.filter((t) => t.status === "COMPLETED").length;
@@ -114,8 +120,8 @@ export const TicketsMainPage: React.FC<TicketsPageProps> = ({
     return {
       all,
       assignedToMe,
-      waitingForMe,
-      unassigned,
+      pending,
+      scheduled,
       completed,
     };
   }, [data?.counters, baseTickets, currentUserId]);
@@ -124,11 +130,11 @@ export const TicketsMainPage: React.FC<TicketsPageProps> = ({
     let list = [...baseTickets];
 
     switch (viewFilter) {
-      case "WAITING_FOR_ME":
-        list = list.filter((t) => t.employee?.id === currentUserId);
+      case "PENDING":
+        list = list.filter((t) => t.status === "PENDING");
         break;
-      case "UNASSIGNED":
-        list = list.filter((t) => !t.employee);
+      case "SCHEDULED":
+        list = list.filter((t) => t.status === "SCHEDULED");
         break;
       case "COMPLETED":
       case "ALL":
@@ -137,14 +143,14 @@ export const TicketsMainPage: React.FC<TicketsPageProps> = ({
     }
 
     return list;
-  }, [baseTickets, viewFilter, currentUserId]);
+  }, [baseTickets, viewFilter]);
   return (
     <div className="space-y-4">
       {/* Header simple */}
       <div className="flex flex-col gap-2">
         <HeaderTab hadle={() => navigate("/app/tickets/new")} title="Tickets" />
         <p className="text-sm text-oxford-blue-700 font-medium">
-          Manage your work orders by status, assignment, and urgency.
+          {t("subtitle")}
         </p>
       </div>
 
@@ -163,11 +169,11 @@ export const TicketsMainPage: React.FC<TicketsPageProps> = ({
             <MagnifyingGlassIcon className="h-4 w-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search by title, description or cliente..."
+              placeholder={t("searchPlaceholder")}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="
-                w-full pl-9 pr-3 py-2
+                w-full pl-9 pr-3 py-3
                 rounded-lg border border-slate-300
                 bg-white text-xs text-slate-700
                 focus:outline-none focus:ring-1 focus:ring-oxford-blue-500 focus:border-oxford-blue-500
@@ -178,31 +184,33 @@ export const TicketsMainPage: React.FC<TicketsPageProps> = ({
 
         {/* Dropdowns */}
         <div className="flex flex-wrap  justify-end">
-          <div className="justify-evenly space-x-2 flex flex-wrap">
+          <div className="justify-between space-x-2 flex flex-wrap">
             {/* Urgencia */}
             <UrgencySelect
               mode="filter"
               includeAllOption
-              label="Urgency"
+              className=" py-4"
+              label={t("filters.urgency")}
               value={priorityFilter}
               onChange={(v) => setPriorityFilter(v as "ALL" | TicketUrgency)}
             />{" "}
             {/* Estado */}
             <StatusSelect
-              label="Status"
+              className="py-4"
               wrapperClassName="min-w-30  gap-0.5"
               value={statusFilter} // "ALL" | TicketStatus
               onChange={(value) =>
                 setStatusFilter(value as "ALL" | TicketStatus)
               }
               includeAllOption
-              allLabel="All"
+              label={t("filters.status")}
+              allLabel={t("filters.all")}
               allValue="ALL"
               options={Object.entries(statusFilterLabel)
                 .filter(([key]) => key !== "ALL") // evitamos duplicar la opción All
-                .map(([value, label]) => ({
+                .map(([value, key]) => ({
                   value,
-                  label,
+                  label: t(key),
                   // si quieres punticos de color por estado:
                   dotClassName:
                     value === "PENDING"
@@ -217,14 +225,14 @@ export const TicketsMainPage: React.FC<TicketsPageProps> = ({
             {/* Categoría / departamento (de momento solo front) */}
             <AsyncSelect<Category>
               mode="filter"
-              label="Category"
+              label={t("filters.category")}
               name="departmentFilter"
               value={categoryFilter}
               onChange={(value) => setCategoryFilter(value)}
               useOptionsHook={useGetCategoriesQuery}
               getOptionLabel={(c) => c.name}
               getOptionValue={(c) => String(c.id)}
-              enableSearch
+              className="py-4"
               includeAllOption
               wrapperClassName="w-40 gap-0.5"
               labelClassName="text-[10px]"
@@ -237,13 +245,13 @@ export const TicketsMainPage: React.FC<TicketsPageProps> = ({
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {isLoading && (
           <div className="col-span-full text-center text-sm text-slate-400 py-10">
-            Loading tickets...
+            {t("loading")}
           </div>
         )}
 
         {isError && !isLoading && (
           <div className="col-span-full text-center text-sm text-red-500 py-10">
-            Error to load tickets.
+            {t("errorLoad")}
           </div>
         )}
 
@@ -259,7 +267,7 @@ export const TicketsMainPage: React.FC<TicketsPageProps> = ({
 
         {!isLoading && !isError && tickets.length === 0 && (
           <div className="col-span-full text-center text-sm text-slate-400 py-10">
-            No results
+            {t("noResults")}
           </div>
         )}
       </div>

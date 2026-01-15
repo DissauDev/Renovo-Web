@@ -13,13 +13,15 @@ import {
   XCircleIcon,
   AdjustmentsHorizontalIcon,
 } from "@heroicons/react/24/solid";
+import { useTranslation } from "react-i18next";
 
 export type ActiveFilterValue = "ALL" | "true" | "false";
 type ActiveMode = "input" | "filter";
 
 interface ActiveOption {
   value: ActiveFilterValue;
-  label: string;
+
+  labelKey: string;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   color: string;
   hoverBg: string;
@@ -30,7 +32,7 @@ interface ActiveOption {
 const ACTIVE_OPTIONS: ActiveOption[] = [
   {
     value: "ALL",
-    label: "All",
+    labelKey: "filters.all",
     icon: AdjustmentsHorizontalIcon,
     color: "text-slate-500",
     hoverBg: "hover:bg-slate-50",
@@ -39,7 +41,7 @@ const ACTIVE_OPTIONS: ActiveOption[] = [
   },
   {
     value: "true",
-    label: "Active",
+    labelKey: "status.active",
     icon: CheckCircleIcon,
     color: "text-emerald-600",
     hoverBg: "hover:bg-emerald-50",
@@ -48,7 +50,7 @@ const ACTIVE_OPTIONS: ActiveOption[] = [
   },
   {
     value: "false",
-    label: "Desactive",
+    labelKey: "status.inactive",
     icon: XCircleIcon,
     color: "text-red-600",
     hoverBg: "hover:bg-red-50",
@@ -78,6 +80,7 @@ export const ActiveStatusSelect: React.FC<ActiveStatusSelectProps> = ({
   const current = options.find((o) => o.value === value);
   const isFilterMode = mode === "filter";
 
+  const { t } = useTranslation("common");
   return (
     <div className="flex flex-col gap-0.5">
       {label && label.length > 0 && (
@@ -105,10 +108,12 @@ export const ActiveStatusSelect: React.FC<ActiveStatusSelectProps> = ({
           {current ? (
             <span className="flex items-center gap-2">
               <current.icon className={cn("h-4 w-4", current.color)} />
-              <span className="font-medium">{current.label}</span>
+              <span className="font-medium">{t(current.labelKey)}</span>
             </span>
           ) : (
-            <span className="text-sm text-slate-400">{placeholder}</span>
+            <span className="text-sm text-slate-400">
+              {placeholder ?? t("filters.selectStatus")}
+            </span>
           )}
         </SelectTrigger>
 
@@ -130,7 +135,7 @@ export const ActiveStatusSelect: React.FC<ActiveStatusSelectProps> = ({
               <div className="flex items-start gap-2">
                 <opt.icon className={cn("mt-0.5 h-4 w-4", opt.color)} />
                 <div className="flex flex-col">
-                  <span className="font-medium">{opt.label}</span>
+                  <span className="font-medium">{t(opt.labelKey)}</span>
                 </div>
               </div>
             </SelectItem>

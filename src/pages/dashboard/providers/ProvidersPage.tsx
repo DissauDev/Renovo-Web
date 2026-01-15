@@ -1,25 +1,34 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+
 import {
   useGetUsersQuery,
   type User,
 } from "../../../store/features/api/userApi";
+
 import {
   DataTable,
   type TableColumn,
 } from "../../../components/ui/dashboad/DataTable";
-import { useNavigate } from "react-router-dom";
+
 import {
   ActiveStatusSelect,
   type ActiveFilterValue,
 } from "../../../components/atoms/inputs/ActiveStatusSelect";
+
 import { HeaderTab } from "../../../components/layout/HeaderTab";
 
 export const ProvidersPage: React.FC = () => {
+  const { t } = useTranslation("providers");
+
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const pageSize = 10;
   const navigate = useNavigate();
+
   const [activeFilter, setActiveFilter] = useState<ActiveFilterValue>("ALL");
+
   const { data, isLoading } = useGetUsersQuery({
     role: "PROVIDER",
     search,
@@ -28,54 +37,65 @@ export const ProvidersPage: React.FC = () => {
     active: activeFilter === "ALL" ? undefined : activeFilter === "true",
   });
 
-  // data viene como: { items: User[], meta: { total, page, ... } }
+  // backend: { items, meta }
   const items: User[] = data?.items ?? [];
   const totalItems: number = data?.meta?.total ?? items.length;
 
   const columns: TableColumn<User>[] = [
     {
       key: "name",
-      header: "Name",
+      header: t("table.columns.name"),
       render: (u) => (
         <span className="font-medium text-slate-800">{u.name}</span>
       ),
     },
     {
       key: "email",
-      header: "Email",
+      header: t("table.columns.email"),
       render: (u) => <span className="text-slate-600">{u.email}</span>,
     },
     {
       key: "phone",
-      header: "Phone",
+      header: t("table.columns.phone"),
       render: (u) => <span className="text-slate-600">{u.phone ?? "—"}</span>,
     },
     {
       key: "role",
-      header: "Role",
+      header: t("table.columns.role"),
       render: (u) => (
-        <span className="inline-flex items-center rounded-full bg-indigo-50 px-2 py-0.5 text-[11px] font-medium text-indigo-700">
+        <span
+          className="
+            inline-flex items-center rounded-full
+            bg-indigo-50 px-2 py-0.5
+            text-[11px] font-medium text-indigo-700
+          "
+        >
           {u.role}
         </span>
       ),
     },
     {
-      key: "is Active?",
-      header: "is Active?",
+      key: "isActive",
+      header: t("table.columns.status"),
       render: (u) => (
         <span
           className={`
-    inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium
-    ${u.isActive ? "bg-emerald-50 text-emerald-700" : "bg-red-50 text-red-700"}
-  `}
+            inline-flex items-center rounded-full px-2 py-0.5
+            text-[11px] font-medium
+            ${
+              u.isActive
+                ? "bg-emerald-50 text-emerald-700"
+                : "bg-red-50 text-red-700"
+            }
+          `}
         >
-          {u.isActive ? "Active" : "Desactive"}
+          {u.isActive ? t("status.active") : t("status.inactive")}
         </span>
       ),
     },
     {
       key: "createdAt",
-      header: "Created at",
+      header: t("table.columns.createdAt"),
       render: (u) => (
         <span className="text-slate-500">
           {new Date(u.createdAt).toLocaleDateString()}
@@ -88,17 +108,28 @@ export const ProvidersPage: React.FC = () => {
     <div className="space-y-4">
       <HeaderTab
         hadle={() => navigate("/app/providers/new")}
-        title="Providers"
+        title={"Providers"}
       />
+
       <DataTable<User>
-        title="Providers"
+        title={t("title")}
+        i18nNs="providers"
         data={items}
         columns={columns}
         isLoading={isLoading}
         searchTerm={search}
         onSearchChange={(val) => {
           setSearch(val);
-          setPage(1); // resetea a la primera página al buscar
+          setPage(1);
+        }}
+        searchPlaceholder={t("table.searchPlaceholder")}
+        emptyMessage={t("table.empty")}
+        page={page}
+        pageSize={pageSize}
+        totalItems={totalItems}
+        onPageChange={setPage}
+        onRowClick={(row) => {
+          navigate(`/app/providers/${row.id}`);
         }}
         rightSlot={
           <div className="flex flex-wrap gap-2">
@@ -112,14 +143,6 @@ export const ProvidersPage: React.FC = () => {
             />
           </div>
         }
-        searchPlaceholder="Search by name, email..."
-        page={page}
-        pageSize={pageSize}
-        totalItems={totalItems}
-        onPageChange={setPage}
-        onRowClick={(row) => {
-          navigate(`/app/providers/${row.id}`);
-        }}
       />
     </div>
   );

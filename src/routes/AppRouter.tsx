@@ -24,6 +24,7 @@ import { ProductDetailPage } from "../pages/dashboard/products/ProductDetailsPag
 import { CategoriesPage } from "../pages/dashboard/categories/CategoriesPage";
 import { CreateCategoryPage } from "../pages/dashboard/categories/CreateCategoryPage";
 import { CategoryDetailPage } from "../pages/dashboard/categories/CategoriesDetails";
+import { EditTicketPage } from "../pages/tickets/EditTicketPage";
 
 export const AppRouter = () => {
   return (
@@ -50,6 +51,7 @@ export const AppRouter = () => {
           />
           <Route path="tickets/new" element={<CreateTicketPage />} />
           <Route path="tickets/:id" element={<TicketsDetailsPage />} />
+          <Route path="tickets/:id/edit" element={<EditTicketPage />} />
 
           <Route path="invoices" element={<InvoicesPage />} />
           {/* Technicians */}

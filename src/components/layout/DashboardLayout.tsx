@@ -4,10 +4,11 @@ import { Sidebar } from "./SideBar";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../store/store";
 import RenovoLogo from "../../assets/images/LOGOTIPO_3RENOVO.png";
+import { useTranslation } from "react-i18next";
 
 export const DashboardLayout: React.FC = () => {
   const navigate = useNavigate();
-
+  const { t } = useTranslation();
   const currentUser = useSelector((state: RootState) => state.auth.user);
 
   const initials =
@@ -23,10 +24,14 @@ export const DashboardLayout: React.FC = () => {
     <div className="min-h-screen bg-slate-100">
       <Sidebar />
 
-      <main className="ml-20 min-h-screen flex flex-col text-slate-900">
+      <main className="ml-0 md:ml-20 min-h-screen flex flex-col text-slate-900">
         {/* Topbar */}
-        <header className="sticky top-0 z-40 h-16 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm flex items-center justify-between px-4 sm:px-6">
+        <header
+          className="sticky top-0 z-40 h-16 bg-white/95 backdrop-blur border-b
+         border-slate-200 shadow-sm flex items-center justify-between px-4 sm:px-6"
+        >
           {/* Logo */}
+          <div className="md:hidden block w-1 h-1"></div>
           <div className="flex items-center gap-2">
             <img
               src={RenovoLogo}
@@ -40,10 +45,10 @@ export const DashboardLayout: React.FC = () => {
             {/* Texto small a la izquierda del pill */}
             <div className="hidden sm:flex flex-col items-end">
               <span className="text-[10px] uppercase tracking-[0.16em] text-slate-400">
-                Logged in as
+                {t("layout.loggedInAs")}
               </span>
               <span className="text-xs sm:text-sm font-varien text-oxford-blue-700 max-w-[180px] truncate">
-                {currentUser?.name ?? "User"}
+                {currentUser?.name ?? t("layout.userFallback")}
               </span>
             </div>
 
@@ -77,7 +82,9 @@ export const DashboardLayout: React.FC = () => {
                 {initials}
               </div>
 
-              <span className="hidden xs:inline-block">My profile</span>
+              <span className="hidden xs:inline-block">
+                {t("layout.myProfile")}
+              </span>
             </button>
           </div>
         </header>

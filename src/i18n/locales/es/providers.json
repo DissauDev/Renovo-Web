@@ -1,0 +1,97 @@
+{
+  "title": "Proveedores",
+  "table": {
+    "searchPlaceholder": "Buscar por nombre, email...",
+    "empty": "No se encontraron registros.",
+    "columns": {
+      "name": "Nombre",
+      "email": "Correo",
+      "phone": "Teléfono",
+      "role": "Rol",
+      "status": "Estado",
+      "createdAt": "Creado el"
+    }
+  },
+  "status": {
+    "active": "Activo",
+    "inactive": "Inactivo"
+  },
+  "roles": {
+    "admin": "Admin",
+    "provider": "Proveedor",
+    "employee": "Empleado"
+  },
+  "new": {
+    "title": "Crear nuevo usuario",
+    "formTitle": "Crear proveedor",
+    "submit": "Crear proveedor"
+  },
+  "form": {
+    "titleCreate": "Crear usuario",
+    "titleEdit": "Editar usuario",
+    "subtitleCreate": "Completa la información para crear un nuevo usuario.",
+    "subtitleEdit": "Actualiza la información de este usuario.",
+    "submitCreate": "Crear usuario",
+    "submitSave": "Guardar cambios",
+    "submitting": "Guardando...",
+    "fields": {
+      "name": { "label": "Nombre", "placeholder": "Juan Pérez" },
+      "userName": { "label": "Usuario", "placeholder": "juan.perez" },
+      "email": { "label": "Correo", "placeholder": "usuario@ejemplo.com" },
+      "phone": { "label": "Teléfono", "placeholder": "+1 (555) 123-4567" },
+      "password": {
+        "label": "Contraseña",
+        "placeholder": "••••••••",
+        "toggle": "Mostrar / ocultar contraseña"
+      },
+      "role": { "label": "Rol" }
+    }
+  },
+  "toasts": {
+    "created": "Usuario creado correctamente",
+    "createError": "Error al crear el usuario"
+  },
+  "validation": {
+    "nameRequired": "El nombre es obligatorio",
+    "emailRequired": "El correo es obligatorio",
+    "emailInvalid": "Correo inválido",
+    "phoneInvalid": "El teléfono debe ser un número válido de EE. UU.",
+    "passwordMin": "La contraseña debe tener al menos 8 caracteres",
+    "passwordUpper": "Debe contener al menos una mayúscula",
+    "passwordLower": "Debe contener al menos una minúscula",
+    "passwordNumber": "Debe contener al menos un número"
+  },
+  "detail": {
+    "invalidId": "ID de usuario inválido.",
+    "loading": "Cargando detalles del usuario...",
+    "loadError": "Error cargando el usuario.",
+    "retry": "Reintentar",
+    "back": "Volver",
+    "title": "Detalles del usuario",
+    "subtitle": "Ver y editar la información del usuario. Algunos campos son de solo lectura.",
+    "processing": "Procesando...",
+    "activate": "Activar",
+    "deactivate": "Desactivar",
+    "changePassword": "Cambiar contraseña",
+    "logout": "Cerrar sesión",
+    "loggingOut": "Cerrando sesión...",
+    "editable": "Información editable",
+    "save": "Guardar cambios",
+    "saving": "Guardando...",
+    "cards": {
+      "userId": "ID de usuario",
+      "role": "Rol",
+      "createdAt": "Creado el",
+      "loginEmail": "Correo de acceso"
+    },
+    "toasts": {
+      "logoutError": "Error al cerrar sesión",
+      "updated": "Usuario actualizado correctamente",
+      "updateError": "Error al actualizar",
+      "toggleError": "Error al cambiar el estado",
+      "activated": "activado",
+      "deactivated": "desactivado",
+      "toggled": "{{status}}"
+    }
+  }
+}
