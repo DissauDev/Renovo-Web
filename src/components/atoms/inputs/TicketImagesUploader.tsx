@@ -3,6 +3,7 @@ import { useUploadImagesMutation } from "../../../store/features/api/uploadApi";
 import { toastNotify } from "../../../lib/toastNotify";
 import { cn } from "../../../lib/utils";
 import { useTranslation } from "react-i18next";
+import { showApiError } from "../../../lib/showApiError";
 
 interface TicketImageItem {
   id: string;
@@ -63,7 +64,7 @@ export const TicketImagesUploader: React.FC<TicketImagesUploaderProps> = ({
   // ✅ usa el mismo criterio en TODA la app (API_URL primero, fallback SERVER_URL)
   const baseUrl = React.useMemo(() => {
     return String(
-      import.meta.env.VITE_API_URL || import.meta.env.VITE_SERVER_URL || ""
+      import.meta.env.VITE_API_URL || import.meta.env.VITE_SERVER_URL || "",
     );
   }, []);
 
@@ -109,7 +110,7 @@ export const TicketImagesUploader: React.FC<TicketImagesUploaderProps> = ({
       e.target.value = "";
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      toastNotify(error?.message || "Upload error", "error");
+      showApiError(error, t, "Upload error");
     }
   };
 
@@ -138,7 +139,7 @@ export const TicketImagesUploader: React.FC<TicketImagesUploaderProps> = ({
           "file:bg-oxford-blue-50 file:text-oxford-blue-700",
           "hover:file:bg-oxford-blue-100",
           (isUploading || safeImages.length >= maxImages) &&
-            "opacity-60 cursor-not-allowed"
+            "opacity-60 cursor-not-allowed",
         )}
       />
 

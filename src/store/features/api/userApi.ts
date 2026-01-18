@@ -5,6 +5,7 @@ import { apiSlice } from "./apiSlice";
 export type Role = "ADMIN" | "PROVIDER" | "EMPLOYEE" 
 
 export interface User {
+  locale: "EN" | "ES" | undefined;
   isActive?: boolean;
 
   id: number;

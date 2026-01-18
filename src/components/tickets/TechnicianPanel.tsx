@@ -6,6 +6,7 @@ import { useScheduleTicketMutation } from "../../store/features/api/ticketsApi";
 import { toastNotify } from "../../lib/toastNotify";
 import { DateTimePicker } from "../ui/dateTimePicker";
 import { useTranslation } from "react-i18next";
+import { showApiError } from "../../lib/showApiError";
 
 interface TechnicianPanelProps {
   ticket: Ticket;
@@ -29,12 +30,12 @@ export const TechnicianPanel: React.FC<TechnicianPanelProps> = ({
 
   // técnico seleccionado
   const [selectedTechId, setSelectedTechId] = React.useState<string>(
-    currentTech ? String(currentTech.id) : "UNASSIGNED"
+    currentTech ? String(currentTech.id) : "UNASSIGNED",
   );
 
   // fecha/hora seleccionada
   const [scheduledAtLocal, setScheduledAtLocal] = React.useState<Date | null>(
-    ticket.scheduledAt ? new Date(ticket.scheduledAt) : null
+    ticket.scheduledAt ? new Date(ticket.scheduledAt) : null,
   );
 
   React.useEffect(() => {
@@ -43,7 +44,7 @@ export const TechnicianPanel: React.FC<TechnicianPanelProps> = ({
 
   React.useEffect(() => {
     setScheduledAtLocal(
-      ticket.scheduledAt ? new Date(ticket.scheduledAt) : null
+      ticket.scheduledAt ? new Date(ticket.scheduledAt) : null,
     );
   }, [ticket.scheduledAt]);
 
@@ -69,7 +70,7 @@ export const TechnicianPanel: React.FC<TechnicianPanelProps> = ({
       onStatusUpdated?.();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      toastNotify(error?.message || t("technician.errors.schedule"), "error");
+      showApiError(error, t, "technician.errors.schedule");
     }
   };
 
@@ -134,18 +135,19 @@ export const TechnicianPanel: React.FC<TechnicianPanelProps> = ({
           onChange={(d: React.SetStateAction<Date | null>) =>
             setScheduledAtLocal(d)
           }
-          defaultTime="10:30:00"
+          defaultTime="14:30:00"
         />
 
         <button
           type="button"
           onClick={handleConfirm}
           disabled={disableConfirm}
-          className={`inline-flex w-full items-center justify-center rounded-lg px-3 py-2 text-xs font-medium shadow-sm border
+          className={`inline-flex w-full items-center 
+            justify-center rounded-lg px-3 py-2 text-sm font-varien shadow-sm border
             ${
               disableConfirm
                 ? "bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed"
-                : "bg-emerald-600 text-white border-emerald-700 hover:bg-emerald-700"
+                : "bg-oxford-blue-700 text-white  hover:bg-oxford-blue-800"
             }`}
         >
           {t("technician.confirm")}

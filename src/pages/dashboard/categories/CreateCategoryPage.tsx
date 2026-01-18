@@ -10,6 +10,7 @@ import { useCreateCategoryMutation } from "../../../store/features/api/categorie
 import { CategoryForm } from "./CategoryForm.tsx";
 import { ButtonBack } from "../../../components/layout/ButtonBack.tsx";
 import { useTranslation } from "react-i18next";
+import { showApiError } from "../../../lib/showApiError.ts";
 
 // ----------------- SCHEMA -----------------
 const createCategorySchema = z.object({
@@ -44,7 +45,7 @@ export const CreateCategoryPage: React.FC = () => {
       navigate("/app/categories");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      toastNotify(error?.message || t("toast.createError"), "error");
+      showApiError(error, t, "toast.createError");
     }
   };
 

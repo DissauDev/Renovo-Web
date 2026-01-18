@@ -14,6 +14,7 @@ import {
 } from "./CloseTicketSchema";
 import { CloseLineItemRow } from "./CloseLineItemRow";
 import { useTranslation } from "react-i18next";
+import { showApiError } from "../../lib/showApiError";
 
 type Props = {
   ticketId: number;
@@ -58,8 +59,6 @@ export function CloseTicketForm({
       photos: defaultPhotos ?? [],
     },
   });
-
-  console.log("default fotos", defaultPhotos);
 
   // ✅ Line items
   const {
@@ -129,7 +128,8 @@ export function CloseTicketForm({
       setOpen(false);
       onClosed?.();
     } catch (error: any) {
-      toastNotify(error?.message || t("closeForm.toast.error"), "error");
+      console.log(error.code);
+      showApiError(error, t, "closeForm.toast.error");
     }
   };
 

@@ -90,7 +90,126 @@
       "aria": "Language selector",
       "es": "Spanish",
       "en": "English"
-    }
+    },
+  "invoiceSettings": {
+   "tip": "Tip: You can enable both product tax and invoice tax at the same time." ,
+  "loading": "Loading settings...",
+  "errorLoading": "Error loading settings.",
+  "retry": "Retry",
+
+  "title": "Invoice preferences",
+  "subtitle": "Configure taxes for products and invoices.",
+
+  "actions": {
+    "save": "Save",
+    "saving": "Saving..."
+  },
+
+  "toast": {
+    "saved": "Saved",
+    "errorSaving": "Error saving settings"
+  },
+
+  "productTax": {
+    "title": "Product tax",
+    "subtitle": "Adds a percent tax per product line."
+  },
+
+  "invoiceTax": {
+    "title": "Invoice tax / fee",
+    "subtitle": "Adds fixed amount and/or percent to the invoice total."
+  },
+
+  "fields": {
+    "percent": "Percent (%)",
+    "fixedAmount": "Fixed amount"
+  },
+
+  "placeholders": {
+    "percentExample": "e.g. {{value}}",
+    "fixedExample": "e.g. {{value}}"
   }
+}
+  },"errors": {
+  "UNKNOWN_ERROR": "Something went wrong. Please try again.",
+
+  "INVALID_ID": "Invalid {{label}}.",
+  "TICKETS_INVALID_ID": "Invalid ticket id.",
+  "TICKETS_REQUIRED_FIELDS": "Missing required fields: {{fields}}.",
+  "TICKETS_PROVIDER_ID_REQUIRED_FOR_ADMIN": "providerId is required when an admin creates a ticket.",
+  "TICKETS_ONLY_ADMIN_OR_PROVIDER": "Only admin or provider can create tickets.",
+  "TICKETS_ONLY_ADMIN_ASSIGN": "Only admin can assign tickets.",
+  "TICKETS_ASSIGNED_TO_REQUIRED": "assignedTo is required.",
+  "TICKETS_STATUS_REQUIRED": "status is required.",
+  "TICKETS_INVALID_STATUS_VALUE": "Invalid status value: {{value}}.",
+  "TICKETS_FORBIDDEN": "You don't have permission to perform this action.",
+  "TICKETS_NOT_FOUND": "Ticket not found.",
+
+  "TICKETS_ONLY_ADMIN_SCHEDULE": "Only admin can schedule tickets.",
+  "TICKETS_SCHEDULED_AT_REQUIRED": "scheduledAt is required.",
+  "TICKETS_CANNOT_SCHEDULE_STATUS": "Cannot schedule a {{status}} ticket.",
+  "TICKETS_INVALID_SCHEDULED_AT": "Invalid scheduledAt date.",
+  "TICKETS_ASSIGNED_TO_NOT_EMPLOYEE": "assignedTo must be an EMPLOYEE.",
+  "TICKETS_SCHEDULE_CONFLICT": "This employee already has a ticket scheduled at that time.",
+
+  "TICKETS_CANNOT_CHANGE_COMPLETED": "Cannot change status of a completed ticket.",
+  "TICKETS_CANNOT_CLOSE_CANCELLED": "Cannot close a cancelled ticket.",
+  "TICKETS_MISSING_ONSITE_CHECKIN": "Ticket was never checked in.",
+
+  "SCOPE_TITLE_REQUIRED": "Title is required.",
+  "SCOPE_ITEM_NOT_FOUND": "Scope item not found.",
+  "SCOPE_TITLE_MIN_LENGTH": "Title must be at least {{min}} characters.",
+  "SCOPE_INVALID_ID": "Invalid scope item id.",
+
+  "EMPLOYEE_NOT_FOUND": "Employee not found.",
+  "PRODUCT_NOT_FOUND": "Product not found.",
+  "INVENTORY_INSUFFICIENT_STOCK": "Insufficient stock for {{name}}. Available: {{available}}, requested: {{requested}}.",
+
+   "AUTH_EMAIL_IN_USE": "Email is already in use.",
+  "AUTH_INVALID_CREDENTIALS": "Invalid email or password.",
+  "AUTH_USER_NOT_FOUND": "User not found.",
+  "AUTH_CURRENT_PASSWORD_INCORRECT": "Current password is incorrect.",
+  "AUTH_NEW_PASSWORD_MIN_LENGTH": "New password must be at least {{min}} characters long.",
+  "AUTH_NEW_PASSWORD_SAME_AS_CURRENT": "New password must be different from the current password.",
+
+        "AUTH_FORGOT_PASSWORD_EMAIL_REQUIRED": "Email is required",
+      "AUTH_FORGOT_PASSWORD_INVALID_EMAIL": "Enter a valid email",
+      "AUTH_RESET_PASSWORD_TOKEN_REQUIRED": "Reset token is required",
+      "AUTH_RESET_PASSWORD_TOKEN_INVALID": "This reset link is invalid",
+      "AUTH_RESET_PASSWORD_TOKEN_EXPIRED": "This reset link has expired. Please request a new one.",
+      "AUTH_RESET_PASSWORD_PASSWORD_WEAK": "Password does not meet security requirements",
+      "AUTH_RESET_PASSWORD_SAME_AS_OLD": "New password must be different from the previous one",
+      "AUTH_RESET_PASSWORD_USER_NOT_FOUND": "User not found",
+   "AUTH_PASSWORD_SAME_AS_CURRENT":"New password must be different from the previous one",
+   
+    "USERS_NOT_FOUND": "User not found.",
+  "USERS_INVALID_ID": "Invalid user id.",
+  "USERS_ONLY_ADMIN_DELETE": "Only admin can delete users.",
+  "USERS_ONLY_ADMIN_OR_PROVIDER_CREATE": "Only admin or provider can create users.",
+  "USERS_REQUIRED_FIELDS": "Missing required fields: {{fields}}.",
+  "USERS_PROVIDER_CANNOT_CREATE_ADMIN": "Providers cannot create admin users.",
+  "USERS_EMAIL_IN_USE": "Email is already in use.",
+  "USERS_IS_ACTIVE_REQUIRED_BOOLEAN": "isActive (boolean) is required.",
+  "USERS_ONLY_ADMIN_PATCH_ACTIVE": "Only admin can change user active status.",
+
+    "PRODUCTS_ONLY_ADMIN": "Only admin can manage products.",
+  "PRODUCTS_INVALID_ID": "Invalid product id.",
+  "PRODUCTS_NOT_FOUND": "Product not found.",
+  "PRODUCTS_NAME_REQUIRED": "name is required.",
+  "PRODUCTS_INVALID_CATEGORY_ID": "Invalid categoryId.",
+  "PRODUCTS_NON_NEGATIVE_REQUIRED": "{{field}} must be a non-negative number.",
+  "PRODUCTS_SLUG_IN_USE": "Slug already in use.",
+  "PRODUCTS_SKU_IN_USE": "SKU already in use.",
+  "PRODUCTS_IS_ACTIVE_REQUIRED_BOOLEAN": "isActive (boolean) is required.",
+
+    "INVOICE_SETTINGS_INVALID_PRODUCT_TAX_PERCENT": "Product tax percent must be between {{min}} and {{max}}.",
+  "INVOICE_SETTINGS_INVALID_INVOICE_TAX_PERCENT": "Invoice tax percent must be between {{min}} and {{max}}.",
+  "INVOICE_SETTINGS_INVALID_INVOICE_TAX_FIXED": "Invoice fixed amount must be at least {{min}}.",
+
+   "UPLOADS_NO_FILES": "No files were uploaded.",
+  "UPLOADS_ONLY_IMAGES": "Only image files are allowed.",
+  "UPLOADS_FILE_TOO_LARGE": "File is too large. Max size is {{maxMb}} MB.",
+  "UPLOADS_TOO_MANY_FILES": "Too many files. Max allowed is {{max}}."
+}
 
 }

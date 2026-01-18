@@ -10,6 +10,7 @@ import {
 import { useCreateProductMutation } from "../../../store/features/api/productsApi";
 import { toastNotify } from "../../../lib/toastNotify";
 import { ButtonBack } from "../../../components/layout/ButtonBack";
+import { showApiError } from "../../../lib/showApiError";
 
 export const CreateProductPage: React.FC = () => {
   const navigate = useNavigate();
@@ -37,15 +38,12 @@ export const CreateProductPage: React.FC = () => {
 
       toastNotify(
         t("toast.createdSuccess", "Product created successfully"),
-        "success"
+        "success",
       );
       navigate("/app/products");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      toastNotify(
-        error?.message || t("toast.createError", "Error creating product"),
-        "error"
-      );
+      showApiError(error, t, "toast.createError");
     }
   };
 

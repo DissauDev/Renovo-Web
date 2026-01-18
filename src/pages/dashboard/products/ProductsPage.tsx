@@ -19,6 +19,8 @@ import {
 } from "../../../components/atoms/inputs/ActiveStatusSelect.tsx";
 import { HeaderTab } from "../../../components/layout/HeaderTab.tsx";
 import { useTranslation } from "react-i18next";
+import type { RootState } from "../../../store/store.ts";
+import { useSelector } from "react-redux";
 
 export const ProductsPage = () => {
   const [search, setSearch] = useState("");
@@ -40,6 +42,9 @@ export const ProductsPage = () => {
 
   const products: Product[] = data?.items ?? [];
   const total = data?.total ?? 0;
+
+  const role = useSelector((state: RootState) => state.auth.user?.role);
+  const isAdminorWorker = role === "ADMIN" || role === "EMPLOYEE";
 
   const columns: TableColumn<Product>[] = [
     {
@@ -65,9 +70,11 @@ export const ProductsPage = () => {
           <span className="font-medium text-slate-700">
             ${((p.sellCents ?? 0) / 100).toFixed(2)}
           </span>
-          <span className="text-[11px] text-slate-500">
-            {t("table.cost")} ${((p.costCents ?? 0) / 100).toFixed(2)}
-          </span>
+          {isAdminorWorker ? (
+            <span className="text-[11px] text-slate-500">
+              {t("table.cost")} ${((p.costCents ?? 0) / 100).toFixed(2)}
+            </span>
+          ) : null}
         </div>
       ),
     },
@@ -82,8 +89,8 @@ export const ProductsPage = () => {
           qty === 0
             ? "bg-red-50 text-red-700"
             : qty <= 5
-            ? "bg-amber-50 text-amber-700"
-            : "bg-emerald-50 text-emerald-700";
+              ? "bg-amber-50 text-amber-700"
+              : "bg-emerald-50 text-emerald-700";
 
         return (
           <span
@@ -155,10 +162,15 @@ export const ProductsPage = () => {
       ),
     },
   ];
-
+  const handleNavigate = () => {
+    if (isAdminorWorker) {
+      navigate("/app/products/new");
+      return;
+    }
+  };
   return (
     <div className="space-y-4">
-      <HeaderTab hadle={() => navigate("/app/products/new")} title="Products" />
+      <HeaderTab hadle={handleNavigate} title="Products" />
       <DataTable<Product>
         title={t("title")}
         i18nNs="products"

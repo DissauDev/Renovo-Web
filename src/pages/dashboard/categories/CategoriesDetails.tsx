@@ -24,6 +24,7 @@ import { cn } from "../../../lib/utils";
 import { CategoryForm } from "./CategoryForm.tsx";
 import { useTranslation } from "react-i18next";
 import { ButtonBack } from "../../../components/layout/ButtonBack.tsx";
+import { showApiError } from "../../../lib/showApiError.ts";
 
 // --------- SCHEMA FORM ---------
 const categoryFormSchema = z.object({
@@ -79,7 +80,7 @@ export const CategoryDetailPage: React.FC = () => {
         icon: typedCategory.icon ?? "",
       });
     }
-  }, [category, reset]);
+  }, [category, reset, typedCategory?.icon, typedCategory?.name]);
 
   const handleToggleActive = async () => {
     if (!categoryId || !category) return;
@@ -92,13 +93,13 @@ export const CategoryDetailPage: React.FC = () => {
 
       toastNotify(
         !typedCategory.isActive ? t("toast.activated") : t("toast.deactivated"),
-        "success"
+        "success",
       );
 
       refetch();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      toastNotify(err?.message || t("toast.toggleError"), "error");
+      showApiError(err, t, "toast.toggleError");
     }
   };
 
@@ -117,8 +118,7 @@ export const CategoryDetailPage: React.FC = () => {
       refetch();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      console.error(error);
-      toastNotify(error?.message || t("toast.updateError"), "error");
+      showApiError(error, t, "toast.updateError");
     }
   };
 
@@ -178,7 +178,7 @@ export const CategoryDetailPage: React.FC = () => {
             "px-3 py-1.5 h-10 text-sm rounded-lg font-varien shadow border transition",
             typedCategory.isActive
               ? "bg-cameo-600 text-white hover:bg-cameo-700 border-cameo-700"
-              : "bg-slate-200 text-slate-700 hover:bg-slate-300 border-slate-300"
+              : "bg-slate-200 text-slate-700 hover:bg-slate-300 border-slate-300",
           )}
         >
           <span className="flex flex-row items-center gap-2">
@@ -223,7 +223,7 @@ export const CategoryDetailPage: React.FC = () => {
               "inline-flex items-center rounded-full px-2 py-0.5 text-sm   font-semibold",
               typedCategory.isActive
                 ? "bg-emerald-50 text-emerald-700"
-                : "bg-red-50 text-red-700"
+                : "bg-red-50 text-red-700",
             )}
           >
             {typedCategory.isActive ? t("status.active") : t("status.inactive")}

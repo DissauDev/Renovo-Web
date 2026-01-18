@@ -6,6 +6,7 @@ import { StatusSelect } from "../atoms/inputs/StatusSelect";
 import { useChangeTicketStatusMutation } from "../../store/features/api/ticketsApi";
 import { toastNotify } from "../../lib/toastNotify";
 import { useTranslation } from "react-i18next";
+import { showApiError } from "../../lib/showApiError";
 
 interface StatusPanelProps {
   ticket: Ticket;
@@ -22,7 +23,7 @@ const STATUS_PANEL_OPTIONS: TicketStatus[] = [
 
 export const StatusPanel = ({ ticket, onStatusUpdated }: StatusPanelProps) => {
   const [selectedStatus, setSelectedStatus] = useState<TicketStatus>(
-    ticket.status
+    ticket.status,
   );
 
   const { t } = useTranslation("tickets");
@@ -70,7 +71,7 @@ export const StatusPanel = ({ ticket, onStatusUpdated }: StatusPanelProps) => {
       onStatusUpdated?.();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      toastNotify(error?.message || t("statusPanel.error"), "error");
+      showApiError(error, t, "statusPanel.error");
     }
   };
 
@@ -104,8 +105,8 @@ export const StatusPanel = ({ ticket, onStatusUpdated }: StatusPanelProps) => {
             {isUpdating
               ? t("statusPanel.updating")
               : hasChanges
-              ? t("statusPanel.confirm")
-              : t("statusPanel.noChanges")}
+                ? t("statusPanel.confirm")
+                : t("statusPanel.noChanges")}
           </button>
         </div>
       </div>

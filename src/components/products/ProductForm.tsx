@@ -13,7 +13,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { FormInput } from "../atoms/form/FormInput";
 import { FormTextArea } from "../atoms/form/FormTextArea";
 import { AsyncSelect } from "../atoms/inputs/AsyncSelect";
-import { TicketImagesUploader } from "../atoms/inputs/TicketImagesUploader";
+//import { TicketImagesUploader } from "../atoms/inputs/TicketImagesUploader";
 import { cn } from "../../lib/utils";
 
 import { FormInputNumber } from "../atoms/form/FormInputNumber";
@@ -99,8 +99,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   const {
     control,
     handleSubmit,
-    setValue,
-    watch,
+    //  setValue,
+    //  watch,
     formState: { errors },
   } = useForm<ProductFormValues>({
     resolver: zodResolver(schema) as unknown as Resolver<ProductFormValues>,
@@ -118,8 +118,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     },
   });
 
-  // eslint-disable-next-line react-hooks/incompatible-library
-  const imageUrl = watch("imageUrl");
+  //const imageUrl = watch("imageUrl");
 
   const onSubmit: SubmitHandler<ProductFormValues> = async (values) => {
     await onSubmitForm({
@@ -137,7 +136,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       }}
       className={cn(
         "bg-white rounded-2xl shadow border border-slate-200 p-6 space-y-4",
-        className
+        className,
       )}
       noValidate
     >
@@ -159,7 +158,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               "px-2 flex flex-row py-1 text-sm items-center justify-center",
               "rounded-lg border border-slate-300 text-slate-700",
               "hover:bg-red-500 hover:text-white",
-              isSubmitting && "opacity-60 cursor-not-allowed"
+              isSubmitting && "opacity-60 cursor-not-allowed",
             )}
           >
             <XMarkIcon className="size-5" />
@@ -295,7 +294,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         )}
       />
 
-      {/* Image */}
+      {/* Image 
       <div className="space-y-2">
         <label className="text-xs font-medium text-slate-600 tracking-[0.12em] uppercase">
           {t("form.fields.image")}
@@ -312,8 +311,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 ]
               : []
           }
-          onAddImage={(url) =>
-            setValue("imageUrl", url, { shouldValidate: true })
+          onAddImage={(image) =>
+            setValue("imageUrl", image.url, { shouldValidate: true })
           }
           onRemoveImage={() =>
             setValue("imageUrl", "", { shouldValidate: true })
@@ -325,7 +324,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             {String(errors.imageUrl.message ?? "")}
           </p>
         )}
-      </div>
+      </div> */}
 
       {/* Actions */}
       <div className="flex flex-col sm:flex-row sm:justify-end gap-2 pt-4">
@@ -335,7 +334,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             onClick={onCancel}
             className={cn(
               "px-4 py-2 text-sm rounded-lg border border-slate-300",
-              "text-slate-700 hover:bg-slate-50"
+              "text-slate-700 hover:bg-slate-50",
             )}
             disabled={isSubmitting}
           >
@@ -351,17 +350,17 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             "bg-oxford-blue-600 text-white font-varien",
             "hover:bg-oxford-blue-700",
             "disabled:opacity-60 disabled:cursor-not-allowed",
-            "shadow-sm"
+            "shadow-sm",
           )}
         >
           {isSubmitting
             ? mode === "create"
               ? t("actions.creating")
               : t("actions.saving")
-            : submitLabel ??
+            : (submitLabel ??
               (mode === "create"
                 ? t("actions.create")
-                : t("actions.saveChanges"))}
+                : t("actions.saveChanges")))}
         </button>
       </div>
     </form>

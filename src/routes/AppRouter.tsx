@@ -25,6 +25,9 @@ import { CategoriesPage } from "../pages/dashboard/categories/CategoriesPage";
 import { CreateCategoryPage } from "../pages/dashboard/categories/CreateCategoryPage";
 import { CategoryDetailPage } from "../pages/dashboard/categories/CategoriesDetails";
 import { EditTicketPage } from "../pages/tickets/EditTicketPage";
+import { ForgotPasswordPage } from "../pages/auth/ForgotPasswordPage";
+import { ResetPasswordPage } from "../pages/auth/ResetPasswordPage";
+import NotFound from "../pages/NotFound";
 
 export const AppRouter = () => {
   return (
@@ -34,7 +37,8 @@ export const AppRouter = () => {
         {/* Público */}
         <Route path="/" element={<LoginPage />} />
         <Route path="/singin" element={<LoginPage />} />
-
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
         {/* Privado / Dashboard */}
         <Route path="/app" element={<DashboardLayout />}>
           {/* User */}
@@ -73,6 +77,7 @@ export const AppRouter = () => {
 
           <Route path="settings" element={<SettingsPage />} />
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );

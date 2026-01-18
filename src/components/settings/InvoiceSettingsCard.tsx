@@ -7,6 +7,8 @@ import {
 } from "../../store/features/api/invoiceSettingsApi";
 import { toastNotify } from "../../lib/toastNotify";
 import { FormInputNumber } from "../atoms/form/FormInputNumber";
+import { useTranslation } from "react-i18next";
+import { showApiError } from "../../lib/showApiError";
 
 function clampNumber(v: number, min: number, max: number) {
   if (Number.isNaN(v)) return min;
@@ -28,6 +30,7 @@ export const InvoiceSettingsCard: React.FC<{ className?: string }> = ({
   const { data, isLoading, isError, refetch } = useGetInvoiceSettingsQuery();
   const [updateSettings, { isLoading: isSaving }] =
     useUpdateInvoiceSettingsMutation();
+  const { t } = useTranslation("common");
 
   const {
     handleSubmit,
@@ -59,6 +62,7 @@ export const InvoiceSettingsCard: React.FC<{ className?: string }> = ({
     });
   }, [data, reset]);
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const productTaxEnabled = watch("productTaxEnabled");
   const invoiceTaxEnabled = watch("invoiceTaxEnabled");
 
@@ -86,10 +90,11 @@ export const InvoiceSettingsCard: React.FC<{ className?: string }> = ({
         invoiceTaxFixed,
       }).unwrap();
 
-      toastNotify("Saved", "success");
+      toastNotify(t("settings.invoiceSettings.toast.saved"), "success");
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      toastNotify(err?.message || "Error saving settings", "error");
+      showApiError(err, t, "settings.invoiceSettings.toast.errorSaving");
     }
   };
 
@@ -98,10 +103,12 @@ export const InvoiceSettingsCard: React.FC<{ className?: string }> = ({
       <div
         className={cn(
           "rounded-2xl border border-slate-200 bg-white shadow-sm p-5",
-          className
+          className,
         )}
       >
-        <p className="text-sm text-slate-500">Loading settings...</p>
+        <p className="text-sm text-slate-500">
+          {t("settings.invoiceSettings.loading")}
+        </p>
       </div>
     );
   }
@@ -111,16 +118,19 @@ export const InvoiceSettingsCard: React.FC<{ className?: string }> = ({
       <div
         className={cn(
           "rounded-2xl border border-slate-200 bg-white shadow-sm p-5 space-y-3",
-          className
+          className,
         )}
       >
-        <p className="text-sm text-red-500">Error loading settings.</p>
+        <p className="text-sm text-red-500">
+          {t("settings.invoiceSettings.errorLoading")}
+        </p>
+
         <button
           type="button"
           onClick={() => refetch()}
           className="text-xs px-3 py-1 rounded-md border border-slate-300 hover:bg-slate-50"
         >
-          Retry
+          {t("settings.invoiceSettings.retry")}
         </button>
       </div>
     );
@@ -134,16 +144,16 @@ export const InvoiceSettingsCard: React.FC<{ className?: string }> = ({
       }}
       className={cn(
         "rounded-2xl border border-slate-200 bg-white shadow-sm p-5",
-        className
+        className,
       )}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="space-y-1">
           <h2 className="text-sm font-varien text-oxford-blue-800">
-            Invoice preferences
+            {t("settings.invoiceSettings.title")}
           </h2>
           <p className="text-[11px] text-slate-500">
-            Configure taxes for products and invoices.
+            {t("settings.invoiceSettings.subtitle")}
           </p>
         </div>
 
@@ -153,10 +163,12 @@ export const InvoiceSettingsCard: React.FC<{ className?: string }> = ({
           className={cn(
             "h-9 px-3 rounded-lg text-sm font-varien",
             "bg-oxford-blue-600 text-white hover:bg-oxford-blue-700",
-            "disabled:opacity-60 disabled:cursor-not-allowed"
+            "disabled:opacity-60 disabled:cursor-not-allowed",
           )}
         >
-          {isSaving ? "Saving..." : "Save"}
+          {isSaving
+            ? t("settings.invoiceSettings.actions.saving")
+            : t("settings.invoiceSettings.actions.save")}
         </button>
       </div>
 
@@ -166,10 +178,10 @@ export const InvoiceSettingsCard: React.FC<{ className?: string }> = ({
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-sm font-semibold text-slate-800">
-                Product tax
+                {t("settings.invoiceSettings.productTax.title")}
               </p>
               <p className="text-[11px] text-slate-500">
-                Adds a percent tax per product line.
+                {t("settings.invoiceSettings.productTax.subtitle")}
               </p>
             </div>
 
@@ -187,13 +199,13 @@ export const InvoiceSettingsCard: React.FC<{ className?: string }> = ({
               <span
                 className={cn(
                   "relative inline-flex h-6 w-11 items-center rounded-full transition",
-                  productTaxEnabled ? "bg-oxford-blue-600" : "bg-slate-300"
+                  productTaxEnabled ? "bg-oxford-blue-600" : "bg-slate-300",
                 )}
               >
                 <span
                   className={cn(
                     "inline-block h-5 w-5 transform rounded-full bg-white transition",
-                    productTaxEnabled ? "translate-x-5" : "translate-x-1"
+                    productTaxEnabled ? "translate-x-5" : "translate-x-1",
                   )}
                 />
               </span>
@@ -202,7 +214,7 @@ export const InvoiceSettingsCard: React.FC<{ className?: string }> = ({
 
           <div className="mt-4 grid grid-cols-1 gap-2">
             <FormInputNumber
-              label="Percent (%)"
+              label={t("settings.invoiceSettings.fields.percent")}
               name="productTaxPercent"
               value={watch("productTaxPercent")}
               onChange={(v) =>
@@ -214,7 +226,10 @@ export const InvoiceSettingsCard: React.FC<{ className?: string }> = ({
               max={100}
               step={0.01}
               variant="price"
-              placeholder="e.g. 8.25"
+              placeholder={t(
+                "settings.invoiceSettings.placeholders.percentExample",
+                { value: "8.25" },
+              )}
             />
           </div>
         </div>
@@ -224,10 +239,10 @@ export const InvoiceSettingsCard: React.FC<{ className?: string }> = ({
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-sm font-semibold text-slate-800">
-                Invoice tax / fee
+                {t("settings.invoiceSettings.invoiceTax.title")}
               </p>
               <p className="text-[11px] text-slate-500">
-                Adds fixed amount and/or percent to the invoice total.
+                {t("settings.invoiceSettings.invoiceTax.subtitle")}
               </p>
             </div>
 
@@ -245,13 +260,13 @@ export const InvoiceSettingsCard: React.FC<{ className?: string }> = ({
               <span
                 className={cn(
                   "relative inline-flex h-6 w-11 items-center rounded-full transition",
-                  invoiceTaxEnabled ? "bg-oxford-blue-600" : "bg-slate-300"
+                  invoiceTaxEnabled ? "bg-oxford-blue-600" : "bg-slate-300",
                 )}
               >
                 <span
                   className={cn(
                     "inline-block h-5 w-5 transform rounded-full bg-white transition",
-                    invoiceTaxEnabled ? "translate-x-5" : "translate-x-1"
+                    invoiceTaxEnabled ? "translate-x-5" : "translate-x-1",
                   )}
                 />
               </span>
@@ -260,7 +275,7 @@ export const InvoiceSettingsCard: React.FC<{ className?: string }> = ({
 
           <div className="mt-4 grid grid-cols-1 gap-3">
             <FormInputNumber
-              label="Percent (%)"
+              label={t("settings.invoiceSettings.fields.percent")}
               name="invoiceTaxPercent"
               value={watch("invoiceTaxPercent")}
               onChange={(v) =>
@@ -272,11 +287,14 @@ export const InvoiceSettingsCard: React.FC<{ className?: string }> = ({
               max={100}
               step={0.01}
               variant="price"
-              placeholder="e.g. 5"
+              placeholder={t(
+                "settings.invoiceSettings.placeholders.percentExample",
+                { value: "5" },
+              )}
             />
 
             <FormInputNumber
-              label="Fixed amount"
+              label={t("settings.invoiceSettings.fields.fixedAmount")}
               name="invoiceTaxFixed"
               value={watch("invoiceTaxFixed")}
               onChange={(v) =>
@@ -288,14 +306,17 @@ export const InvoiceSettingsCard: React.FC<{ className?: string }> = ({
               max={999999}
               step={0.01}
               variant="price"
-              placeholder="e.g. 15.00"
+              placeholder={t(
+                "settings.invoiceSettings.placeholders.fixedExample",
+                { value: "15.00" },
+              )}
             />
           </div>
         </div>
       </div>
 
       <div className="mt-4 text-[11px] text-slate-500">
-        Tip: You can enable both product tax and invoice tax at the same time.
+        {t("settings.invoiceSettings.tip")}
       </div>
     </form>
   );

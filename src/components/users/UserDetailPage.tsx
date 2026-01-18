@@ -21,6 +21,7 @@ import { useLogoutMutation } from "../../store/features/api/authApi";
 import { usePatchProductActiveMutation } from "../../store/features/api/productsApi";
 import { useTranslation } from "react-i18next";
 import { ButtonBack } from "../layout/ButtonBack";
+import { showApiError } from "../../lib/showApiError";
 
 interface Props {
   defaultRoleProp?: "ADMIN" | "PROVIDER" | "EMPLOYEE";
@@ -81,8 +82,7 @@ export const UserDetailPage = ({
       refetch();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      console.error(error);
-      toastNotify(error.message || t("detail.toasts.updateError"), "error");
+      showApiError(error, t, "detail.toasts.updateError");
     }
   };
 
@@ -100,12 +100,12 @@ export const UserDetailPage = ({
             ? t("detail.toasts.activated")
             : t("detail.toasts.deactivated"),
         }),
-        "success"
+        "success",
       );
       refetch();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      toastNotify(err?.message || t("detail.toasts.toggleError"), "error");
+      showApiError(err, t, "detail.toasts.toggleError");
     }
   };
 
@@ -276,6 +276,7 @@ export const UserDetailPage = ({
                 phone: typedUser.phone ?? "",
                 email: typedUser.email,
                 role: typedUser.role,
+                locale: typedUser.locale,
               }}
               submitLabel={isUpdating ? t("detail.saving") : t("detail.save")}
               onSubmitForm={handleSubmit}

@@ -14,6 +14,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { ButtonBack } from "../../components/layout/ButtonBack";
 import { resolveImageUrl } from "../../lib/resolveImageUrl";
+import { showApiError } from "../../lib/showApiError";
 
 export const EditTicketPage: React.FC = () => {
   const navigate = useNavigate();
@@ -98,7 +99,7 @@ export const EditTicketPage: React.FC = () => {
       navigate(`/app/tickets/${ticketId}`);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      toastNotify(error?.message || t("toasts.updateError"), "error");
+      showApiError(error, t, "toasts.updateError");
     }
   };
 

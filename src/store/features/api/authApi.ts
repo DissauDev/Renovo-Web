@@ -14,6 +14,11 @@ type SignUpRequest = {
   name?: string;
   // cualquier otro campo de registro que manejes
 };
+type ForgotPasswordRequest = { email: string };
+type ForgotPasswordResponse = { ok: boolean; code?: string };
+
+type ResetPasswordRequest = { token: string; newPassword: string };
+type ResetPasswordResponse = { ok: boolean; code?: string };
 
 type AuthResponse = {
   user: AuthUser;
@@ -75,6 +80,21 @@ signUp: builder.mutation<AuthResponse, SignUpRequest>({
   },
   invalidatesTags: ['Auth'],
 }),
+forgotPassword: builder.mutation<ForgotPasswordResponse, ForgotPasswordRequest>({
+  query: (body) => ({
+    url: "/auth/forgot-password",
+    method: "POST",
+    data: body,
+  }),
+}),
+
+resetPassword: builder.mutation<ResetPasswordResponse, ResetPasswordRequest>({
+  query: (body) => ({
+    url: "/auth/reset-password",
+    method: "POST",
+    data: body,
+  }),
+}),
 
   changePassword: builder.mutation<
       ChangePasswordResponse,
@@ -93,6 +113,7 @@ logout: builder.mutation<{ message: string }, void>({
     url: '/auth/logout',
     method: 'POST',
   }),
+  
   async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
     try {
       await queryFulfilled;
@@ -110,6 +131,8 @@ export const {
   useSignInMutation,
   useSignUpMutation,
   useLogoutMutation,
-  useChangePasswordMutation
+  useChangePasswordMutation,
+  useForgotPasswordMutation,
+  useResetPasswordMutation
 } = authApi;
 

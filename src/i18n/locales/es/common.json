@@ -85,6 +85,127 @@
       "aria": "Selector de idioma",
       "es": "Español",
       "en": "Inglés"
-    }
+    },
+    "invoiceSettings": {
+  "tip": "Consejo: puedes habilitar al mismo tiempo el impuesto por producto y el impuesto de la factura.",
+  "loading": "Cargando configuración...",
+  "errorLoading": "Error al cargar la configuración.",
+  "retry": "Reintentar",
+
+  "title": "Preferencias de facturación",
+  "subtitle": "Configura los impuestos para productos y facturas.",
+
+  "actions": {
+    "save": "Guardar",
+    "saving": "Guardando..."
+  },
+
+  "toast": {
+    "saved": "Guardado",
+    "errorSaving": "Error al guardar la configuración"
+  },
+
+  "productTax": {
+    "title": "Impuesto por producto",
+    "subtitle": "Agrega un porcentaje de impuesto por cada línea de producto."
+  },
+
+  "invoiceTax": {
+    "title": "Impuesto / cargo de la factura",
+    "subtitle": "Agrega un monto fijo y/o un porcentaje al total de la factura."
+  },
+
+  "fields": {
+    "percent": "Porcentaje (%)",
+    "fixedAmount": "Monto fijo"
+  },
+
+  "placeholders": {
+    "percentExample": "ej. {{value}}",
+    "fixedExample": "ej. {{value}}"
   }
+}
+
+  },
+  "errors": {
+  "UNKNOWN_ERROR": "Ocurrió un error. Inténtalo de nuevo.",
+
+  "INVALID_ID": "{{label}} inválido.",
+  "TICKETS_INVALID_ID": "ID de ticket inválido.",
+  "TICKETS_REQUIRED_FIELDS": "Faltan campos requeridos: {{fields}}.",
+  "TICKETS_PROVIDER_ID_REQUIRED_FOR_ADMIN": "providerId es requerido cuando un admin crea un ticket.",
+  "TICKETS_ONLY_ADMIN_OR_PROVIDER": "Solo admin o provider pueden crear tickets.",
+  "TICKETS_ONLY_ADMIN_ASSIGN": "Solo el admin puede asignar tickets.",
+  "TICKETS_ASSIGNED_TO_REQUIRED": "assignedTo es requerido.",
+  "TICKETS_STATUS_REQUIRED": "status es requerido.",
+  "TICKETS_INVALID_STATUS_VALUE": "Valor de status inválido: {{value}}.",
+  "TICKETS_FORBIDDEN": "No tienes permisos para realizar esta acción.",
+  "TICKETS_NOT_FOUND": "Ticket no encontrado.",
+
+  "TICKETS_ONLY_ADMIN_SCHEDULE": "Solo el admin puede agendar tickets.",
+  "TICKETS_SCHEDULED_AT_REQUIRED": "scheduledAt es requerido.",
+  "TICKETS_CANNOT_SCHEDULE_STATUS": "No se puede agendar un ticket en estado {{status}}.",
+  "TICKETS_INVALID_SCHEDULED_AT": "Fecha scheduledAt inválida.",
+  "TICKETS_ASSIGNED_TO_NOT_EMPLOYEE": "assignedTo debe ser un EMPLOYEE.",
+  "TICKETS_SCHEDULE_CONFLICT": "Este empleado ya tiene un ticket agendado para esa hora.",
+
+  "TICKETS_CANNOT_CHANGE_COMPLETED": "No se puede cambiar el estado de un ticket completado.",
+  "TICKETS_CANNOT_CLOSE_CANCELLED": "No se puede cerrar un ticket cancelado.",
+  "TICKETS_MISSING_ONSITE_CHECKIN": "El ticket nunca fue registrado como 'on site'.",
+
+  "SCOPE_TITLE_REQUIRED": "El título es requerido.",
+  "SCOPE_ITEM_NOT_FOUND": "El scope item no fue encontrado.",
+  "SCOPE_TITLE_MIN_LENGTH": "El título debe tener al menos {{min}} caracteres.",
+  "SCOPE_INVALID_ID": "ID de scope item inválido.",
+
+  "EMPLOYEE_NOT_FOUND": "Empleado no encontrado.",
+  "PRODUCT_NOT_FOUND": "Producto no encontrado.",
+  "INVENTORY_INSUFFICIENT_STOCK": "Stock insuficiente para {{name}}. Disponible: {{available}}, solicitado: {{requested}}.",
+
+  "AUTH_EMAIL_IN_USE": "Este correo ya está en uso.",
+  "AUTH_INVALID_CREDENTIALS": "Correo o contraseña incorrectos.",
+  "AUTH_USER_NOT_FOUND": "Usuario no encontrado.",
+  "AUTH_CURRENT_PASSWORD_INCORRECT": "La contraseña actual es incorrecta.",
+  "AUTH_NEW_PASSWORD_MIN_LENGTH": "La nueva contraseña debe tener al menos {{min}} caracteres.",
+  "AUTH_NEW_PASSWORD_SAME_AS_CURRENT": "La nueva contraseña debe ser diferente a la contraseña actual.",
+
+    "AUTH_FORGOT_PASSWORD_EMAIL_REQUIRED": "El correo es obligatorio",
+      "AUTH_FORGOT_PASSWORD_INVALID_EMAIL": "Escribe un correo válido",
+      "AUTH_RESET_PASSWORD_TOKEN_REQUIRED": "El token es obligatorio",
+      "AUTH_RESET_PASSWORD_TOKEN_INVALID": "Este enlace de restablecimiento no es válido",
+      "AUTH_RESET_PASSWORD_TOKEN_EXPIRED": "Este enlace expiró. Solicita uno nuevo.",
+      "AUTH_RESET_PASSWORD_PASSWORD_WEAK": "La contraseña no cumple los requisitos de seguridad",
+      "AUTH_RESET_PASSWORD_SAME_AS_OLD": "La nueva contraseña debe ser diferente a la anterior",
+      "AUTH_RESET_PASSWORD_USER_NOT_FOUND": "Usuario no encontrado",
+      "AUTH_PASSWORD_SAME_AS_CURRENT":"La nueva contraseña debe ser diferente a la anterior",
+
+    "USERS_NOT_FOUND": "Usuario no encontrado.",
+  "USERS_INVALID_ID": "ID de usuario inválido.",
+  "USERS_ONLY_ADMIN_DELETE": "Solo el admin puede eliminar usuarios.",
+  "USERS_ONLY_ADMIN_OR_PROVIDER_CREATE": "Solo admin o provider puede crear usuarios.",
+  "USERS_REQUIRED_FIELDS": "Faltan campos requeridos: {{fields}}.",
+  "USERS_PROVIDER_CANNOT_CREATE_ADMIN": "Un provider no puede crear usuarios admin.",
+  "USERS_EMAIL_IN_USE": "Este correo ya está en uso.",
+  "USERS_IS_ACTIVE_REQUIRED_BOOLEAN": "isActive (boolean) es requerido.",
+  "USERS_ONLY_ADMIN_PATCH_ACTIVE": "Solo el admin puede cambiar el estado activo del usuario.",
+
+  "PRODUCTS_ONLY_ADMIN": "Solo el admin puede gestionar productos.",
+  "PRODUCTS_INVALID_ID": "ID de producto inválido.",
+  "PRODUCTS_NOT_FOUND": "Producto no encontrado.",
+  "PRODUCTS_NAME_REQUIRED": "El nombre es requerido.",
+  "PRODUCTS_INVALID_CATEGORY_ID": "categoryId inválido.",
+  "PRODUCTS_NON_NEGATIVE_REQUIRED": "{{field}} debe ser un número mayor o igual que 0.",
+  "PRODUCTS_SLUG_IN_USE": "El slug ya está en uso.",
+  "PRODUCTS_SKU_IN_USE": "El SKU ya está en uso.",
+  "PRODUCTS_IS_ACTIVE_REQUIRED_BOOLEAN": "isActive (boolean) es requerido.",
+
+    "INVOICE_SETTINGS_INVALID_PRODUCT_TAX_PERCENT": "El porcentaje de impuesto del producto debe estar entre {{min}} y {{max}}.",
+  "INVOICE_SETTINGS_INVALID_INVOICE_TAX_PERCENT": "El porcentaje de impuesto de la factura debe estar entre {{min}} y {{max}}.",
+  "INVOICE_SETTINGS_INVALID_INVOICE_TAX_FIXED": "El monto fijo de la factura debe ser como mínimo {{min}}.",
+
+   "UPLOADS_NO_FILES": "No se subieron archivos.",
+  "UPLOADS_ONLY_IMAGES": "Solo se permiten archivos de imagen.",
+  "UPLOADS_FILE_TOO_LARGE": "El archivo es demasiado grande. El máximo es {{maxMb}} MB.",
+  "UPLOADS_TOO_MANY_FILES": "Demasiados archivos. El máximo permitido es {{max}}."
+}
 }

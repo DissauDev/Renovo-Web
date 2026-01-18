@@ -17,6 +17,7 @@ import {
   useDeleteScopeItemMutation,
 } from "../../store/features/api/ticketsApi";
 import { useTranslation } from "react-i18next";
+import { showApiError } from "../../lib/showApiError";
 
 type ScopeItem = {
   id: number;
@@ -133,7 +134,7 @@ export function ScopeItemQuickAdd({
       if (editingId === scopeItemId) closeForm();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      toastNotify(error?.message || t("scope.toast.deleteError"), "error");
+      showApiError(error, t, "scope.toast.deleteError");
     }
   };
 
@@ -156,7 +157,7 @@ export function ScopeItemQuickAdd({
             "inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs font-medium",
             isDisabled
               ? "bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed"
-              : "bg-white text-oxford-blue-800 border-slate-200 hover:bg-[var(--color-cameo-50)]"
+              : "bg-white text-oxford-blue-800 border-slate-200 hover:bg-[var(--color-cameo-50)]",
           )}
         >
           {isOpen ? (
@@ -178,7 +179,7 @@ export function ScopeItemQuickAdd({
                 "rounded-xl border border-slate-200 p-3",
                 editingId === item.id
                   ? "ring-2 ring-[color:var(--color-persian-red-200)]"
-                  : ""
+                  : "",
               )}
             >
               <div className="flex items-start justify-between gap-2">
@@ -202,7 +203,7 @@ export function ScopeItemQuickAdd({
                       "rounded-lg border px-2 py-1 text-xs",
                       isDisabled
                         ? "bg-slate-100 text-slate-400 border-slate-200"
-                        : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
+                        : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50",
                     )}
                     title={t("common.edit")}
                   >
@@ -217,7 +218,7 @@ export function ScopeItemQuickAdd({
                       "rounded-lg border px-2 py-1 text-xs",
                       isDisabled
                         ? "bg-slate-100 text-slate-400 border-slate-200"
-                        : "bg-white text-red-600 border-slate-200 hover:bg-red-50"
+                        : "bg-white text-red-600 border-slate-200 hover:bg-red-50",
                     )}
                     title={t("common.delete")}
                   >
@@ -271,7 +272,7 @@ export function ScopeItemQuickAdd({
                 errors.title
                   ? "border-red-300 focus:ring-2 focus:ring-red-200"
                   : "border-slate-200 focus:ring-2 focus:ring-emerald-100",
-                isDisabled ? "bg-slate-100" : "bg-white"
+                isDisabled ? "bg-slate-100" : "bg-white",
               )}
             />
             {errors.title && (
@@ -291,7 +292,7 @@ export function ScopeItemQuickAdd({
               disabled={isDisabled}
               className={cn(
                 "w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-emerald-100",
-                isDisabled ? "bg-slate-100" : "bg-white"
+                isDisabled ? "bg-slate-100" : "bg-white",
               )}
             />
           </div>
@@ -304,14 +305,14 @@ export function ScopeItemQuickAdd({
                 "inline-flex flex-1 items-center justify-center rounded-lg px-3 py-2 text-xs font-medium shadow-sm border",
                 isDisabled
                   ? "bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed"
-                  : "bg-oxford-blue-600 text-white border-oxford-blue-700 hover:bg-oxford-blue-700"
+                  : "bg-oxford-blue-600 text-white border-oxford-blue-700 hover:bg-oxford-blue-700",
               )}
             >
               {isBusy
                 ? t("common.saving")
                 : editingId
-                ? t("common.saveChanges")
-                : t("scope.form.add")}
+                  ? t("common.saveChanges")
+                  : t("scope.form.add")}
             </button>
 
             <button
@@ -322,7 +323,7 @@ export function ScopeItemQuickAdd({
                 "inline-flex items-center justify-center rounded-lg px-3 py-2 text-xs font-medium border",
                 isDisabled
                   ? "bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed"
-                  : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
+                  : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50",
               )}
             >
               {t("common.cancel")}

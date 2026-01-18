@@ -44,7 +44,11 @@
         "placeholder": "••••••••",
         "toggle": "Toggle password visibility"
       },
-      "role": { "label": "Role" }
+      "role": { "label": "Role" },
+       "locale": {
+        "label": "Language",
+        "placeholder": "Select language"
+      }
     }
   },
   "toasts": {
@@ -93,5 +97,9 @@
       "deactivated": "deactivated",
       "toggled": "{{status}}"
     }
+  },
+    "locales": {
+    "en": "English",
+    "es": "Spanish"
   }
 }

@@ -2,8 +2,7 @@ import * as React from "react";
 import type { FieldError } from "react-hook-form";
 import { cn } from "../../../lib/utils";
 
-interface FormInputPhoneProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+interface FormInputPhoneProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   name: string;
   error?: FieldError;
@@ -18,7 +17,7 @@ export const FormInputPhone = React.forwardRef<
 >(
   (
     { label, name, error, leftIcon, rightIcon, className, onChange, ...props },
-    ref
+    ref,
   ) => {
     const hasError = !!error;
 
@@ -37,7 +36,7 @@ export const FormInputPhone = React.forwardRef<
       } else if (digits.length > 6) {
         formatted = `(${digits.slice(0, 3)}) ${digits.slice(
           3,
-          6
+          6,
         )}-${digits.slice(6)}`;
       }
 
@@ -62,13 +61,13 @@ export const FormInputPhone = React.forwardRef<
         {/* Wrapper del input */}
         <div
           className={cn(
-            "flex items-center gap-2 rounded-lg border px-3 py-2.5 text-sm",
+            "flex items-center gap-2 rounded-lg border px-3 py-2 text-sm",
             "bg-white shadow-xs transition-all",
             "focus-within:ring-2 focus-within:ring-oxford-blue-500/40 focus-within:border-oxford-blue-500",
             hasError &&
               "border-red-400 focus-within:ring-red-500/30 focus-within:border-red-500 bg-red-50/40",
             !hasError && "border-slate-300",
-            className
+            className,
           )}
         >
           {leftIcon && (
@@ -87,7 +86,7 @@ export const FormInputPhone = React.forwardRef<
             className={cn(
               "w-full bg-transparent outline-none text-sm text-slate-900 placeholder:text-slate-400",
               "border-none focus:outline-none",
-              leftIcon || rightIcon ? "flex-1" : ""
+              leftIcon || rightIcon ? "flex-1" : "",
             )}
             aria-invalid={hasError ? "true" : "false"}
             onChange={handleChange}
@@ -107,7 +106,7 @@ export const FormInputPhone = React.forwardRef<
         )}
       </div>
     );
-  }
+  },
 );
 
 FormInputPhone.displayName = "FormInputPhone";

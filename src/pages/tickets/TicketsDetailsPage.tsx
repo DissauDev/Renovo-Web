@@ -62,7 +62,7 @@ export const TicketsDetailsPage: React.FC = () => {
   if (isLoading) {
     return (
       <div className="p-4 text-sm text-slate-500">
-        {t("details.loadingTicketDetails")}
+        {t("edit.loadingTicketDetails")}
       </div>
     );
   }
@@ -73,7 +73,7 @@ export const TicketsDetailsPage: React.FC = () => {
         <ButtonBack />
 
         <div className="rounded-xl border border-slate-200 bg-white px-6 py-10 text-center text-sm text-slate-500 shadow-sm">
-          {t("details.ticketNotFound", { id })}
+          {t("edit.ticketNotFound", { id })}
         </div>
 
         <button

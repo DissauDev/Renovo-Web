@@ -44,7 +44,11 @@
         "placeholder": "••••••••",
         "toggle": "Mostrar / ocultar contraseña"
       },
-      "role": { "label": "Rol" }
+      "role": { "label": "Rol" },
+        "locale": {
+        "label": "Lenguaje",
+        "placeholder": "Selecciona lenguaje"
+      }
     }
   },
   "toasts": {
@@ -93,5 +97,9 @@
       "deactivated": "desactivado",
       "toggled": "{{status}}"
     }
+  },
+    "locales": {
+    "en": "Inglés",
+    "es": "Español"
   }
 }

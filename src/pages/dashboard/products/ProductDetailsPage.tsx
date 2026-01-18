@@ -23,6 +23,7 @@ import {
 import { toastNotify } from "../../../lib/toastNotify";
 import { useTranslation } from "react-i18next";
 import { ButtonBack } from "../../../components/layout/ButtonBack";
+import { showApiError } from "../../../lib/showApiError";
 
 export const ProductDetailPage = () => {
   const { id } = useParams();
@@ -58,12 +59,12 @@ export const ProductDetailPage = () => {
             ? t("status.active")
             : t("status.inactive"),
         }),
-        "success"
+        "success",
       );
       refetch();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      toastNotify(err?.message || t("errors.toggleActive"), "error");
+      showApiError(err, t, "errors.toggleActive");
     }
   };
 
@@ -90,8 +91,7 @@ export const ProductDetailPage = () => {
       refetch();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      console.error(error);
-      toastNotify(error?.message || t("errors.update"), "error");
+      showApiError(error, t, "errors.update");
     }
   };
 

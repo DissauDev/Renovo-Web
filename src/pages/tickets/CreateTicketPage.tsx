@@ -12,6 +12,7 @@ import {
   type TicketFormValues,
 } from "../../components/tickets/TicketForm";
 import { useTranslation } from "react-i18next";
+import { showApiError } from "../../lib/showApiError";
 
 export const CreateTicketPage: React.FC = () => {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ export const CreateTicketPage: React.FC = () => {
   const { t } = useTranslation("tickets");
 
   const providerId = useSelector(
-    (state: RootState) => (state as RootState).auth.user?.id
+    (state: RootState) => (state as RootState).auth.user?.id,
   ) as number | undefined;
 
   const handleSubmitForm = async (values: TicketFormValues) => {
@@ -48,7 +49,7 @@ export const CreateTicketPage: React.FC = () => {
       navigate("/app/tickets");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      toastNotify(error?.message || t("toasts.createError"), "error");
+      showApiError(error, t, "toasts.createError");
     }
   };
 

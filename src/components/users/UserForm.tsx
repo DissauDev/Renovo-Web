@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useForm, type SubmitHandler } from "react-hook-form";
+import { Controller, useForm, type SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
@@ -9,6 +9,8 @@ import { toast } from "react-toastify";
 import { useCreateUserMutation } from "../../store/features/api/userApi";
 import { FormInputPhone } from "../atoms/form/FormInputPhone";
 import { useTranslation } from "react-i18next";
+import { showApiError } from "../../lib/showApiError";
+import { LocaleSelect } from "../atoms/inputs/LocaleState";
 
 type Role = "ADMIN" | "PROVIDER" | "EMPLOYEE";
 
@@ -26,6 +28,7 @@ const baseUserSchema = z.object({
     .refine((val) => !val || US_PHONE_REGEX.test(val), {
       message: "validation.phoneInvalid",
     }),
+  locale: z.enum(["EN", "ES"]),
   email: z
     .string()
     .min(1, "validation.emailRequired")
@@ -55,6 +58,7 @@ export type UserFormValues = {
   email: string;
   password?: string;
   role: Role;
+  locale: "EN" | "ES";
 };
 
 type UserFormMode = "create" | "edit";
@@ -77,6 +81,7 @@ export const UserForm: React.FC<UserFormProps> = ({
   title,
   defaultRole = "EMPLOYEE",
   hideRoleSelect = false,
+
   onSuccess,
   submitLabel,
   className,
@@ -98,6 +103,7 @@ export const UserForm: React.FC<UserFormProps> = ({
     phone: "",
     email: "",
     password: "",
+    locale: "EN",
     role: defaultRole,
     ...initialValues,
   };
@@ -108,6 +114,7 @@ export const UserForm: React.FC<UserFormProps> = ({
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
   } = useForm<UserFormValues>({
     resolver: zodResolver(schema),
@@ -127,7 +134,7 @@ export const UserForm: React.FC<UserFormProps> = ({
 
     if (isEditMode) {
       console.warn(
-        "UserForm in 'edit' mode without onSubmitForm; nothing will be sent."
+        "UserForm in 'edit' mode without onSubmitForm; nothing will be sent.",
       );
       return;
     }
@@ -147,6 +154,7 @@ export const UserForm: React.FC<UserFormProps> = ({
         name: "",
         userName: "",
         phone: "",
+        locale: "EN",
         email: "",
         password: "",
         role: defaultRole,
@@ -155,10 +163,7 @@ export const UserForm: React.FC<UserFormProps> = ({
       onSuccess?.();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      toast.error(
-        error?.message || t("toasts.createError", "Error creating user"),
-        { position: "top-right" }
-      );
+      showApiError(error, t, "toasts.createError");
     }
   };
 
@@ -188,7 +193,7 @@ export const UserForm: React.FC<UserFormProps> = ({
     <div
       className={cn(
         "w-full rounded-2xl border max-w-2xl border-slate-200 bg-white shadow-sm p-4 md:p-6",
-        className
+        className,
       )}
     >
       {/* Header */}
@@ -249,7 +254,7 @@ export const UserForm: React.FC<UserFormProps> = ({
             label={t("form.fields.phone.label", "Phone")}
             placeholder={t(
               "form.fields.phone.placeholder",
-              "+1 (555) 123-4567"
+              "+1 (555) 123-4567",
             )}
             error={
               errors.phone
@@ -261,6 +266,19 @@ export const UserForm: React.FC<UserFormProps> = ({
             }
             {...register("phone")}
           />
+          <Controller
+            control={control}
+            name="locale"
+            render={({ field }) => (
+              <LocaleSelect value={field.value} onChange={field.onChange} />
+            )}
+          />
+
+          {errors.locale && (
+            <p className="text-[11px] text-red-500 mt-0.5">
+              {renderError(errors.locale.message)}
+            </p>
+          )}
 
           {/* Password */}
           {!hidePasswordField && (
@@ -285,7 +303,7 @@ export const UserForm: React.FC<UserFormProps> = ({
                   className="flex items-center justify-center text-slate-600 hover:text-slate-800 focus:outline-none"
                   aria-label={t(
                     "form.fields.password.toggle",
-                    "Toggle password visibility"
+                    "Toggle password visibility",
                   )}
                 >
                   {showPassword ? (
@@ -308,7 +326,7 @@ export const UserForm: React.FC<UserFormProps> = ({
               <select
                 className={cn(
                   "w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-xs text-slate-700",
-                  "focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500"
+                  "focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500",
                 )}
                 {...register("role")}
               >
@@ -339,7 +357,7 @@ export const UserForm: React.FC<UserFormProps> = ({
                 "bg-oxford-blue-600 px-4 py-2.5 text-sm font-varien text-white",
                 "shadow-sm hover:bg-oxford-blue-700",
                 "disabled:opacity-60 disabled:cursor-not-allowed",
-                "transition-colors"
+                "transition-colors",
               )}
             >
               {isSubmitting ? t("form.submitting", "Saving...") : submitText}

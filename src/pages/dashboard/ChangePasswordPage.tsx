@@ -11,6 +11,7 @@ import { cn } from "../../lib/utils";
 import { useChangePasswordMutation } from "../../store/features/api/authApi";
 import { useTranslation } from "react-i18next";
 import { ButtonBack } from "../../components/layout/ButtonBack";
+import { showApiError } from "../../lib/showApiError";
 
 // 🧩 Esquema Zod (mismos campos, solo traducimos mensajes usando t en runtime)
 const changePasswordSchema = z
@@ -112,9 +113,7 @@ export const ChangePasswordPage: React.FC = () => {
       navigate(-1);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      toast.error(error.message || t("changePassword.toastError"), {
-        position: "top-right",
-      });
+      showApiError(error, t, "changePassword.toastError");
     }
   };
 
@@ -228,7 +227,7 @@ export const ChangePasswordPage: React.FC = () => {
                               "h-1 flex-1 rounded-full transition-all",
                               lvl <= newStrength.level
                                 ? newStrength.color
-                                : "bg-slate-200"
+                                : "bg-slate-200",
                             )}
                           />
                         ))}
@@ -238,13 +237,13 @@ export const ChangePasswordPage: React.FC = () => {
                           "text-xs font-semibold",
                           newStrength.level === 1 && "text-red-500",
                           newStrength.level === 2 && "text-amber-500",
-                          newStrength.level === 3 && "text-emerald-600"
+                          newStrength.level === 3 && "text-emerald-600",
                         )}
                       >
                         {newStrength.labelKey
                           ? t("changePassword.strengthLabel", {
                               level: t(
-                                `changePassword.${newStrength.labelKey}`
+                                `changePassword.${newStrength.labelKey}`,
                               ),
                             })
                           : ""}
@@ -297,7 +296,7 @@ export const ChangePasswordPage: React.FC = () => {
                               "h-1 flex-1 rounded-full transition-all",
                               lvl <= confirmStrength.level
                                 ? confirmStrength.color
-                                : "bg-slate-200"
+                                : "bg-slate-200",
                             )}
                           />
                         ))}
@@ -307,13 +306,13 @@ export const ChangePasswordPage: React.FC = () => {
                           "text-xs font-semibold",
                           confirmStrength.level === 1 && "text-red-500",
                           confirmStrength.level === 2 && "text-amber-500",
-                          confirmStrength.level === 3 && "text-emerald-600"
+                          confirmStrength.level === 3 && "text-emerald-600",
                         )}
                       >
                         {confirmStrength.labelKey
                           ? t("changePassword.strengthLabel", {
                               level: t(
-                                `changePassword.${confirmStrength.labelKey}`
+                                `changePassword.${confirmStrength.labelKey}`,
                               ),
                             })
                           : ""}
@@ -332,7 +331,7 @@ export const ChangePasswordPage: React.FC = () => {
                     "text-sm font-varien text-white shadow-sm",
                     "hover:bg-oxford-blue-700",
                     "disabled:opacity-60 disabled:cursor-not-allowed",
-                    "transition-colors"
+                    "transition-colors",
                   )}
                 >
                   {isLoading ? t("common.saving") : t("changePassword.submit")}
