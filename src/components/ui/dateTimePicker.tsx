@@ -1,13 +1,11 @@
 import * as React from "react";
 import { ChevronDownIcon } from "lucide-react";
-
 import { Button } from "./button";
 import { Calendar } from "./calendar";
-
 import { PopoverContent, Popover, PopoverTrigger } from "./popover";
 import { Label } from "./label";
-import { Input } from "./input";
 import { useTranslation } from "react-i18next";
+import { TimeWheelPicker } from "./time-wheel-picker";
 
 type DateTimePickerProps = {
   value?: Date | null;
@@ -21,7 +19,7 @@ function pad2(n: number) {
 
 function dateToTimeString(d: Date) {
   return `${pad2(d.getHours())}:${pad2(d.getMinutes())}:${pad2(
-    d.getSeconds()
+    d.getSeconds(),
   )}`;
 }
 
@@ -31,6 +29,14 @@ function combineDateAndTime(date: Date, time: string) {
   next.setHours(hh || 0, mm || 0, ss || 0, 0);
   return next;
 }
+function to12hLabel(time24: string) {
+  const [hh = "0", mm = "0"] = time24.split(":");
+  const H = Number(hh) || 0;
+  const M = Number(mm) || 0;
+  const period = H >= 12 ? "PM" : "AM";
+  const h12 = H % 12 === 0 ? 12 : H % 12;
+  return `${h12}:${pad2(M)} ${period}`;
+}
 
 export function DateTimePicker({
   value,
@@ -38,13 +44,14 @@ export function DateTimePicker({
   defaultTime = "10:30:00",
 }: DateTimePickerProps) {
   const [open, setOpen] = React.useState(false);
+  const [timeOpen, setTimeOpen] = React.useState(false);
   const { t } = useTranslation(); // ✅ no dependas del namespace aquí
 
   const [date, setDate] = React.useState<Date | undefined>(
-    value ? new Date(value) : undefined
+    value ? new Date(value) : undefined,
   );
   const [time, setTime] = React.useState<string>(
-    value ? dateToTimeString(new Date(value)) : defaultTime
+    value ? dateToTimeString(new Date(value)) : defaultTime,
   );
 
   React.useEffect(() => {
@@ -125,14 +132,30 @@ export function DateTimePicker({
           {t("tickets:technician.timeLabel")}
         </Label>
 
-        <Input
-          type="time"
-          id="time-picker"
-          step="60"
-          value={time}
-          onChange={(e) => setTime(e.target.value)}
-          className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-        />
+        <Popover open={timeOpen} onOpenChange={setTimeOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              type="button"
+              id="time-picker"
+              className="w-40 justify-between font-normal"
+            >
+              {to12hLabel(time)}
+              <ChevronDownIcon className="h-4 w-4 opacity-70" />
+            </Button>
+          </PopoverTrigger>
+
+          <PopoverContent
+            align="start"
+            className="w-[280px] rounded-2xl border border-slate-200 bg-white p-3 shadow-xl"
+          >
+            <TimeWheelPicker
+              onClose={() => setTimeOpen(false)}
+              value={time} // "HH:mm:ss"
+              onChange={setTime} // devuelve "HH:mm:ss"
+            />
+          </PopoverContent>
+        </Popover>
       </div>
     </div>
   );

@@ -34,7 +34,9 @@
     "created": "Creado",
     "client": "Cliente",
     "technician": "Técnico",
-    "unassigned": "Sin asignar"
+    "unassigned": "Sin asignar",
+     "duration": "Duración",
+    "provider":"Proveedor"
   },
 
   "urgency": {
@@ -134,7 +136,8 @@
       "selectDate": "Selecciona fecha ",
     "errors": {
       "selectDate": "Selecciona fecha y hora",
-      "schedule": "Error agendando ticket"
+      "schedule": "Error agendando ticket",
+      "selectTechnician": "Selecciona un técnico"
     }
   },
   "statusPanel": {
@@ -195,7 +198,11 @@
     "addressLabel": "Dirección del servicio",
     "noAddress": "No se proporcionó dirección.",
     "created": "Creado",
-    "scheduledAt": "Programado para"
+    "scheduledAt": "Programado para",
+      "onSiteAt": "Llegada al sitio",
+  "closeReadyAt": "Listo para cerrar",
+  "laborMinutes": "Tiempo de trabajo",
+  "minutes": "min"
   },
 
   "closePanel": {
@@ -213,7 +220,7 @@
         "placeholder": "Ejemplo: \"Se reparó fuga tras la pared; parcheado y sellado.\""
       },
       "internalNote": {
-        "label": "Nota interna (solo admin)",
+        "label": "Nota interna (solo para admin)",
         "placeholder": "Ejemplo: \"El cliente pidió igualar pintura. Añadir a la factura después.\""
       }
     },
@@ -255,7 +262,10 @@
   "qtyMin": "La cantidad debe ser al menos 1.",
   "noteMax": "La nota es demasiado larga.",
   "productRequired": "Seleccione un producto.",
-  "nameRequired": "El nombre es obligatorio."
+  "nameRequired": "El nombre es obligatorio.",
+     "clientRequired": "Client name is required",
+      "phoneRequired": "Client phone is required",
+      "addressRequired": "Address is required"
 }
   },
   "urgencyoptions": {

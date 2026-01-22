@@ -1,6 +1,8 @@
 // src/components/tickets/TicketsViewTabs.tsx
 import React from "react";
 import { useTranslation } from "react-i18next";
+import type { RootState } from "../../store/store";
+import { useAppSelector } from "../../store/hooks";
 
 export type ViewFilter = "ALL" | "PENDING" | "SCHEDULED" | "COMPLETED";
 
@@ -112,11 +114,15 @@ export const TicketsViewTabs: React.FC<TicketsViewTabsProps> = ({
   counters,
 }) => {
   const { t } = useTranslation("tickets");
+  const user = useAppSelector((state: RootState) => state.auth.user);
+
+  const tabsToRender =
+    user?.role === "EMPLOYEE" ? TABS.filter((t) => t.id !== "PENDING") : TABS;
 
   return (
     <div className="w-full overflow-x-auto">
       <div className="flex gap-3 min-w-max">
-        {TABS.map((tab) => {
+        {tabsToRender.map((tab) => {
           const isActive = viewFilter === tab.id;
           const count = counters[tab.countKey];
           const color = COLOR_STYLES[tab.color];

@@ -50,14 +50,18 @@ export const TechnicianPanel: React.FC<TechnicianPanelProps> = ({
 
   const handleConfirm = async () => {
     try {
+      if (selectedTechId === "UNASSIGNED") {
+        toastNotify(t("technician.errors.selectTechnician"), "error");
+        return;
+      }
+
       if (!scheduledAtLocal) {
         toastNotify(t("technician.errors.selectDate"), "error");
 
         return;
       }
 
-      const assignedTo =
-        selectedTechId === "UNASSIGNED" ? null : Number(selectedTechId);
+      const assignedTo = Number(selectedTechId);
 
       await scheduleTicket({
         id: ticketId,
@@ -76,6 +80,7 @@ export const TechnicianPanel: React.FC<TechnicianPanelProps> = ({
 
   const disableConfirm =
     isScheduling ||
+    selectedTechId === "UNASSIGNED" ||
     !scheduledAtLocal ||
     (selectedTechId === (currentTech ? String(currentTech.id) : "UNASSIGNED") &&
       // compara scheduledAt actual vs local (por ms)
@@ -135,7 +140,7 @@ export const TechnicianPanel: React.FC<TechnicianPanelProps> = ({
           onChange={(d: React.SetStateAction<Date | null>) =>
             setScheduledAtLocal(d)
           }
-          defaultTime="14:30:00"
+          defaultTime="10:30:00"
         />
 
         <button

@@ -25,7 +25,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["settings"], // ✅ solo persistimos settings (idioma)
+  whitelist: ["settings","auth"], // ✅ solo persistimos settings (idioma)
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

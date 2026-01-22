@@ -34,7 +34,9 @@
     "created": "Created",
     "client": "Client",
     "technician": "Technician",
-    "unassigned": "Unassigned"
+    "unassigned": "Unassigned",
+    "duration": "Duration",
+    "provider":"Provider"
   },
 
    "form": {
@@ -66,7 +68,10 @@
       "descriptionRequired": "Description is required",
       "invalidEmail": "Invalid email",
       "categoryRequired": "Select a category",
-      "invalidUrl": "Must be a valid URL"
+      "invalidUrl": "Must be a valid URL",
+      "clientRequired": "Client name is required",
+      "phoneRequired": "Client phone is required",
+      "addressRequired": "Address is required"
     }
   },
 
@@ -136,7 +141,8 @@
       "selectDate": "Select date",
     "errors": {
       "selectDate": "Please select date and time",
-      "schedule": "Error scheduling ticket"
+      "schedule": "Error scheduling ticket",
+      "selectTechnician": "Please select a technician"
     }
   },
   "statusPanel": {
@@ -194,7 +200,11 @@
     "addressLabel": "Service address",
     "noAddress": "No address provided.",
     "created": "Created",
-    "scheduledAt": "Scheduled at"
+    "scheduledAt": "Scheduled at",
+     "onSiteAt": "On-site time",
+  "closeReadyAt": "Ready to close",
+  "laborMinutes": "Labor time",
+  "minutes": "min"
   },
   "closePanel": {
     "title": "Close ticket",
@@ -211,7 +221,7 @@
         "placeholder": "Example: \"Repaired leak behind wall; patched and sealed.\""
       },
       "internalNote": {
-        "label": "Internal note (admin only)",
+        "label": "Internal note (for admin only)",
         "placeholder": "Example: \"Customer asked for paint match. Add to invoice later.\""
       }
     },

@@ -27,15 +27,15 @@ import { useTranslation } from "react-i18next";
 export const ticketFormSchema = z.object({
   title: z.string().min(2, "tickets:form.validation.titleRequired"),
   description: z.string().min(5, "tickets:form.validation.descriptionRequired"),
-  clientName: z.string().optional(),
+  clientName: z.string().min(2, "tickets:form.validation.clientRequired"),
   urgency: z.enum(["LOW", "MEDIUM", "HIGH"]).default("MEDIUM"),
-  clientPhone: z.string().optional(),
+  clientPhone: z.string().min(5, "tickets:form.validation.phoneRequired"),
   clientEmail: z
     .string()
     .email("tickets:form.validation.invalidEmail")
     .optional()
     .or(z.literal("")),
-  address: z.string().optional(),
+  address: z.string().min(5, "tickets:form.validation.addressRequired"),
   categoryId: z.coerce
     .number()
     .min(1, "tickets:form.validation.categoryRequired"),
@@ -44,7 +44,7 @@ export const ticketFormSchema = z.object({
       z.object({
         imageId: z.coerce.number().int().positive(),
         url: z.string().url(),
-      })
+      }),
     )
     .optional(),
 });
@@ -92,7 +92,7 @@ export const TicketForm: React.FC<Props> = ({
       // Si es un mensaje plano
       return msg;
     },
-    [t, i18n]
+    [t, i18n],
   );
 
   const resolver: Resolver<TicketFormValues> = React.useMemo(() => {
@@ -157,7 +157,7 @@ export const TicketForm: React.FC<Props> = ({
       }}
       className={cn(
         "bg-white rounded-2xl shadow border border-slate-200 p-6 space-y-4",
-        className
+        className,
       )}
       noValidate
     >
@@ -342,7 +342,7 @@ export const TicketForm: React.FC<Props> = ({
             "bg-oxford-blue-600 text-white font-varien",
             "hover:bg-oxford-blue-700",
             "disabled:opacity-60 disabled:cursor-not-allowed",
-            "shadow-sm"
+            "shadow-sm",
           )}
         >
           {isSubmitting
@@ -350,8 +350,8 @@ export const TicketForm: React.FC<Props> = ({
               ? t("form.actions.creating")
               : t("form.actions.saving")
             : mode === "create"
-            ? t("form.actions.create")
-            : t("form.actions.save")}
+              ? t("form.actions.create")
+              : t("form.actions.save")}
         </button>
       </div>
     </form>

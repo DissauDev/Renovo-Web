@@ -76,14 +76,22 @@ export const Sidebar: React.FC = () => {
 
       // EMPLOYEE: solo tickets
       if (isEmployee) {
-        return !["/app/providers", "/app/settings"].includes(item.to);
+        return ![
+          "/app/providers",
+          "/app/settings",
+          "/app/technicians",
+          "/app/categories",
+          "/app/products",
+        ].includes(item.to);
       }
 
       if (isProvider) {
         return ![
           "/app/providers",
           "/app/settings",
-          "app//technicians",
+          "/app/technicians",
+          "/app/categories",
+          "/app/products",
         ].includes(item.to);
       }
 

@@ -12,6 +12,7 @@ export type TicketStatus =
 export type TicketUrgency = "LOW" | "MEDIUM" | "HIGH";
 
 export interface Ticket {
+  closeReadyAt: string | number | Date;
   images: never[];
   uploads: never[];
   notesInternal: string;

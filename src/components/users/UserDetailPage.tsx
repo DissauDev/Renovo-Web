@@ -5,7 +5,6 @@ import {
   useUpdateUserMutation,
   type User,
 } from "../../store/features/api/userApi";
-import { UserForm, type UserFormValues } from "./UserForm";
 
 import {
   CalendarDaysIcon,
@@ -22,6 +21,10 @@ import { usePatchProductActiveMutation } from "../../store/features/api/products
 import { useTranslation } from "react-i18next";
 import { ButtonBack } from "../layout/ButtonBack";
 import { showApiError } from "../../lib/showApiError";
+import type { UserFormValues } from "./UserFormFields";
+import { UserForm } from "./UserForm";
+import { apiSlice } from "../../store/features/api/apiSlice";
+import { useAppDispatch } from "../../store/hooks";
 
 interface Props {
   defaultRoleProp?: "ADMIN" | "PROVIDER" | "EMPLOYEE";
@@ -52,10 +55,12 @@ export const UserDetailPage = ({
 
   const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
   const [triggerLogout, { isLoading: isLoggingOut }] = useLogoutMutation();
+  const dispatch = useAppDispatch();
 
   const handleLogout = async () => {
     try {
-      await triggerLogout().unwrap(); // backend + limpiar Redux/localStorage
+      await triggerLogout().unwrap();
+      dispatch(apiSlice.util.resetApiState());
       navigate("/"); // o la ruta que uses para el login
     } catch (error) {
       console.error(error);

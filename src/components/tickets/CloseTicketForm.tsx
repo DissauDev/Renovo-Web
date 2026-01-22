@@ -15,6 +15,9 @@ import {
 import { CloseLineItemRow } from "./CloseLineItemRow";
 import { useTranslation } from "react-i18next";
 import { showApiError } from "../../lib/showApiError";
+import { cn } from "../../lib/utils";
+import { useAppSelector } from "../../store/hooks";
+import type { RootState } from "../../store/store";
 
 type Props = {
   ticketId: number;
@@ -80,6 +83,8 @@ export function CloseTicketForm({
     control,
     name: "photos",
   });
+  const user = useAppSelector((state: RootState) => state.auth.user);
+  const isAdmin = user?.role === "ADMIN";
 
   React.useEffect(() => {
     // si llega null/undefined -> deja vacío
@@ -144,22 +149,48 @@ export function CloseTicketForm({
       className="px-5 pb-5 space-y-5"
     >
       {/* Summary + internal note */}
-      <div className="grid gap-4 lg:grid-cols-2">
-        <FormTextArea
-          label={t("closeForm.fields.workSummary.label")}
-          rows={3}
-          {...register("workSummary")}
-          placeholder={t("closeForm.fields.workSummary.placeholder")}
-          className="rounded-xl"
-        />
+      <div
+        className={cn("grid gap-4", isAdmin ? "grid-cols-1" : "lg:grid-cols-2")}
+      >
+        {isAdmin ? (
+          <>
+            <div>
+              <div className="text-sm font-semibold text-slate-900">
+                {t("closeForm.fields.workSummary.label")}
+              </div>
+              <p className="mt-1 whitespace-pre-wrap   text-sm text-slate-700 ">
+                {defaultWorkSummary?.trim() || "—"}
+              </p>
+            </div>
 
-        <FormTextArea
-          label={t("closeForm.fields.internalNote.label")}
-          rows={3}
-          {...register("notesInternal")}
-          placeholder={t("closeForm.fields.internalNote.placeholder")}
-          className="rounded-xl"
-        />
+            <div>
+              <div className="text-sm font-semibold text-slate-900">
+                {t("closeForm.fields.internalNote.label")}
+              </div>
+              <p className="mt-1 whitespace-pre-wrap  text-sm text-slate-700">
+                {defaultInternalNotes?.trim() || "—"}
+              </p>
+            </div>
+          </>
+        ) : (
+          <>
+            <FormTextArea
+              label={t("closeForm.fields.workSummary.label")}
+              rows={3}
+              {...register("workSummary")}
+              placeholder={t("closeForm.fields.workSummary.placeholder")}
+              className="rounded-xl"
+            />
+
+            <FormTextArea
+              label={t("closeForm.fields.internalNote.label")}
+              rows={3}
+              {...register("notesInternal")}
+              placeholder={t("closeForm.fields.internalNote.placeholder")}
+              className="rounded-xl"
+            />
+          </>
+        )}
       </div>
 
       {/* ✅ Closeout / checkout photos */}
@@ -225,7 +256,7 @@ export function CloseTicketForm({
         <Button
           type="button"
           variant="outline"
-          className="rounded-xl"
+          className="rounded-xl hover:bg-oxford-blue-100 "
           onClick={() => setOpen(false)}
           disabled={isDisabled}
         >
@@ -233,7 +264,7 @@ export function CloseTicketForm({
         </Button>
         <Button
           type="submit"
-          className="rounded-xl bg-emerald-600 text-white hover:bg-emerald-700"
+          className="rounded-xl bg-oxford-blue-600  text-white hover:bg-oxford-blue-700"
           disabled={isDisabled}
         >
           {isLoading

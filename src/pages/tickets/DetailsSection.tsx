@@ -5,12 +5,18 @@ interface DetailsSectionProps {
   address?: string | null;
   createdAt: string;
   scheduletAt?: string | null;
+  onSiteAt?: string | null;
+  closeReadyAt?: string | null;
+  laborMinutes?: number | null;
 }
 
 export const DetailsSection = ({
   address,
   createdAt,
   scheduletAt,
+  onSiteAt,
+  closeReadyAt,
+  laborMinutes,
 }: DetailsSectionProps) => {
   const { t } = useTranslation("tickets");
 
@@ -52,6 +58,41 @@ export const DetailsSection = ({
                 {t("detailsPanel.scheduledAt")}
               </div>
               <div className="text-slate-700">{scheduletAt}</div>
+            </div>
+          </div>
+        )}
+        {onSiteAt && (
+          <div className="flex items-center gap-1.5">
+            <ClockIcon className="h-5 w-5 text-oxford-blue-800" />
+            <div>
+              <div className="text-sm font-semibold text-slate-700">
+                {t("detailsPanel.onSiteAt")}
+              </div>
+              <div className="text-slate-700">{onSiteAt}</div>
+            </div>
+          </div>
+        )}
+        {closeReadyAt && (
+          <div className="flex items-center gap-1.5">
+            <ClockIcon className="h-5 w-5 text-oxford-blue-800" />
+            <div>
+              <div className="text-sm font-semibold text-slate-700">
+                {t("detailsPanel.closeReadyAt")}
+              </div>
+              <div className="text-slate-700">{closeReadyAt}</div>
+            </div>
+          </div>
+        )}
+        {typeof laborMinutes === "number" && laborMinutes > 0 && (
+          <div className="flex items-center gap-1.5">
+            <ClockIcon className="h-5 w-5 text-oxford-blue-800" />
+            <div>
+              <div className="text-sm font-semibold text-slate-700">
+                {t("detailsPanel.laborMinutes")}
+              </div>
+              <div className="text-slate-700">
+                {laborMinutes} {t("detailsPanel.minutes", "min")}
+              </div>
             </div>
           </div>
         )}

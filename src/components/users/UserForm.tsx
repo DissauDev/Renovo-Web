@@ -1,24 +1,20 @@
 import * as React from "react";
-import { Controller, useForm, type SubmitHandler } from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
-import { FormInput } from "../atoms/form/FormInput";
+
 import { cn } from "../../lib/utils";
 import { toast } from "react-toastify";
 import { useCreateUserMutation } from "../../store/features/api/userApi";
-import { FormInputPhone } from "../atoms/form/FormInputPhone";
 import { useTranslation } from "react-i18next";
 import { showApiError } from "../../lib/showApiError";
-import { LocaleSelect } from "../atoms/inputs/LocaleState";
+
+import { UserFormFields, type UserFormValues } from "./UserFormFields"; // ✅ nuevo
 
 type Role = "ADMIN" | "PROVIDER" | "EMPLOYEE";
 
 const US_PHONE_REGEX = /^\+?1?\s*\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$/;
 
-//
-// 🔹 Zod schemas (create vs edit)
-//
 const baseUserSchema = z.object({
   name: z.string().min(1, "validation.nameRequired"),
   userName: z.string().optional(),
@@ -36,7 +32,6 @@ const baseUserSchema = z.object({
   role: z.enum(["ADMIN", "PROVIDER", "EMPLOYEE"]),
 });
 
-// create: strong password required
 const createUserSchema = baseUserSchema.extend({
   password: z
     .string()
@@ -46,20 +41,9 @@ const createUserSchema = baseUserSchema.extend({
     .regex(/\d/, "validation.passwordNumber"),
 });
 
-// edit: password optional
 const updateUserSchema = baseUserSchema.extend({
   password: z.string().optional(),
 });
-
-export type UserFormValues = {
-  name: string;
-  userName?: string;
-  phone?: string;
-  email: string;
-  password?: string;
-  role: Role;
-  locale: "EN" | "ES";
-};
 
 type UserFormMode = "create" | "edit";
 
@@ -71,7 +55,7 @@ interface UserFormProps {
   submitLabel?: string;
   className?: string;
 
-  mode?: UserFormMode; // default "create"
+  mode?: UserFormMode;
   initialValues?: Partial<UserFormValues>;
   onSubmitForm?: (values: UserFormValues) => Promise<void> | void;
   hidePasswordField?: boolean;
@@ -81,7 +65,6 @@ export const UserForm: React.FC<UserFormProps> = ({
   title,
   defaultRole = "EMPLOYEE",
   hideRoleSelect = false,
-
   onSuccess,
   submitLabel,
   className,
@@ -93,9 +76,7 @@ export const UserForm: React.FC<UserFormProps> = ({
   const { t } = useTranslation("providers");
 
   const isEditMode = mode === "edit";
-
   const [createUser, { isLoading: isCreating }] = useCreateUserMutation();
-  const [showPassword, setShowPassword] = React.useState(false);
 
   const effectiveDefaults: UserFormValues = {
     name: "",
@@ -114,6 +95,7 @@ export const UserForm: React.FC<UserFormProps> = ({
     register,
     handleSubmit,
     reset,
+    setValue,
     control,
     formState: { errors },
   } = useForm<UserFormValues>({
@@ -183,10 +165,8 @@ export const UserForm: React.FC<UserFormProps> = ({
       ? t("form.submitSave", "Save changes")
       : t("form.submitCreate", "Create user"));
 
-  // If you want edit mode loading, pass isSubmitting from parent via onSubmitForm.
   const isSubmitting = !isEditMode && isCreating;
 
-  // helper to render zod error keys -> translated messages
   const renderError = (msg?: string) => (msg ? t(msg, msg) : undefined);
 
   return (
@@ -205,164 +185,36 @@ export const UserForm: React.FC<UserFormProps> = ({
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
-        <div className="grid grid-cols-1 gap-4">
-          {/* Name */}
-          <FormInput
-            label={t("form.fields.name.label", "Name")}
-            placeholder={t("form.fields.name.placeholder", "John Doe")}
-            error={
-              errors.name
-                ? { ...errors.name, message: renderError(errors.name.message) }
-                : undefined
-            }
-            {...register("name")}
-          />
+        {/* ✅ Inputs extraídos */}
+        <UserFormFields
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-ignore
+          t={t}
+          register={register}
+          control={control}
+          setValue={setValue}
+          errors={errors}
+          isEditMode={isEditMode}
+          hidePasswordField={hidePasswordField}
+          hideRoleSelect={hideRoleSelect}
+          renderError={renderError}
+        />
 
-          {/* Username */}
-          <FormInput
-            label={t("form.fields.userName.label", "Username")}
-            placeholder={t("form.fields.userName.placeholder", "john.doe")}
-            error={
-              errors.userName
-                ? {
-                    ...errors.userName,
-                    message: renderError(errors.userName.message),
-                  }
-                : undefined
-            }
-            {...register("userName")}
-          />
-
-          {/* Email */}
-          <FormInput
-            label={t("form.fields.email.label", "Email")}
-            type="email"
-            placeholder={t("form.fields.email.placeholder", "user@example.com")}
-            error={
-              errors.email
-                ? {
-                    ...errors.email,
-                    message: renderError(errors.email.message),
-                  }
-                : undefined
-            }
-            {...register("email")}
-          />
-
-          {/* Phone */}
-          <FormInputPhone
-            label={t("form.fields.phone.label", "Phone")}
-            placeholder={t(
-              "form.fields.phone.placeholder",
-              "+1 (555) 123-4567",
+        {/* Submit */}
+        <div className="pt-2">
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className={cn(
+              "inline-flex items-center justify-center w-full rounded-lg",
+              "bg-oxford-blue-600 px-4 py-2.5 text-sm font-varien text-white",
+              "shadow-sm hover:bg-oxford-blue-700",
+              "disabled:opacity-60 disabled:cursor-not-allowed",
+              "transition-colors",
             )}
-            error={
-              errors.phone
-                ? {
-                    ...errors.phone,
-                    message: renderError(errors.phone.message),
-                  }
-                : undefined
-            }
-            {...register("phone")}
-          />
-          <Controller
-            control={control}
-            name="locale"
-            render={({ field }) => (
-              <LocaleSelect value={field.value} onChange={field.onChange} />
-            )}
-          />
-
-          {errors.locale && (
-            <p className="text-[11px] text-red-500 mt-0.5">
-              {renderError(errors.locale.message)}
-            </p>
-          )}
-
-          {/* Password */}
-          {!hidePasswordField && (
-            <FormInput
-              label={t("form.fields.password.label", "Password")}
-              type={showPassword ? "text" : "password"}
-              placeholder={t("form.fields.password.placeholder", "••••••••")}
-              error={
-                errors.password
-                  ? {
-                      ...errors.password,
-                      message: renderError(errors.password.message),
-                    }
-                  : undefined
-              }
-              autoComplete={isEditMode ? "off" : "new-password"}
-              {...register("password")}
-              rightIcon={
-                <button
-                  type="button"
-                  onClick={() => setShowPassword((prev) => !prev)}
-                  className="flex items-center justify-center text-slate-600 hover:text-slate-800 focus:outline-none"
-                  aria-label={t(
-                    "form.fields.password.toggle",
-                    "Toggle password visibility",
-                  )}
-                >
-                  {showPassword ? (
-                    <EyeSlashIcon className="h-4 w-4" />
-                  ) : (
-                    <EyeIcon className="h-4 w-4" />
-                  )}
-                </button>
-              }
-            />
-          )}
-
-          {/* Role */}
-          {!hideRoleSelect && (
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium text-slate-600 tracking-[0.12em] uppercase">
-                {t("form.fields.role.label", "Role")}
-              </label>
-
-              <select
-                className={cn(
-                  "w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-xs text-slate-700",
-                  "focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500",
-                )}
-                {...register("role")}
-              >
-                <option value="ADMIN">{t("roles.admin", "Admin")}</option>
-                <option value="PROVIDER">
-                  {t("roles.provider", "Provider")}
-                </option>
-                <option value="EMPLOYEE">
-                  {t("roles.employee", "Employee")}
-                </option>
-              </select>
-
-              {errors.role && (
-                <p className="text-[11px] text-red-500 mt-0.5">
-                  {renderError(errors.role.message)}
-                </p>
-              )}
-            </div>
-          )}
-
-          {/* Submit */}
-          <div className="pt-2">
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className={cn(
-                "inline-flex items-center justify-center w-full rounded-lg",
-                "bg-oxford-blue-600 px-4 py-2.5 text-sm font-varien text-white",
-                "shadow-sm hover:bg-oxford-blue-700",
-                "disabled:opacity-60 disabled:cursor-not-allowed",
-                "transition-colors",
-              )}
-            >
-              {isSubmitting ? t("form.submitting", "Saving...") : submitText}
-            </button>
-          </div>
+          >
+            {isSubmitting ? t("form.submitting", "Saving...") : submitText}
+          </button>
         </div>
       </form>
     </div>

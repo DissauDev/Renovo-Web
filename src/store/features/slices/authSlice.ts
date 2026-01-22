@@ -14,14 +14,8 @@ export interface AuthState {
   accessToken: string | null;
 }
 
-// 🔹 Intenta hidratar desde localStorage
-const storedAuth = localStorage.getItem('renovo_auth');
-const initialState: AuthState = storedAuth
-  ? JSON.parse(storedAuth)
-  : {
-      user: null,
-      accessToken: null,
-    };
+ const initialState: AuthState = { user: null, accessToken: null };
+
 
 type CredentialsPayload = {
   user: AuthUser;
@@ -35,19 +29,10 @@ const authSlice = createSlice({
     setCredentials: (state, action: PayloadAction<CredentialsPayload>) => {
       state.user = action.payload.user;
       state.accessToken = action.payload.accessToken;
-
-      localStorage.setItem(
-        'renovo_auth',
-        JSON.stringify({
-          user: state.user,
-          accessToken: state.accessToken,
-        })
-      );
     },
     logout: (state) => {
       state.user = null;
       state.accessToken = null;
-      localStorage.removeItem('renovo_auth');
     },
   },
 });

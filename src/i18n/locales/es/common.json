@@ -188,7 +188,10 @@
   "USERS_EMAIL_IN_USE": "Este correo ya está en uso.",
   "USERS_IS_ACTIVE_REQUIRED_BOOLEAN": "isActive (boolean) es requerido.",
   "USERS_ONLY_ADMIN_PATCH_ACTIVE": "Solo el admin puede cambiar el estado activo del usuario.",
-
+  "USERS_PHONE_IN_USE": "Este número de teléfono ya está en uso.",
+  "USERS_USERNAME_IN_USE": "Este nombre de usuario ya está en uso.",
+  "USERS_UNIQUE_CONSTRAINT": "Uno o más campos deben ser únicos.",
+ 
   "PRODUCTS_ONLY_ADMIN": "Solo el admin puede gestionar productos.",
   "PRODUCTS_INVALID_ID": "ID de producto inválido.",
   "PRODUCTS_NOT_FOUND": "Producto no encontrado.",

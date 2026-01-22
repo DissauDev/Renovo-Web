@@ -88,11 +88,18 @@ export const TicketsDetailsPage: React.FC = () => {
   }
 
   // helpers
+
   const createdAt = new Date(ticket.createdAt).toLocaleString();
   const scheduledAt = ticket?.scheduledAt
     ? new Date(ticket.scheduledAt).toLocaleString()
     : "";
-
+  const onSiteAt = ticket?.onSiteAt
+    ? new Date(ticket.onSiteAt).toLocaleString()
+    : "";
+  const closeReadyAt = ticket?.closeReadyAt
+    ? new Date(ticket.closeReadyAt).toLocaleString()
+    : "";
+  const laborMinutes = ticket?.laborMinutes ?? null;
   return (
     <div className="space-y-6">
       {/* Header + acciones */}
@@ -107,6 +114,9 @@ export const TicketsDetailsPage: React.FC = () => {
           <DetailsSection
             address={ticket.address}
             createdAt={createdAt}
+            closeReadyAt={closeReadyAt}
+            onSiteAt={onSiteAt}
+            laborMinutes={laborMinutes}
             scheduletAt={scheduledAt}
           />
 
@@ -141,27 +151,31 @@ export const TicketsDetailsPage: React.FC = () => {
 
         {/* Columna derecha */}
         <div className="space-y-4">
-          <StatusPanel
-            ticket={ticket}
-            onStatusUpdated={() => {
-              refetch();
-            }}
-          />
+          {user?.role === "ADMIN" || user?.role === "EMPLOYEE" ? (
+            <StatusPanel
+              ticket={ticket}
+              onStatusUpdated={() => {
+                refetch();
+              }}
+            />
+          ) : null}
 
           <ClientCard
             clientName={ticket.clientName}
             providername={ticket?.provider?.name}
           />
 
-          <TechnicianPanel
-            ticket={ticket}
-            onStatusUpdated={() => {
-              refetch();
-            }}
-            //@ts-ignore
-            technicians={technicians}
-            isLoadingTechnicians={isLoadingTechnicians}
-          />
+          {user?.role === "ADMIN" && (
+            <TechnicianPanel
+              ticket={ticket}
+              onStatusUpdated={() => {
+                refetch();
+              }}
+              //@ts-ignore
+              technicians={technicians}
+              isLoadingTechnicians={isLoadingTechnicians}
+            />
+          )}
 
           {(user?.role === "ADMIN" || user?.role === "EMPLOYEE") && (
             <div className="lg:hidden block">

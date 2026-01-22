@@ -191,6 +191,10 @@
   "USERS_EMAIL_IN_USE": "Email is already in use.",
   "USERS_IS_ACTIVE_REQUIRED_BOOLEAN": "isActive (boolean) is required.",
   "USERS_ONLY_ADMIN_PATCH_ACTIVE": "Only admin can change user active status.",
+  "USERS_PHONE_IN_USE": "This phone number is already in use.",
+  "USERS_USERNAME_IN_USE": "This username is already in use.",
+  "USERS_UNIQUE_CONSTRAINT": "One or more fields must be unique.",
+ 
 
     "PRODUCTS_ONLY_ADMIN": "Only admin can manage products.",
   "PRODUCTS_INVALID_ID": "Invalid product id.",

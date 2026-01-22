@@ -77,14 +77,15 @@ const BASE_URGENCY_OPTIONS: UrgencyOption[] = [
 ];
 export const TicketCard: React.FC<TicketCardProps> = ({ ticket, onClick }) => {
   const { t } = useTranslation("tickets");
-
+  const providerName = ticket.provider?.name ?? "";
+  const laborMinutes = ticket.laborMinutes ?? 0;
   const technicianInitials = ticket.employee?.name
     ?.split(" ")
     .map((p) => p[0])
     .join("")
     .toUpperCase();
   const urgencyConfig = BASE_URGENCY_OPTIONS.find(
-    (opt) => opt.value === ticket.urgency
+    (opt) => opt.value === ticket.urgency,
   );
 
   return (
@@ -165,6 +166,18 @@ export const TicketCard: React.FC<TicketCardProps> = ({ ticket, onClick }) => {
             </span>
           </span>
         </div>
+        {laborMinutes !== null && laborMinutes > 0 && (
+          <div className="flex items-center gap-1.5">
+            <ClockIcon className="h-3.5 w-3.5 text-slate-400" />
+            <span>
+              {t("card.duration")}
+              {":"}{" "}
+              <span className="text-slate-700">
+                {laborMinutes} {t("card.minutes", "min")}
+              </span>
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Footer */}
@@ -176,6 +189,15 @@ export const TicketCard: React.FC<TicketCardProps> = ({ ticket, onClick }) => {
           </span>
           <span className="text-xs font-semibold text-slate-800">
             {ticket.clientName}
+          </span>
+        </div>
+
+        <div className="flex flex-col">
+          <span className="text-[11px] font-medium font-varien text-slate-400">
+            {t("card.provider")} {":"}
+          </span>
+          <span className="text-xs font-semibold text-slate-800">
+            {providerName || "—"}
           </span>
         </div>
 
