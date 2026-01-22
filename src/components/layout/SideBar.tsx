@@ -199,7 +199,7 @@ export const Sidebar: React.FC = () => {
             "shadow-xs",
           )}
         >
-          v1.0.0
+          v1.0.1
         </span>
       </aside>
 
