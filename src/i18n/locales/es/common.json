@@ -191,7 +191,7 @@
   "USERS_PHONE_IN_USE": "Este número de teléfono ya está en uso.",
   "USERS_USERNAME_IN_USE": "Este nombre de usuario ya está en uso.",
   "USERS_UNIQUE_CONSTRAINT": "Uno o más campos deben ser únicos.",
- 
+ "AUTH_EMAIL_NOT_FOUND":"No se encontró el email", 
   "PRODUCTS_ONLY_ADMIN": "Solo el admin puede gestionar productos.",
   "PRODUCTS_INVALID_ID": "ID de producto inválido.",
   "PRODUCTS_NOT_FOUND": "Producto no encontrado.",

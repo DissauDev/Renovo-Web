@@ -10,6 +10,8 @@ interface FormInputPhoneProps extends React.InputHTMLAttributes<HTMLInputElement
   rightIcon?: React.ReactNode;
 }
 
+// (155) 555-5583
+
 // Usamos forwardRef para que RHF pueda pasar ref correctamente
 export const FormInputPhone = React.forwardRef<
   HTMLInputElement,
@@ -24,8 +26,16 @@ export const FormInputPhone = React.forwardRef<
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const raw = e.target.value || "";
 
-      // Solo dígitos
-      const digits = raw.replace(/\D/g, "").slice(0, 10);
+      // 1) Solo dígitos
+      let digits = (raw || "").replace(/\D/g, "");
+
+      // 2) Si viene con código país USA (+1 o 1) y son 11 dígitos, quita el 1 inicial
+      if (digits.length === 11 && digits.startsWith("1")) {
+        digits = digits.slice(1);
+      }
+
+      // 3) Limita a 10 (solo NANP)
+      digits = digits.slice(0, 10);
 
       let formatted = digits;
 
@@ -80,6 +90,25 @@ export const FormInputPhone = React.forwardRef<
             id={name}
             name={name}
             ref={ref}
+            onPaste={(e) => {
+              const pasted = e.clipboardData.getData("text");
+              let digits = pasted.replace(/\D/g, "");
+              if (digits.length === 11 && digits.startsWith("1"))
+                digits = digits.slice(1);
+              digits = digits.slice(0, 10);
+
+              // Evita que el navegador pegue el texto crudo
+              e.preventDefault();
+
+              // Construye el "raw" como solo dígitos y reaprovecha tu formateo
+              const next = digits;
+              const target = e.target as HTMLInputElement;
+              target.value = next;
+
+              // dispara tu lógica existente
+              // (si prefieres, llama a una función helper normalize+format)
+              target.dispatchEvent(new Event("input", { bubbles: true }));
+            }}
             inputMode="tel"
             // type="tel" si quieres que en móvil abra teclado numérico
             type="tel"
